@@ -59,25 +59,29 @@
 
 
   $: Time_to_death     = 32
-  $: logN              = Math.log(7e6)
+  $: logN              = Math.log(330e6)
   $: N                 = Math.exp(logN)
   $: I0                = 1
-  $: R0                = 2.2
+  $: R0                = 2.8
   $: D_incbation       = 5.2       
   $: D_infectious      = 2.9 
   $: D_recovery_mild   = (14 - 2.9)  
   $: D_recovery_severe = (31.5 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious 
-  $: CFR               = 0.02  
-  $: InterventionTime  = 100  
+  $: CFR               = 0.01 
+  $: InterventionTime  = 80  
   $: OMInterventionAmt = 2/3
   $: InterventionAmt   = 1 - OMInterventionAmt
   $: Time              = 220
   $: Xmax              = 110000
-  $: dt                = 2
   $: P_SEVERE          = 0.2
   $: duration          = 7*12*1e10
+  $: InterventionLength= 90
+  $: DaysRelaxed       = 30
+  $: TotalDays         = 540
+  $: dt                = TotalDays / 100
+  $: R0New             = R0 * (2/3)
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -95,7 +99,7 @@
 
 // dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration
 
-  function get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration) {
+  function get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
 
     var interpolation_steps = 40
     var steps = 110*interpolation_steps
@@ -104,10 +108,23 @@
 
     var method = Integrators["RK4"]
     function f(t, x){
-
       // SEIR ODE
-      if (t > InterventionTime && t < InterventionTime + duration){
+      // var nDays = 90
+      // var InterventionLength = nDays
+      // if (t > InterventionTime && t < InterventionTime + duration && t< InterventionTime + InterventionLength){
+      var nDays = dt*interpolation_steps * 100
+      if (InterventionLength + DaysRelaxed > nDays){
+        DaysRelaxed = nDays - InterventionLength
+      }
+      var period = InterventionLength + DaysRelaxed
+      var dutycycle = InterventionLength / period
+      var isItTimeToIntervene = ((t - InterventionTime) % period) / period
+      // console.log(isItTimeToIntervene, t, InterventionLength, InterventionTime)
+      if (t > InterventionTime && isItTimeToIntervene < dutycycle && t< InterventionTime + duration){// t< InterventionTime + InterventionLength){
         var beta = (InterventionAmt)*R0/(D_infectious)
+      }else if (t > InterventionTime && isItTimeToIntervene >= dutycycle && t< InterventionTime + duration){
+        var beta = R0New/(D_infectious)
+        // R0 = R0New
       } else if (t > InterventionTime + duration) {
         var beta = 0.5*R0/(D_infectious)        
       } else {
@@ -176,7 +193,7 @@
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
   }
 
-  $: Sol            = get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration)
+  $: Sol            = get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New)
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100
@@ -475,7 +492,6 @@
 
   .paneltext{
     position:relative;
-    height:130px;
   }
 
   .paneltitle{
@@ -925,7 +941,7 @@
 </div>
 
 
-<div style="height:220px;">
+<div style="height:280px;">
   <div class="minorTitle">
     <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Transmission Dynamics</div>
     <div style="flex: 0 0 20; width:20px"></div>
@@ -941,6 +957,25 @@
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Number of initial infections.<br></div>
       <div class="slidertext">{I0}</div>
       <input class="range" type=range bind:value={I0} min={1} max=10000 step=1>
+      <div class="paneldesc" style="height:30px; border-top: 1px solid #EEE; padding-top: 10px">Total number of days<br></div>
+      <div class="slidertext">{TotalDays} days</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={TotalDays} min={0} max={600} step=1.> 
+    </div>
+
+    <div class="column">
+      <div class="paneltitle">Intervention Parameters</div>
+      <div class="paneldesc" style="height:30px">Intervention Length<br></div>
+      <div class="slidertext">{InterventionLength} days</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={InterventionLength} min={0} max={TotalDays/2} step=1.>    
+
+      <div class="paneldesc" style="height:29px;border-top: 1px solid #EEE; padding-top: 10px">Amount of time social distancing is relaxed<br></div>
+      <div class="slidertext">{DaysRelaxed} Days</div>
+      <input class="range" type=range bind:value={DaysRelaxed} min={0} max={TotalDays/2} step=1>
+
+      <div class="paneldesc" style="height:29px">{@html math_inline("\\mathcal{R}_0")} after social distancing is relaxed<br></div>
+      <div class="slidertext">{R0New.toFixed(2)}</div>
+      <input class="range" type=range bind:value={R0New} min=0.01 max=10 step=0.01> 
+      
     </div>
 
     <div class="column">
@@ -993,6 +1028,8 @@
       <div class="slidertext">{D_hospital_lag} Days</div>
       <input class="range" type=range bind:value={D_hospital_lag} min={0.5} max=100 step=0.01>
     </div>
+
+    
 
   </div>
 </div>

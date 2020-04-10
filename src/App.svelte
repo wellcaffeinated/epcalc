@@ -57,21 +57,47 @@
     return r;
   }
 
+  // Wuhan
+  // $: Time_to_death     = 16.2
+  // $: logN              = Math.log(19E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 1
+  // $: R0                = 5.7
+  // $: D_incbation       = 4.2      
+  // $: D_infectious      = 6 
+  // $: D_recovery_mild   = (14 - 2.9)  
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious 
+  // $: CFR               = 0.02
+  // $: InterventionTime  = 38  
+  // $: OMInterventionAmt = 0.88
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.2
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = R0 * (2/3)
 
-  $: Time_to_death     = 32
-  $: logN              = Math.log(330e6)
+  // NY
+  $: Time_to_death     = 16.2
+  $: logN              = Math.log(19E6)
   $: N                 = Math.exp(logN)
-  $: I0                = 1
-  $: R0                = 2.8
-  $: D_incbation       = 5.2       
-  $: D_infectious      = 2.9 
+  $: I0                = 10
+  $: R0                = 5.7
+  $: D_incbation       = 4.2      
+  $: D_infectious      = 6 
   $: D_recovery_mild   = (14 - 2.9)  
-  $: D_recovery_severe = (31.5 - 2.9)
+  $: D_recovery_severe = (14 - 2.9)
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious 
-  $: CFR               = 0.01 
-  $: InterventionTime  = 80  
-  $: OMInterventionAmt = 2/3
+  $: CFR               = 0.02
+  $: InterventionTime  = 38 
+  $: OMInterventionAmt = 0.85
   $: InterventionAmt   = 1 - OMInterventionAmt
   $: Time              = 220
   $: Xmax              = 110000
@@ -81,7 +107,7 @@
   $: DaysRelaxed       = 30
   $: TotalDays         = 540
   $: dt                = TotalDays / 100
-  $: R0New             = R0 * (2/3)
+  $: R0New             = 1.2
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -102,7 +128,7 @@
   function get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
 
     var interpolation_steps = 40
-    var steps = 110*interpolation_steps
+    var steps = 1000*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
 
@@ -119,19 +145,19 @@
       var period = InterventionLength + DaysRelaxed
       var dutycycle = InterventionLength / period
       var isItTimeToIntervene = ((t - InterventionTime) % period) / period
-      // console.log(isItTimeToIntervene, t, InterventionLength, InterventionTime)
-      if (t > InterventionTime && isItTimeToIntervene < dutycycle && t< InterventionTime + duration){// t< InterventionTime + InterventionLength){
-        var beta = (InterventionAmt)*R0/(D_infectious)
-      }else if (t > InterventionTime && isItTimeToIntervene >= dutycycle && t< InterventionTime + duration){
-        var beta = R0New/(D_infectious)
-        // R0 = R0New
-      } else if (t > InterventionTime + duration) {
-        var beta = 0.5*R0/(D_infectious)        
-      } else {
-        var beta = R0/(D_infectious)
-      }
+
       var a     = 1/D_incbation
       var gamma = 1/D_infectious
+      var beta = R0 *gamma
+
+      if (t > InterventionTime && isItTimeToIntervene < dutycycle && t< InterventionTime + duration){
+        beta = (InterventionAmt)*beta
+      }else if (t > InterventionTime && isItTimeToIntervene >= dutycycle && t< InterventionTime + duration){
+        beta = R0New*gamma
+        // R0 = R0New
+      } else if(t > InterventionTime + duration) {
+        beta = 0.5*beta        
+      }
       
       var S        = x[0] // Susectable
       var E        = x[1] // Exposed
@@ -182,7 +208,7 @@
       t+=dt
     }
     return {"P": P, 
-            "deaths": N*v[6], 
+            "deaths": N*v[9], 
             "total": 1-v[0],
             "total_infected": TI,
             "Iters":Iters,
@@ -204,6 +230,7 @@
   $: dIters         = Sol["dIters"]
   $: Pmax           = max(P, checked)
   $: lock           = false
+
 
   var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
 

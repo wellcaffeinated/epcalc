@@ -29,7 +29,7 @@
 
   export let y;
   export let tmax;
-  export let xmax; 
+  export let xmax;
   export let deaths;
   export let total;
   export let vline;
@@ -38,8 +38,10 @@
   export let N;
   export let ymax;
   export let InterventionTime;
-  export let colors; 
+  export let colors;
   export let log = false;
+  export let interventionDuration;
+  export let interventionRelaxDuration;
 
   const padding = { top: 20, right: 0, bottom: 20, left: 25 };
 
@@ -94,7 +96,19 @@
   export let checked;
 
   // var data = [[2   , 2  ], [5   , 2  ], [18  , 4  ], [28  , 6  ], [43  , 8  ], [61  , 12 ], [95  , 16 ], [139 , 19 ], [245 , 26 ], [388 , 34 ], [593 , 43 ], [978 , 54 ], [1501, 66 ], [2336, 77 ], [2922, 92 ], [3513, 107], [4747, 124]]
-  var data = []
+  var data = [];
+
+  var numRegions
+  var interventionRegions
+  // var interventionRegions = [{ x: 30, width: 100 }]
+  $: numRegions = Math.ceil((tmax - InterventionTime) / (interventionDuration + interventionRelaxDuration))
+  $: interventionRegions = range(numRegions).map((n) => {
+    let startDay = (InterventionTime + n * (interventionDuration + interventionRelaxDuration))
+    let x = xScaleTime(startDay)
+    let x2 = xScaleTime(startDay + interventionDuration)
+    let width = x2 - x // need to do this because scale doesn't start at zero...
+    return { x, width };
+  });
 </script>
 
 <style>
@@ -103,7 +117,7 @@
     font-size: 30px;
     font-weight: 300;
     font-family: nyt-franklin,arial,helvetica,sans-serif;
-    font-style: normal; 
+    font-style: normal;
   }
 
   .chart {
@@ -146,6 +160,9 @@
     stroke-width:12.5;
   }
 
+  .intervention-regions rect {
+    fill: #dbfdee;
+  }
 
   .x-axis .tick text {
     text-anchor: middle;
@@ -203,6 +220,17 @@
       {/each}
     </g>
 
+    <g class="intervention-regions">
+      {#each interventionRegions as region}
+        <rect
+          x="{region.x}"
+          y="0"
+          width="{region.width}"
+          height="{height - padding.bottom}"
+        ></rect>
+      {/each}
+    </g>
+
     <g class='bars'>
       {#each range(y.length) as i}
         <rect
@@ -211,10 +239,10 @@
           on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
           class="bar"
           x="{xScale(i) + 2}"
-          y="{0}"
-          width="{barWidth+3}"
+          y="{yScale( sum(y[i], checked) )}"
+          width="{barWidth}"
           height="{height}"
-          style="fill:white; opacity: 0">     
+          style="fill:white; opacity: 1">
         </rect>
 
         {#each range(colors.length) as j}
@@ -227,9 +255,9 @@
                 x="{xScale(i) + 2}"
                 y="{yScale( sum(y[i].slice(0,j+1), checked) )}"
                 width="{barWidth}"
-                height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" 
+                height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}"
                 style="fill:{colors[j]};
-                       opacity:{active == i ? 0.9: 0.6}">     
+                       opacity:{active == i ? 0.9: 0.6}">
               </rect>
           {:else}
               <rect
@@ -238,23 +266,23 @@
                 on:click={() => {lock = !lock; active_lock = indexToTime(i) }}
                 class="bar"
                 x="{xScale(i) + 2}"
-                y="{(function () { 
-                        var z = yScale( sum(y[i].slice(0,j+1), checked) ); 
+                y="{(function () {
+                        var z = yScale( sum(y[i].slice(0,j+1), checked) );
                         return Math.min(isNaN(z) ? 0: z, height - padding.top)
-                      })()  
+                      })()
                     }"
                 width="{barWidth}"
                 height="{(function () {
                   var top = yScaleL( sum(y[i].slice(0,j+1),checked) + 0.0001 )
                   var btm = yScaleL( sum(y[i].slice(0,j),checked) + 0.0001)
-                  var z = top - btm; 
+                  var z = top - btm;
                   if (z + yScale( sum(y[i].slice(0,j+1), checked) ) > height - padding.top) {
                     return top
                   } else {
                     return Math.max(isNaN(z) ? 0 : z,0)
-                  }})()}" 
+                  }})()}"
                 style="fill:{colors[j]};
-                       opacity:{active == i ? 0.9: 0.6}">     
+                       opacity:{active == i ? 0.9: 0.6}">
               </rect>
           {/if}
         {/each}
@@ -262,7 +290,7 @@
       {/each}
     </g>
 
-<!-- height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" -->
+    <!-- height="{Math.max(height - padding.bottom - yScale(y[i][j]*checked[j] ),0)}" -->
 
     <g class='bars'>
       {#each range(data.length) as i}
@@ -272,28 +300,28 @@
           y="{yScale( data[i][1] )}"
           width="{barWidth}"
           height="{height - padding.bottom - yScale( data[i][1] )}"
-          style="fill:black; 
+          style="fill:black;
                  opacity: 0.5;
-                 box-shadow: 4px 10px 5px 2px rgba(0,0,0,0.75);">     
+                 box-shadow: 4px 10px 5px 2px rgba(0,0,0,0.75);">
         </rect>
       {/each}
     </g>
 
-  </svg> 
+  </svg>
 
   <div style="position: absolute;width:{width+15}px; height: {height}px; position: absolute; top:0px; left:0px; pointer-events: none">
-    
+
     {#if active >= 0}
-      <div style="position:absolute; 
+      <div style="position:absolute;
                   pointer-events: none;
                   width:100px;
                   left:{xScale(active)}px;
-                  top:{Math.max(yScale(sum(y[active], checked)),0) }px" class="tip"> 
+                  top:{Math.max(yScale(sum(y[active], checked)),0) }px" class="tip">
           <!-- {#if lock} <div style="position:absolute; top:-35px; left:-3.5px; font-family: Source Code Pro">🔒</div> {/if} -->
           <svg style="position:absolute; top:-12px; left:0px" height="10" width="10">
-          <path 
+          <path
             d="M 0 0 L 10 0 L 5 10 z"
-            fill="{lock ? '#555':'#AAA'}" 
+            fill="{lock ? '#555':'#AAA'}"
             stroke-width="3" />
           </svg>
       </div>

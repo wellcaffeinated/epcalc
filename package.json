@@ -20,6 +20,7 @@
     "d3-time-format": "^2.2.3",
     "d3-tip": "^0.9.1",
     "katex": "^0.11.1",
+    "lodash": "^4.17.15",
     "ndarray": "^1.0.18",
     "ndarray-scratch": "^1.2.0",
     "numpy-parser": "^1.2.3",

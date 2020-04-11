@@ -1,5 +1,5 @@
 <script>
-
+  import debounce from 'lodash/debounce'
   import { scaleLinear } from "d3-scale";
   // import { Date } from "d3-time"
   import Chart from './Chart.svelte';
@@ -216,10 +216,25 @@
   }
 
   function max(P, checked) {
+    if (!P.length) return 0
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
   }
 
-  $: Sol            = get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New)
+  var Sol = {"P": [],
+          "deaths": 0,
+          "total": 0,
+          "total_infected": [],
+          "Iters":[[]],
+          "dIters": () => [[]]}
+
+  // create a function that only runs after modified parameters stop changing rapidly
+  const compute = debounce((...params) => {
+    Sol = get_solution(...params)
+  }, 60)
+
+  // compute whenever values change
+  $: _ = compute(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New)
+
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100
@@ -436,7 +451,7 @@
     return milestones
   }
 
-  $: milestones = get_milestones(P)
+  $: milestones = P.length ? get_milestones(P) : []
   $: log = true
 
 </script>

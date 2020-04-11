@@ -258,7 +258,7 @@
                   var btm = yScaleL( sum(y[i].slice(0,j),checked) + 0.0001)
                   var z = top - btm;
                   if (z + yScale( sum(y[i].slice(0,j+1), checked) ) > height - padding.top) {
-                    return top
+                    return Math.max(0, top)
                   } else {
                     return Math.max(isNaN(z) ? 0 : z,0)
                   }})()}"

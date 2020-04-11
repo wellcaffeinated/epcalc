@@ -161,7 +161,7 @@
   }
 
   .intervention-regions rect {
-    fill: #dbfdee;
+    fill: #ecf0f1;
   }
 
   .x-axis .tick text {

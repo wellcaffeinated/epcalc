@@ -84,30 +84,56 @@
   // $: R0New             = R0 * (2/3)
 
   // NY
-  $: Time_to_death     = 16.2
-  $: logN              = Math.log(19E6)
+  // $: Time_to_death     = 16.2
+  // $: logN              = Math.log(19E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 30
+  // $: R0                = 5.4
+  // $: D_incbation       = 4.2
+  // $: D_infectious      = 6
+  // $: D_recovery_mild   = (14 - 2.9)
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious
+  // $: CFR               = 0.02
+  // $: InterventionTime  = 35
+  // $: OMInterventionAmt = 0.82
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.2
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 5.4
+
+  ////New York Times:
+    // Defaults
+  $: R0                = 2.5;
+  $: CFR               = 0.01;
+  $: InterventionAmt   = .4;
+  $: InterventionTime  = 73;
+  $: P_SEVERE          = 0.2;
+  $: logN              = Math.log(332E6)
   $: N                 = Math.exp(logN)
-  $: I0                = 10
-  $: R0                = 5.7
-  $: D_incbation       = 4.2
-  $: D_infectious      = 6
-  $: D_recovery_mild   = (14 - 2.9)
-  $: D_recovery_severe = (14 - 2.9)
-  $: D_hospital_lag    = 5
-  $: D_death           = Time_to_death - D_infectious
-  $: CFR               = 0.02
-  $: InterventionTime  = 38
-  $: OMInterventionAmt = 0.85
-  $: InterventionAmt   = 1 - OMInterventionAmt
-  $: Time              = 220
-  $: Xmax              = 110000
-  $: P_SEVERE          = 0.2
+  $: duration          = 14;
+  $: Time_to_death     = 32;
+  $: I0                = 3.4
+  $: D_incbation       = 5.2;
+  $: D_infectious      = 2.9;
+  $: D_recovery_mild   = (14 - 2.9);
+  $: D_recovery_severe = (31.5 - 2.9);
+  $: D_hospital_lag    = 5;
+  $: D_death           = Time_to_death - D_infectious;
+  $: dt                = 2;
   $: duration          = 7*12*1e10
   $: InterventionLength= 90
   $: DaysRelaxed       = 30
   $: TotalDays         = 540
   $: dt                = TotalDays / 100
-  $: R0New             = 1.2
+  $: R0New             = 5.4
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,

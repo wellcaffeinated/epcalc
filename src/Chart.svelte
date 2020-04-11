@@ -201,25 +201,6 @@
 <div style="width:{width+15}px; height: {height}px; position: relative; top:20px">
   <svg style="position:absolute; height: {height}px">
 
-    <!-- y axis -->
-    <g class="axis y-axis" transform="translate(0,{padding.top})">
-      {#each yScale.ticks(5) as tick}
-        <g class="tick tick-{tick}" transform="translate(0, {yScale(tick) - padding.bottom})">
-          <line x2="100%"></line>
-          <text y="-4">{Number.isInteger(Math.log10(tick)) ? formatNumber(tick) : (log ? "": formatNumber(tick))}{ (tick == yScale.ticks(5)[0]) ? " ": ""}</text>
-        </g>
-      {/each}
-    </g>
-
-    <!-- x axis -->
-    <g class="axis x-axis">
-      {#each xScaleTime.ticks() as i}
-        <g class="tick" transform="translate({xScaleTime(i)},{height})">
-          <text x="0" y="-4">{i == 0 ? "Day ":""}{i}</text>
-        </g>
-      {/each}
-    </g>
-
     <g class="intervention-regions">
       {#each interventionRegions as region}
         <rect
@@ -304,6 +285,25 @@
                  opacity: 0.5;
                  box-shadow: 4px 10px 5px 2px rgba(0,0,0,0.75);">
         </rect>
+      {/each}
+    </g>
+
+    <!-- y axis -->
+    <g class="axis y-axis" transform="translate(0,{padding.top})">
+      {#each yScale.ticks(5) as tick}
+        <g class="tick tick-{tick}" transform="translate(0, {yScale(tick) - padding.bottom})">
+          <line x2="100%"></line>
+          <text y="-4">{Number.isInteger(Math.log10(tick)) ? formatNumber(tick) : (log ? "": formatNumber(tick))}{ (tick == yScale.ticks(5)[0]) ? " ": ""}</text>
+        </g>
+      {/each}
+    </g>
+
+    <!-- x axis -->
+    <g class="axis x-axis">
+      {#each xScaleTime.ticks() as i}
+        <g class="tick" transform="translate({xScaleTime(i)},{height})">
+          <text x="0" y="-4">{i == 0 ? "Day ":""}{i}</text>
+        </g>
       {/each}
     </g>
 

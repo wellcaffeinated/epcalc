@@ -70,8 +70,8 @@
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
   $: CFR               = 0.02
-  $: InterventionTime  = 38
-  $: OMInterventionAmt = 0.88
+  $: InterventionTime  = 39
+  $: OMInterventionAmt = 0.90
   $: InterventionAmt   = 1 - OMInterventionAmt
   $: Time              = 220
   $: Xmax              = 110000
@@ -81,7 +81,7 @@
   $: DaysRelaxed       = 30
   $: TotalDays         = 540
   $: dt                = TotalDays / 100
-  $: R0New             = R0 * (2/3)
+  $: R0New             = 5.7
 
   // NY
   // $: Time_to_death     = 16.2
@@ -1169,6 +1169,13 @@
 <div style="position: relative; height: 12px"></div>
 
 <p class = "center">
+<b> Overview </b><br>
+This is a modified verision of Gabrielle Goh&#39;s exellent epidemic calculator found <a href="http://gabgoh.github.io/COVID/">here</a> (<a href="https://github.com/gabgoh/epcalc">source code</a>). The first major change is that you can now extend the number of days that the model computes out to 18 months. The second major change is that you can now specify how long the social distancing measures are implemented, followed by how long the social distancing measures are relaxed. This is so that the Covid-19 &quot;aftershocks&quot; can be studied. The default is cycles of social distancing intervention for 90 days (grey shaded regions), followed by 30 days of returning to life as normal. You can also change the R0 for the time periods where social distancing is relaxed. The initial parameters are based roughly on those estimated by the <a href="https://wwwnc.cdc.gov/eid/article/26/7/20-0282_article">CDC for Wuhan</a>, however, one should be careful when trying to draw too strong a conclusion from the model as many parameters are not well known and can fluctuate wildly depending on the time and place of the outbreak.
+<p>
+
+
+<p class = "center">
+<b> Original text </b><br>
 At the time of writing, the coronavirus disease of 2019 remains a global health crisis of grave and uncertain magnitude. To the non-expert (such as myself), contextualizing the numbers, forecasts and epidemiological parameters described in the media and literature can be challenging. I created this calculator as an attempt to address this gap in understanding.
 </p>
 

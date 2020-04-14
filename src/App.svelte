@@ -58,30 +58,30 @@
   }
 
   // Wuhan
-  // $: Time_to_death     = 16.2
-  // $: logN              = Math.log(19E6)
-  // $: N                 = Math.exp(logN)
-  // $: I0                = 1
-  // $: R0                = 5.7
-  // $: D_incbation       = 4.2
-  // $: D_infectious      = 6
-  // $: D_recovery_mild   = (14 - 2.9)
-  // $: D_recovery_severe = (14 - 2.9)
-  // $: D_hospital_lag    = 5
-  // $: D_death           = Time_to_death - D_infectious
-  // $: CFR               = 0.02
-  // $: InterventionTime  = 38
-  // $: OMInterventionAmt = 0.88
-  // $: InterventionAmt   = 1 - OMInterventionAmt
-  // $: Time              = 220
-  // $: Xmax              = 110000
-  // $: P_SEVERE          = 0.2
-  // $: duration          = 7*12*1e10
-  // $: InterventionLength= 90
-  // $: DaysRelaxed       = 30
-  // $: TotalDays         = 540
-  // $: dt                = TotalDays / 100
-  // $: R0New             = R0 * (2/3)
+  $: Time_to_death     = 16.2
+  $: logN              = Math.log(19E6)
+  $: N                 = Math.exp(logN)
+  $: I0                = 1
+  $: R0                = 5.7
+  $: D_incbation       = 4.2
+  $: D_infectious      = 6
+  $: D_recovery_mild   = (14 - 2.9)
+  $: D_recovery_severe = (14 - 2.9)
+  $: D_hospital_lag    = 5
+  $: D_death           = Time_to_death - D_infectious
+  $: CFR               = 0.02
+  $: InterventionTime  = 38
+  $: OMInterventionAmt = 0.88
+  $: InterventionAmt   = 1 - OMInterventionAmt
+  $: Time              = 220
+  $: Xmax              = 110000
+  $: P_SEVERE          = 0.2
+  $: duration          = 7*12*1e10
+  $: InterventionLength= 90
+  $: DaysRelaxed       = 30
+  $: TotalDays         = 540
+  $: dt                = TotalDays / 100
+  $: R0New             = R0 * (2/3)
 
   // NY
   // $: Time_to_death     = 16.2
@@ -109,31 +109,83 @@
   // $: dt                = TotalDays / 100
   // $: R0New             = 5.4
 
-  ////New York Times:
-    // Defaults
-  $: R0                = 2.5;
-  $: CFR               = 0.01;
-  $: InterventionAmt   = .4;
-  $: InterventionTime  = 73;
-  $: P_SEVERE          = 0.2;
-  $: logN              = Math.log(332E6)
-  $: N                 = Math.exp(logN)
-  $: duration          = 14;
-  $: Time_to_death     = 32;
-  $: I0                = 3.4
-  $: D_incbation       = 5.2;
-  $: D_infectious      = 2.9;
-  $: D_recovery_mild   = (14 - 2.9);
-  $: D_recovery_severe = (31.5 - 2.9);
-  $: D_hospital_lag    = 5;
-  $: D_death           = Time_to_death - D_infectious;
-  $: dt                = 2;
-  $: duration          = 7*12*1e10
-  $: InterventionLength= 90
-  $: DaysRelaxed       = 30
-  $: TotalDays         = 540
-  $: dt                = TotalDays / 100
-  $: R0New             = 5.4
+  //HIME approxiation
+  // $: Time_to_death     = 16.2
+  // $: logN              = Math.log(332E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 10
+  // $: R0                = 2.5
+  // $: D_incbation       = 5.2
+  // $: D_infectious      = 2.9
+  // $: D_recovery_mild   = (14 - 2.9)
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious
+  // $: CFR               = 0.01
+  // $: InterventionTime  = 85
+  // $: OMInterventionAmt = 0.85
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.2
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 2.5
+
+
+  // ////New York Times:
+  //   $: Time_to_death     = 32
+  // $: logN              = Math.log(332E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 3
+  // $: R0                = 2.5
+  // $: D_incbation       = 5.2
+  // $: D_infectious      = 2.9
+  // $: D_recovery_mild   = (14 - 2.9)
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious
+  // $: CFR               = 0.01
+  // $: InterventionTime  = 73
+  // $: OMInterventionAmt = 0.6
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.1
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 14
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 220
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 2.5
+
+  //   Defaults
+  // $: R0                = 2.5;
+  // $: CFR               = 0.01;
+  // $: InterventionAmt   = .4;
+  // $: InterventionTime  = 73;
+  // $: P_SEVERE          = 0.2;
+  // $: logN              = Math.log(332E6)
+  // $: N                 = Math.exp(logN)
+  // $: duration          = 14;
+  // $: Time_to_death     = 32;
+  // $: I0                = 3.4
+  // $: D_incbation       = 5.2;
+  // $: D_infectious      = 2.9;
+  // $: D_recovery_mild   = (14 - 2.9);
+  // $: D_recovery_severe = (31.5 - 2.9);
+  // $: D_hospital_lag    = 5;
+  // $: D_death           = Time_to_death - D_infectious;
+  // $: dt                = 2;
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 5.4
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -154,7 +206,7 @@
   function get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
 
     var interpolation_steps = 40
-    var steps = 1000*interpolation_steps
+    var steps = 100*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
 
@@ -176,14 +228,21 @@
       var gamma = 1/D_infectious
       var beta = R0 *gamma
 
-      if (t > InterventionTime && isItTimeToIntervene < dutycycle && t< InterventionTime + duration){
+      if (t > InterventionTime && isItTimeToIntervene < dutycycle){//} && t< InterventionTime + duration){
         beta = (InterventionAmt)*beta
-      }else if (t > InterventionTime && isItTimeToIntervene >= dutycycle && t< InterventionTime + duration){
+      }else if(t > InterventionTime && isItTimeToIntervene >= dutycycle ){//&& t< InterventionTime + duration){
         beta = R0New*gamma
         // R0 = R0New
-      } else if(t > InterventionTime + duration) {
-        beta = 0.5*beta
       }
+      else if(t > InterventionTime + duration) {
+        beta = 0.*beta
+      }
+      var offset = 29
+      var seasonal_effect   = .46 * 0
+      var forcing = (t) => (1 + seasonal_effect*Math.cos(2*3.14159265*(Math.floor(t) - offset)/365))
+
+      beta = beta*forcing(t)/forcing(0) // Forcing, with R0 correction
+
 
       var S        = x[0] // Susectable
       var E        = x[1] // Exposed
@@ -215,7 +274,8 @@
       return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
     }
 
-    var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
+    // var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
+    var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
     var t = 0
 
     var P  = []
@@ -225,6 +285,7 @@
       if ((steps+1) % (sample_step) == 0) {
             //    Dead   Hospital          Recovered        Infectious   Exposed
         P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
+        // P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    0 ])
         Iters.push(v)
         TI.push(N*(1-v[0]))
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))

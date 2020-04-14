@@ -9,7 +9,7 @@ The easiest install method is to use Docker and docker-compose. Clone this repo 
 ```docker build .```  
 ```docker-compose up```  
 
-This will start a local server on your machine on port 5000. Point a browser to [localhost:5000](localhost:5000) to access it. You can find the code in the ```src``` directory. After editing, the code will automatically recompile, and force refreshing the browser will reflect the changes.
+This will start a local server on your machine on port 5000. Point a browser to [localhost:5000](http://localhost:5000) to access it. You can find the code in the ```src``` directory. After editing, the code will automatically recompile, and force refreshing the browser will reflect the changes.
 
 To stop the program, just run:  
 

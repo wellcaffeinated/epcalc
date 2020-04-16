@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.9.12)  16 APR 2020 14:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.9.12)  16 APR 2020 16:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -356,6 +356,9 @@ Class revtex4-2 Info: multicol was not loaded (OK!) on input line 15.
 
 LaTeX Warning: Label `E:dS_iso' multiply defined.
 
+
+LaTeX Warning: Label `E:Etot' multiply defined.
+
 )
 \openout1 = `"seir-c model.aux"'.
 
@@ -445,10 +448,10 @@ Package pdftex.def Info: SEIR-C_diagram.png  used on input line 51.
  [2 <./SEIR-C_diagram.png>] [3]
 No file "seir-c model".bbl.
 [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 172.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 246.
  (./seir-c model.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 172.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 172.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 246.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 246.
 Package rerunfilecheck Info: File `"seir-c model".out' has not changed.
 (rerunfilecheck)             Checksum: 8FD22C3A7DBC992E24F007D2ADD82B75;255.
 
@@ -457,10 +460,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 8210 strings out of 494060
- 115205 string characters out of 6163035
- 246654 words of memory out of 5000000
- 11801 multiletter control sequences out of 15000+600000
+ 8217 strings out of 494060
+ 115255 string characters out of 6163035
+ 249850 words of memory out of 5000000
+ 11808 multiletter control sequences out of 15000+600000
  12558 words of font info for 48 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  31i,11n,35p,1227b,401s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -478,11 +481,12 @@ pe1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2019basic/texmf-dist/font
 s/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2019basic/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019basic/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on "seir-c model.pdf" (4 pages, 219949 bytes).
+t/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2019basic/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on "seir-c model.pdf" (4 pages, 223809 bytes).
 PDF statistics:
- 125 PDF objects out of 1000 (max. 8388607)
- 101 compressed objects within 2 object streams
+ 129 PDF objects out of 1000 (max. 8388607)
+ 104 compressed objects within 2 object streams
  26 named destinations out of 1000 (max. 500000)
  38 words of extra memory for PDF output out of 10000 (max. 10000000)
 

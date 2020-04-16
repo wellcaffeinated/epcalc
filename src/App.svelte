@@ -82,7 +82,13 @@
   $: TotalDays         = 540
   $: dt                = TotalDays / 100
   $: R0New             = 5.7
-
+  // contact tracing parameters
+  $: RC                = 25 // Number of total contacts while infectious
+  $: probC             = .1 // percent of population contact tracing
+  $: probTest          = .1 // percent of population tested
+  $: TimeTest          = 1. // amount of time it takes to process a test
+  $: TimeIso           = 14
+  $: R1                = 0 // Rate of infections of those who have tested positive.
   // NY
   // $: Time_to_death     = 16.2
   // $: logN              = Math.log(19E6)
@@ -203,7 +209,7 @@
 
 // dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration
 
-  function get_solution(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
+  function get_solution_seir(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
 
     var interpolation_steps = 40
     var steps = 100*interpolation_steps
@@ -302,6 +308,114 @@
             "dIters": f}
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////
+  // dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration
+
+  function get_solution_seirc(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
+
+    var interpolation_steps = 40
+    var steps = 100*interpolation_steps
+    var dt = dt/interpolation_steps
+    var sample_step = interpolation_steps
+
+    var method = Integrators["RK4"]
+    function f(t, x){
+      // SEIR ODE
+      // var nDays = 90
+      // var InterventionLength = nDays
+      // if (t > InterventionTime && t < InterventionTime + duration && t< InterventionTime + InterventionLength){
+      var nDays = dt*interpolation_steps * 100
+      if (InterventionLength + DaysRelaxed > nDays){
+        DaysRelaxed = nDays - InterventionLength
+      }
+      var period = InterventionLength + DaysRelaxed
+      var dutycycle = InterventionLength / period
+      var isItTimeToIntervene = ((t - InterventionTime) % period) / period
+
+      var a     = 1/D_incbation
+      var gamma = 1/D_infectious
+      var beta = R0 *gamma
+      // New parameters for contact tracing
+      var betaC = Rc * gamma  // a rate of contacts with others while infectious
+      var betaT = Pt/Tt       // rate at which test results are returned
+
+
+
+      if (t > InterventionTime && isItTimeToIntervene < dutycycle){//} && t< InterventionTime + duration){
+        beta = (InterventionAmt)*beta
+      }else if(t > InterventionTime && isItTimeToIntervene >= dutycycle ){//&& t< InterventionTime + duration){
+        beta = R0New*gamma
+        // R0 = R0New
+      }
+      else if(t > InterventionTime + duration) {
+        beta = 0.*beta
+      }
+      var offset = 29
+      var seasonal_effect   = .46 * 0
+      var forcing = (t) => (1 + seasonal_effect*Math.cos(2*3.14159265*(Math.floor(t) - offset)/365))
+
+      beta = beta*forcing(t)/forcing(0) // Forcing, with R0 correction
+
+
+      var S        = x[0] // Susectable
+      var E        = x[1] // Exposed
+      var I        = x[2] // Infectious
+      var Mild     = x[3] // Recovering (Mild)
+      var Severe   = x[4] // Recovering (Severe at home)
+      var Severe_H = x[5] // Recovering (Severe in hospital)
+      var Fatal    = x[6] // Recovering (Fatal)
+      var R_Mild   = x[7] // Recovered
+      var R_Severe = x[8] // Recovered
+      var R_Fatal  = x[9] // Dead
+
+      var p_severe = P_SEVERE
+      var p_fatal  = CFR
+      var p_mild   = 1 - P_SEVERE - CFR
+
+      var dS        = -beta*I*S
+      var dE        =  beta*I*S - a*E
+      var dI        =  a*E - gamma*I
+      var dMild     =  p_mild*gamma*I   - (1/D_recovery_mild)*Mild
+      var dSevere   =  p_severe*gamma*I - (1/D_hospital_lag)*Severe
+      var dSevere_H =  (1/D_hospital_lag)*Severe - (1/D_recovery_severe)*Severe_H
+      var dFatal    =  p_fatal*gamma*I  - (1/D_death)*Fatal
+      var dR_Mild   =  (1/D_recovery_mild)*Mild
+      var dR_Severe =  (1/D_recovery_severe)*Severe_H
+      var dR_Fatal  =  (1/D_death)*Fatal
+
+      //      0   1   2   3      4        5          6       7        8          9
+      return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
+    }
+
+    // var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
+    var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
+    var t = 0
+
+    var P  = []
+    var TI = []
+    var Iters = []
+    while (steps--) {
+      if ((steps+1) % (sample_step) == 0) {
+            //    Dead   Hospital          Recovered        Infectious   Exposed
+        P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
+        // P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    0 ])
+        Iters.push(v)
+        TI.push(N*(1-v[0]))
+        // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
+        // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
+      }
+      v =integrate(method,f,v,t,dt);
+      t+=dt
+    }
+    return {"P": P,
+            "deaths": N*v[9],
+            "total": 1-v[0],
+            "total_infected": TI,
+            "Iters":Iters,
+            "dIters": f}
+  }
+  /////////////////////////////////////////////////////////////////////////////
+
   function max(P, checked) {
     if (!P.length) return 0
     return P.reduce((max, b) => Math.max(max, sum(b, checked) ), sum(P[0], checked) )
@@ -316,7 +430,7 @@
 
   // create a function that only runs after modified parameters stop changing rapidly
   const compute = debounce((...params) => {
-    Sol = get_solution(...params)
+    Sol = get_solution_seir(...params)
   }, 60)
 
   // compute whenever values change

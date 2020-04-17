@@ -1,4 +1,8 @@
 \BOOKMARK [0][-]{section*.2}{SEIR-C: An epedemic model that includes contact tracing}{}% 2
 \BOOKMARK [1][-]{section*.1}{Abstract}{section*.2}% 1
-\BOOKMARK [1][-]{section*.3}{Introduction}{section*.2}% 3
+\BOOKMARK [1][-]{section*.3}{Introduction to SEIR}{section*.2}% 3
 \BOOKMARK [1][-]{section*.4}{SEIR-C}{section*.2}% 4
+\BOOKMARK [2][-]{section*.5}{The susceptible population}{section*.4}% 5
+\BOOKMARK [2][-]{section*.6}{The exposed population}{section*.4}% 6
+\BOOKMARK [2][-]{section*.7}{The infectious population}{section*.4}% 7
+\BOOKMARK [2][-]{section*.8}{The recovered population}{section*.4}% 8

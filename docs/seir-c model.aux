@@ -19,28 +19,34 @@
 \newlabel{FirstPage}{{}{1}{}{section*.1}{}}
 \@writefile{toc}{\contentsline {title}{SEIR-C: An epedemic model that includes contact tracing}{1}{section*.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {abstract}{Abstract}{1}{section*.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section*.3}\protected@file@percent }
-\newlabel{E:SEIR}{{1}{1}{}{equation.1.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction to SEIR}{1}{section*.3}\protected@file@percent }
+\newlabel{E:SEIRPop}{{1}{1}{}{equation.1.1}{}}
+\newlabel{E:SEIR}{{2}{1}{}{equation.1.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {II}SEIR-C}{1}{section*.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Conceptual diagram for SEIR-C. Each of the four regions for sucesptible ($S$), exposed ($E$), infectious ($I$), and recovered $(R)$ are separated, and the red arrows represent transitions between their respective populations simialr to SEIR. However, in $S$, $E$, and $I$ there is a sub population of individuals who isolate, slowing the spread. The model assumes that during some $dt$ there is a probability of being tested $p_t$. If someone tests positive and participates in contact tracing, then they notify those that they were in contact with so those individuals can begin isolation. Anyone who tests positive or who is waiting for a test is assumed to isolate. Also, it is assumed that the isolation period is longer thant the infectious and incubation period. The black and grey arrows represent the different dynamics as individuals are moved to isolation, and the blue arrows represent notifications from those who test positive and participate in contact tracing.}}{2}{figure.1}\protected@file@percent }
-\newlabel{f:SEIR-C}{{1}{2}{Conceptual diagram for SEIR-C. Each of the four regions for sucesptible ($S$), exposed ($E$), infectious ($I$), and recovered $(R)$ are separated, and the red arrows represent transitions between their respective populations simialr to SEIR. However, in $S$, $E$, and $I$ there is a sub population of individuals who isolate, slowing the spread. The model assumes that during some $dt$ there is a probability of being tested $p_t$. If someone tests positive and participates in contact tracing, then they notify those that they were in contact with so those individuals can begin isolation. Anyone who tests positive or who is waiting for a test is assumed to isolate. Also, it is assumed that the isolation period is longer thant the infectious and incubation period. The black and grey arrows represent the different dynamics as individuals are moved to isolation, and the blue arrows represent notifications from those who test positive and participate in contact tracing}{figure.1}{}}
-\newlabel{E:Stot}{{5}{2}{}{equation.2.5}{}}
-\newlabel{E:infectionrates}{{7}{2}{}{equation.2.7}{}}
-\newlabel{E:dS}{{9}{2}{}{equation.2.9}{}}
-\newlabel{E:notificationrate}{{10}{2}{}{equation.2.10}{}}
-\newlabel{E:dS_iso}{{12}{3}{}{equation.2.12}{}}
-\newlabel{E:dSc}{{14}{3}{}{equation.2.14}{}}
-\newlabel{E:Etot}{{17}{3}{}{equation.2.17}{}}
-\newlabel{E:dE}{{19}{3}{}{equation.2.19}{}}
-\newlabel{E:dE_w}{{20}{3}{}{equation.2.20}{}}
-\newlabel{E:dEc}{{22}{3}{}{equation.2.22}{}}
+\newlabel{E:SEIRPop_c}{{6}{1}{}{equation.2.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Conceptual diagram for SEIR-C. Each of the four regions for sucesptible ($S$), exposed ($E$), infectious ($I$), and recovered $(R)$ are separated, and the red arrows represent transitions between their respective populations simialr to SEIR. However, in $S$, $E$, and $I$ there is a sub population of individuals who isolate, slowing the spread. The model assumes that during some $dt$ there is a probability of being tested $p_t$. If someone tests positive and participates in contact tracing, then they notify those that they were in contact with so those individuals can begin isolation. Anyone who tests positive or who is waiting for a test is assumed to isolate. The black and grey arrows represent the different dynamics as individuals are moved to isolation, and the blue arrows represent notifications from those who test positive and participate in contact tracing.}}{2}{figure.1}\protected@file@percent }
+\newlabel{f:SEIR-C}{{1}{2}{Conceptual diagram for SEIR-C. Each of the four regions for sucesptible ($S$), exposed ($E$), infectious ($I$), and recovered $(R)$ are separated, and the red arrows represent transitions between their respective populations simialr to SEIR. However, in $S$, $E$, and $I$ there is a sub population of individuals who isolate, slowing the spread. The model assumes that during some $dt$ there is a probability of being tested $p_t$. If someone tests positive and participates in contact tracing, then they notify those that they were in contact with so those individuals can begin isolation. Anyone who tests positive or who is waiting for a test is assumed to isolate. The black and grey arrows represent the different dynamics as individuals are moved to isolation, and the blue arrows represent notifications from those who test positive and participate in contact tracing}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}The susceptible population}{2}{section*.5}\protected@file@percent }
+\newlabel{E:Stot}{{7}{2}{}{equation.2.7}{}}
+\newlabel{E:infectionrates}{{9}{2}{}{equation.2.9}{}}
+\newlabel{E:dS}{{11}{2}{}{equation.2.11}{}}
+\newlabel{E:notificationrate}{{12}{3}{}{equation.2.12}{}}
+\newlabel{E:dS_iso}{{13}{3}{}{equation.2.13}{}}
+\newlabel{E:dSc}{{15}{3}{}{equation.2.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}The exposed population}{3}{section*.6}\protected@file@percent }
+\newlabel{E:Etot}{{18}{3}{}{equation.2.18}{}}
+\newlabel{E:dE}{{20}{3}{}{equation.2.20}{}}
+\newlabel{E:dE_w}{{21}{4}{}{equation.2.21}{}}
+\newlabel{E:dEc}{{23}{4}{}{equation.2.23}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C}The infectious population}{4}{section*.7}\protected@file@percent }
+\newlabel{E:Itot}{{27}{4}{}{equation.2.27}{}}
+\newlabel{E:dI}{{29}{4}{}{equation.2.29}{}}
 \bibdata{"seir-c model"Notes}
 \bibstyle{apsrev4-2}
 \citation{REVTEX42Control}
 \citation{apsrev42Control}
-\newlabel{E:Itot}{{25}{4}{}{equation.2.25}{}}
-\newlabel{E:dI}{{27}{4}{}{equation.2.27}{}}
-\newlabel{E:dI_w}{{28}{4}{}{equation.2.28}{}}
-\newlabel{E:dIc}{{30}{4}{}{equation.2.30}{}}
-\newlabel{E:dItot}{{34}{4}{}{equation.2.34}{}}
-\newlabel{LastPage}{{}{4}{}{}{}}
+\newlabel{E:dI_w}{{30}{5}{}{equation.2.30}{}}
+\newlabel{E:dIc}{{32}{5}{}{equation.2.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D}The recovered population}{5}{section*.8}\protected@file@percent }
+\newlabel{E:dRtot}{{36}{5}{}{equation.2.36}{}}
+\newlabel{LastPage}{{}{5}{}{}{}}

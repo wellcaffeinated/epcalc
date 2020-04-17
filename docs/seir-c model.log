@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.9.12)  16 APR 2020 21:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.9.12)  17 APR 2020 00:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -452,15 +452,20 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 224.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 224.
 Package rerunfilecheck Info: File `"seir-c model".out' has not changed.
 (rerunfilecheck)             Checksum: 67720CE56BECFF6ADC096229FD924FD2;544.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right .
+
+
  ) 
 Here is how much of TeX's memory you used:
  8224 strings out of 494060
  115374 string characters out of 6163035
- 264518 words of memory out of 5000000
+ 266162 words of memory out of 5000000
  11809 multiletter control sequences out of 15000+600000
  12558 words of font info for 48 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 31i,11n,35p,2023b,401s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,11n,35p,2130b,401s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx1
 2.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx9.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/c
@@ -477,7 +482,7 @@ s/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2019basic/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019basic/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2019basic/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on "seir-c model.pdf" (5 pages, 572542 bytes).
+Output written on "seir-c model.pdf" (5 pages, 619063 bytes).
 PDF statistics:
  425 PDF objects out of 1000 (max. 8388607)
  263 compressed objects within 3 object streams

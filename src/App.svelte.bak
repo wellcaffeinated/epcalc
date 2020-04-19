@@ -40,7 +40,7 @@
     K3       : [[.5,.5],[1,-1,2],[1/6,2/3,1/6]],
     SSP33    : [[1,1],[.5,.25,.25],[1/6,1/6,2/3]],
     SSP43    : [[.5,.5],[1,.5,.5],[.5,1/6,1/6,1/6],[1/6,1/6,1/6,1/2]],
-    RK38      : [[.5,.5],[.5,0,.5],[1,0,0,1],[1/6,1/3,1/3,1/6]],
+    RK4      : [[.5,.5],[.5,0,.5],[1,0,0,1],[1/6,1/3,1/3,1/6]],
     RK38     : [[1/3,1/3],[2/3,-1/3,1],[1,1,-1,1],[1/8,3/8,3/8,1/8]]
   };
 
@@ -70,7 +70,7 @@
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
   $: CFR               = 0.02
-  $: InterventionTime  = 100
+  $: InterventionTime  = 39
   $: OMInterventionAmt = 0.90
   $: InterventionAmt   = 1 - OMInterventionAmt
   $: Time              = 220
@@ -79,25 +79,119 @@
   $: duration          = 7*12*1e10
   $: InterventionLength= 90
   $: DaysRelaxed       = 30
-  $: TotalDays         = 160
+  $: TotalDays         = 540
   $: dt                = TotalDays / 100
   $: R0New             = 5.7
   // contact tracing parameters
-  var tt = 100000000000000000.
-  $: N_test = 20000
-  // $: p_test = N_test/N
-  $: frac_c_tested =  1.
-  // $: p_ctest = 1 * p_test
-  $: frac_i_tested = 0.2
-  $: p_c  = 1.
-  $: tau_test = 1
-  $: tau_iso = 14
-  $: tau_c = 7
-  $: R_iso = .3
-  $: R_c = 60
-  $: f_pos = 0.0
-  $: f_neg = 0.
-  $: D_contact_begins = 0
+  $: RC                = 25 // Number of total contacts while infectious
+  $: probC             = .1 // percent of population contact tracing
+  $: probTest          = .1 // percent of population tested
+  $: TimeTest          = 1. // amount of time it takes to process a test
+  $: TimeIso           = 14
+  $: R1                = 0 // Rate of infections of those who have tested positive.
+  // NY
+  // $: Time_to_death     = 16.2
+  // $: logN              = Math.log(19E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 30
+  // $: R0                = 5.4
+  // $: D_incbation       = 4.2
+  // $: D_infectious      = 6
+  // $: D_recovery_mild   = (14 - 2.9)
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious
+  // $: CFR               = 0.02
+  // $: InterventionTime  = 35
+  // $: OMInterventionAmt = 0.82
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.2
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 5.4
+
+  //HIME approxiation
+  // $: Time_to_death     = 16.2
+  // $: logN              = Math.log(332E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 10
+  // $: R0                = 2.5
+  // $: D_incbation       = 5.2
+  // $: D_infectious      = 2.9
+  // $: D_recovery_mild   = (14 - 2.9)
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious
+  // $: CFR               = 0.01
+  // $: InterventionTime  = 85
+  // $: OMInterventionAmt = 0.85
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.2
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 2.5
+
+
+  // ////New York Times:
+  //   $: Time_to_death     = 32
+  // $: logN              = Math.log(332E6)
+  // $: N                 = Math.exp(logN)
+  // $: I0                = 3
+  // $: R0                = 2.5
+  // $: D_incbation       = 5.2
+  // $: D_infectious      = 2.9
+  // $: D_recovery_mild   = (14 - 2.9)
+  // $: D_recovery_severe = (14 - 2.9)
+  // $: D_hospital_lag    = 5
+  // $: D_death           = Time_to_death - D_infectious
+  // $: CFR               = 0.01
+  // $: InterventionTime  = 73
+  // $: OMInterventionAmt = 0.6
+  // $: InterventionAmt   = 1 - OMInterventionAmt
+  // $: Time              = 220
+  // $: Xmax              = 110000
+  // $: P_SEVERE          = 0.1
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 14
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 220
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 2.5
+
+  //   Defaults
+  // $: R0                = 2.5;
+  // $: CFR               = 0.01;
+  // $: InterventionAmt   = .4;
+  // $: InterventionTime  = 73;
+  // $: P_SEVERE          = 0.2;
+  // $: logN              = Math.log(332E6)
+  // $: N                 = Math.exp(logN)
+  // $: duration          = 14;
+  // $: Time_to_death     = 32;
+  // $: I0                = 3.4
+  // $: D_incbation       = 5.2;
+  // $: D_infectious      = 2.9;
+  // $: D_recovery_mild   = (14 - 2.9);
+  // $: D_recovery_severe = (31.5 - 2.9);
+  // $: D_hospital_lag    = 5;
+  // $: D_death           = Time_to_death - D_infectious;
+  // $: dt                = 2;
+  // $: duration          = 7*12*1e10
+  // $: InterventionLength= 90
+  // $: DaysRelaxed       = 30
+  // $: TotalDays         = 540
+  // $: dt                = TotalDays / 100
+  // $: R0New             = 5.4
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -119,7 +213,7 @@
 
     var interpolation_steps = 40
     var steps = 100*interpolation_steps
-    dt = dt/interpolation_steps
+    var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
 
     var method = Integrators["RK4"]
@@ -214,17 +308,18 @@
             "dIters": f}
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////
+  // dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration
 
-  function get_solution_seirc(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested) {
-    // 
+  function get_solution_seirc(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New) {
+
     var interpolation_steps = 40
     var steps = 100*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
 
-    var method = Integrators["RK38"]
+    var method = Integrators["RK4"]
     function f(t, x){
-      // console.log('before', t, x)
       // SEIR ODE
       // var nDays = 90
       // var InterventionLength = nDays
@@ -241,313 +336,59 @@
       var gamma = 1/D_infectious
       var beta = R0 *gamma
       // New parameters for contact tracing
-      // var betaC = Rc * gamma  // a rate of contacts with others while infectious
-      // var betaT = Pt/Tt       // rate at which test results are returned
+      var betaC = Rc * gamma  // a rate of contacts with others while infectious
+      var betaT = Pt/Tt       // rate at which test results are returned
 
-      var tau_inc =    D_incbation
-      var tau_inf =    D_infectious
-
-
-      
-
-      // var Stot = x[0]   // the total Susceptible population
-      // var Etot = x[1]   // the total Exposed population
-      // var Itot = x[2]   // the total Infectious population
-      // var Rtot = x[3]   // the total Recovered population
-
-      // // Now list all the subpopulations that are Susceptible
-      // var S    = x[4]   // Susceptible population that is not isolating
-      // var Sw   = x[5]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      // var St   = x[6]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      // //  /// Susceptible and particpates in contact tracing
-      // var Sc   = x[7]  // notified of a possible exposure and isolates, but not tested 
-      // var Scw  = x[8]  // notified of possible exposure and waiting for test results
-      // var NcS  = x[9]  // False positive. Isolates and notifies others of potential exposure.
-      // var Siso = x[10]   // Total population isolating in S. Siso = Sw + St + Sc + Scw + NcS
-
-      // // Now list all the subpopulations that are Exposed
-      // var E    = x[11]   // Exposed population that is not isolating
-      // var Ew   = x[12]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      // var Et   = x[13]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      // //  /// Exposed and particpates in contact tracing
-      // var Ec   = x[14]  // notified of a possible exposure and isolates, but not tested 
-      // var Ecw  = x[15]  // notified of possible exposure and waiting for test results
-      // var NcE  = x[16]  // False positive. Isolates and notifies others of potential exposure.
-      // var NcEp = x[17]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Eiso = x[18]   // Total population isolating in E. Eiso = Ew + Et + Ec + Ecw + NcE + NcEp
-
-      // // Now list all the subpopulations that are Infectious
-      // var I    = x[19]   // Infectious population that is not isolating
-      // var Iw   = x[20]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      // var It   = x[21]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      // //  /// Infectious and particpates in contact tracing
-      // var Ic   = x[22]  // notified of a possible exposure and isolates, but not tested 
-      // var Icw  = x[23]  // notified of possible exposure and waiting for test results
-      // var NcI  = x[24]  // False positive. Isolates and notifies others of potential exposure.
-      // var NcIp = x[25]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Iiso = x[26]   // Total population isolating in I. Iiso = Iw + It + Ic + Icw + NcI + NcIp
-
-      // // Now for the extra parameters related to deaths, mild, severe, and hospitalization rates
-      // var Mild = x[27] // Recovering (Mild)
-      // var Severe = x[28] // Recovering (Severe at home)
-      // var Severe_H = x[29] // Recovering (Severe in hospital)
-      // var Fatal = x[30] // Recovering (Fatal)
-      // var R_Mild = x[31] // Recovered
-      // var R_Severe = x[32] // Recovered
-      // var R_Fatal = x[33] // Dead
-
-      // look at only the variables with rate changes. Exclude the total populations and the total iso populations.
-
-      // List all the subpopulations that are Susceptible
-      var S    = x[0]   // Susceptible population that is not isolating
-      var Sw   = x[1]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      var St   = x[2]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      //  /// Susceptible and particpates in contact tracing
-      var Sc   = x[3]  // notified of a possible exposure and isolates, but not tested 
-      var Scw  = x[4]  // notified of possible exposure and waiting for test results
-      var NcS  = x[5]  // False positive. Isolates and notifies others of potential exposure.
-      // var Siso = x[]   // Total population isolating in S. Siso = Sw + St + Sc + Scw + NcS
-
-      // Now list all the subpopulations that are Exposed
-      var E    = x[6]   // Exposed population that is not isolating
-      var Ew   = x[7]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      var Et   = x[8]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      //  /// Exposed and particpates in contact tracing
-      var Ec   = x[9]  // notified of a possible exposure and isolates, but not tested 
-      var Ecw  = x[10]  // notified of possible exposure and waiting for test results
-      var NcE  = x[11]  // False positive. Isolates and notifies others of potential exposure.
-      var NcEp = x[12]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Eiso = x[]   // Total population isolating in E. Eiso = Ew + Et + Ec + Ecw + NcE + NcEp
-
-      // Now list all the subpopulations that are Infectious
-      var I    = x[13]   // Infectious population that is not isolating
-      var Iw   = x[14]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      var It   = x[15]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      //  /// Infectious and particpates in contact tracing
-      var Ic   = x[16]  // notified of a possible exposure and isolates, but not tested 
-      var Icw  = x[17]  // notified of possible exposure and waiting for test results
-      var NcI  = x[18]  // False positive. Isolates and notifies others of potential exposure.
-      var NcIp = x[19]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Iiso = x[]   // Total population isolating in I. Iiso = Iw + It + Ic + Icw + NcI + NcIp
-
-      // Now for the extra parameters related to deaths, mild, severe, and hospitalization rates
-      var Mild = x[20] // Recovering (Mild)
-      var Severe = x[21] // Recovering (Severe at home)
-      var Severe_H = x[22] // Recovering (Severe in hospital)
-      var Fatal = x[23] // Recovering (Fatal)
-      var R_Mild = x[24] // Recovered
-      var R_Severe = x[25] // Recovered
-      var R_Fatal = x[26] // Dead
-
-
-
-      // set the probabilities for determining the severity of the disease.
-      var p_severe = P_SEVERE
-      var p_fatal = CFR
-      var p_mild = 1 - P_SEVERE - CFR
-
-      // Rate equations governing the population dynamics.
-
-      // var dS = -beta * I * S
-      // var dE = beta * I * S - a * E
-      // var dI = a * E - gamma * I
-      // var dMild = p_mild * gamma * I - (1 / D_recovery_mild) * Mild
-      // var dSevere = p_severe * gamma * I - (1 / D_hospital_lag) * Severe
-      // var dSevere_H = (1 / D_hospital_lag) * Severe - (1 / D_recovery_severe) * Severe_H
-      // var dFatal = p_fatal * gamma * I - (1 / D_death) * Fatal
-      // var dR_Mild = (1 / D_recovery_mild) * Mild
-      // var dR_Severe = (1 / D_recovery_severe) * Severe_H
-      // var dR_Fatal = (1 / D_death) * Fatal
-
-      // var dStot = 
-      // var dEtot = 
-      // var dItot = 
-      // var dRtot =
-
-      // figure out the relative rates of testing between those who are in contact tracing, and those who are not.
-      // First, the number of tests consumed by those in contact tracing who have been notified of a possible exposure.
-      var Nc_tot = Sc + Ec + Ic
-      // If the number of people who have been notified exceeds the number of tests, all the tests are used on this population
-      // and none are left for the general population.
-      var p_ctest = frac_c_tested
-      var p_test = 0
-      var p_itest = frac_i_tested
-
-      // If there are more people who have been notified of possible contacts than tests for a day, then all the tests go to the potentially contacted population
-      // if (  Nc_tot * frac_c_tested * N > N_test ){
-      //   p_itest = 0
-      //   p_ctest = N_test/(Nc_tot *N)
-      //   p_test = 0
-      // }
-      // else if ( (I * frac_i_tested + Nc_tot * frac_c_tested) *N > N_test ){
-      //   p_ctest = frac_c_tested
-      //   p_itest = (N_test - p_ctest * N ) / I
-      //   p_test  = 0
-      // }
-      // else{
-      //   p_itest = frac_i_tested
-      //   p_ctest = frac_c_tested
-      //   p_test  = (N_test - (p_itest + p_ctest)* N)/(S + E + I)
-      // }
-    
-
-      // if (Nc_tot*frac_c_tested > N_test){
-      //   p_ctest = N_test/ Nc_tot
-      //   p_test  = 0. 
-      // } else{
-      //   p_ctest = Nc_tot * frac_c_tested/N
-      //   p_test  = (N_test  - frac_c_tested * Nc_tot)/N
-      // }
-
-
-      var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
-      var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
-      var Nc = NcS + NcE + NcI // total number of people who are notifying
-
-      // console.log( (Nc_tot + Nc) * N, (Sw + St + Ew + Et + Iw + It) * N)
-
-
-      var gamma_0    = I * R0 / tau_inf       // The effective infectious rate for those who are not isolating. 
-      var gamma_iso  = Iiso * R_iso / tau_inf  // The effective infectious rate for those who are  isolating. 
-      var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who 
 
 
       if (t > InterventionTime && isItTimeToIntervene < dutycycle){//} && t< InterventionTime + duration){
-        gamma_0 = (InterventionAmt)*gamma_0
+        beta = (InterventionAmt)*beta
       }else if(t > InterventionTime && isItTimeToIntervene >= dutycycle ){//&& t< InterventionTime + duration){
-        gamma_0 = R0New/R0*gamma_0
+        beta = R0New*gamma
         // R0 = R0New
       }
       else if(t > InterventionTime + duration) {
-        gamma_0 = gamma_0 *.5
+        beta = 0.*beta
       }
-
-      if (t < D_contact_begins ){
-        // gamma_iso = 0.*gamma_0
-        gamma_c = 0 * gamma_c
-        // p_c = 0.
-        // p_ctest = 0
-        p_test = N_test/N
-      }
-
-
-
       var offset = 29
       var seasonal_effect   = .46 * 0
       var forcing = (t) => (1 + seasonal_effect*Math.cos(2*3.14159265*(Math.floor(t) - offset)/365))
 
       beta = beta*forcing(t)/forcing(0) // Forcing, with R0 correction
 
-      // var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
-      // var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
 
-      // var gamma_0    = I * R0 / tau_inf       // The effective infectious rate for those who are not isolating. 
-      // var gamma_iso  = Iiso * R_iso / tau_inf  // The effective infectious rate for those who are  isolating. 
-      // var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who need to be notified of possible exposure.
+      var S        = x[0] // Susectable
+      var E        = x[1] // Exposed
+      var I        = x[2] // Infectious
+      var Mild     = x[3] // Recovering (Mild)
+      var Severe   = x[4] // Recovering (Severe at home)
+      var Severe_H = x[5] // Recovering (Severe in hospital)
+      var Fatal    = x[6] // Recovering (Fatal)
+      var R_Mild   = x[7] // Recovered
+      var R_Severe = x[8] // Recovered
+      var R_Fatal  = x[9] // Dead
 
-      var dS    = -(gamma_0 + gamma_c * p_c +p_test) * S + 1/tau_iso *(Sc +St + NcS) + (1 -f_pos)/tau_test * (Sw + Scw)
-      var dSw   = p_test * (1 - p_c) * S - (1/tau_test + gamma_iso) * Sw
-      var dSt   = f_pos/tau_test * Sw - (1/tau_iso + gamma_iso) * St
-      var dSc   = gamma_c * p_c * S - (p_ctest + 1/tau_iso + gamma_iso) * Sc
-      var dScw  = p_test * p_c * S + p_ctest * Sc - (1/tau_test + gamma_iso) * Scw
-      var dNcS  = f_pos/tau_test * Scw - (1/tau_iso + gamma_iso) * NcS 
-      // var dSiso = dSw + dSt + dSc + dScw +dNcS
-      // var dStot = dS + dSiso
+      var p_severe = P_SEVERE
+      var p_fatal  = CFR
+      var p_mild   = 1 - P_SEVERE - CFR
 
-      var dE    = gamma_0 * S + 1/tau_iso *(Ec +Et + NcE + NcEp) + f_neg/tau_test * (Ew + Ecw) - (gamma_c * p_c + p_test + 1/tau_inc) * E
-      var dEw   = gamma_iso * Sw + p_test * (1 - p_c) * E - (1/tau_test + 1/tau_inc) * Ew
-      var dEt   = gamma_iso * St + (1 - f_neg)/tau_test * Ew - (1/tau_iso + 1/tau_inc) * Et
-      var dEc   = gamma_iso * Sc + gamma_c * p_c * E - (p_ctest + 1/tau_iso + 1/tau_inc) * Ec
-      var dEcw  = gamma_iso * Scw + p_test * p_c * E + p_ctest * Ec - (1/tau_test + 1/tau_inc) * Ecw
-      var dNcE  = gamma_iso * NcS + (1 - f_neg)/tau_test * Ecw - (1/tau_iso + 1/tau_inc) * NcE 
-      var dNcEp = (gamma_iso * NcS - (1/tau_iso + 1/tau_inc) * NcEp ) * 0
-      // var dEiso = dEw + dEt + dEc + dEcw + dNcE + dNcEp
-      // var dEtot = dE + dEiso
-      
-      var dI    = 1/tau_inc * E  + 1/tau_iso *(Ic +It + NcI + NcIp) + f_neg/tau_test * (Iw + Icw) - (gamma_c * p_c + p_itest + 1/tau_inf) * I
-      var dIw   = 1/tau_inc * Ew + p_itest * (1 - p_c) * I - (1/tau_test + 1/tau_inf) * Iw
-      var dIt   = 1/tau_inc * Et + (1 - f_neg)/tau_test * Iw - (1/tau_iso + 1/tau_inf) * It
-      var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ctest + 1/tau_iso + 1/tau_inf) * Ic
-      var dIcw  = 1/tau_inc * Ecw + p_test * p_c * I + p_ctest * Ic - (1/tau_test + 1/tau_inf) * Icw
-      var dNcI  = (1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf) )* NcI 
-      var dNcIp = (1/tau_inc * (NcE + NcEp) - (1/tau_iso + 1/tau_inf) * NcIp ) * 0
+      var dS        = -beta*I*S
+      var dE        =  beta*I*S - a*E
+      var dI        =  a*E - gamma*I
+      var dMild     =  p_mild*gamma*I   - (1/D_recovery_mild)*Mild
+      var dSevere   =  p_severe*gamma*I - (1/D_hospital_lag)*Severe
+      var dSevere_H =  (1/D_hospital_lag)*Severe - (1/D_recovery_severe)*Severe_H
+      var dFatal    =  p_fatal*gamma*I  - (1/D_death)*Fatal
+      var dR_Mild   =  (1/D_recovery_mild)*Mild
+      var dR_Severe =  (1/D_recovery_severe)*Severe_H
+      var dR_Fatal  =  (1/D_death)*Fatal
 
-      // var dIiso = dIw + dIt + dIc + dIcw + NcI + NcIp 
-      // var dItot = dI + dIiso
-      
-      // var dRtot = dItot/tau_inf
-      
-      
-      var dMild = p_mild * 1/tau_inf * Itot - (1 / D_recovery_mild) * Mild
-      var dSevere = p_severe * 1/tau_inf * Itot - (1 / D_hospital_lag) * Severe
-      var dSevere_H = (1 / D_hospital_lag) * Severe - (1 / D_recovery_severe) * Severe_H
-      var dFatal = p_fatal * 1/tau_inf * Itot - (1 / D_death) * Fatal
-      var dR_Mild = (1 / D_recovery_mild) * Mild
-      var dR_Severe = (1 / D_recovery_severe) * Severe_H
-      var dR_Fatal = (1 / D_death) * Fatal
-      
-      var populationUpdated = []
-
-      // populationUpdated.push(dStot + Stot) 
-      // populationUpdated.push(dEtot + Etot) 
-      // populationUpdated.push(dItot + Itot) 
-      // populationUpdated.push(dRtot + Rtot) 
-      populationUpdated.push(dS) 
-      populationUpdated.push(dSw) 
-      populationUpdated.push(dSt) 
-      populationUpdated.push(dSc) 
-      populationUpdated.push(dScw) 
-      populationUpdated.push(dNcS) 
-      // populationUpdated.push(dSiso) 
-      populationUpdated.push(dE) 
-      populationUpdated.push(dEw) 
-      populationUpdated.push(dEt) 
-      populationUpdated.push(dEc) 
-      populationUpdated.push(dEcw) 
-      populationUpdated.push(dNcE) 
-      populationUpdated.push(dNcEp) 
-      // populationUpdated.push(dEiso) 
-      populationUpdated.push(dI) 
-      populationUpdated.push(dIw) 
-      populationUpdated.push(dIt) 
-      populationUpdated.push(dIc) 
-      populationUpdated.push(dIcw) 
-      populationUpdated.push(dNcI) 
-      populationUpdated.push(dNcIp) 
-      // populationUpdated.push(dIiso) 
-      populationUpdated.push(dMild)       // index 20
-      populationUpdated.push(dSevere)     // index 21
-      populationUpdated.push(dSevere_H)   // index 22 
-      populationUpdated.push(dFatal)      // index 23
-      populationUpdated.push(dR_Mild)     // index 24
-      populationUpdated.push(dR_Severe)   // index 25
-      populationUpdated.push(dR_Fatal)    // index 26
-
-
-
-      // console.log(S, Stot, populationUpdated[0], dStot, gamma_0, gamma_c,  p_c, p_test)
-      // console.log('after', populationUpdated)
-      // console.log('')
-      //          0   1   2   3      4        5          6       7        8          9
-      // return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
-      return(populationUpdated)
+      //      0   1   2   3      4        5          6       7        8          9
+      return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
     }
 
     // var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
-    // var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
-    var length = 34; // user defined length
-    var v = []
-    for(var i = 0; i < length; i++) {
-      v.push(0);
-    }
-
-    v[13]  = I0/N
-    // v[2]   = I0/N
-    v[0]   = 1 - I0/N
-    // v[0]   = 1 - I0/N
-
-    // console.log(v, R0, D_infectious)
-
+    var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
     var t = 0
 
     var P  = []
@@ -556,154 +397,23 @@
     while (steps--) {
       if ((steps+1) % (sample_step) == 0) {
             //    Dead   Hospital          Recovered        Infectious   Exposed
-        // P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
+        P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
         // P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    0 ])
-        var pDead = v[26]
-        // console.log(t, pDead *N)
-        var pRecovered = (v[24] + v[25])
-        var pInfectious = (v[13] + v[14] + v[15] + v[16] + v[17] + v[18] + v[19])
-        var pExposed = (v[6] + v[7] + v[8] + v[9] + v[10] + v[11] + v[12])
-        // var pSusceptible = (1 - pDead + pHospital + pRecovered + pInfectious + pExposed)
-        var pSusceptible = (v[0] + v[1] + v[2] + v[3] + v[4] + v[5])
-        var pMild = v[20]
-        var pSevere = v[21]
-        var pHospital = pMild + pSevere
-        var pFatal = v[23]
-        var pRMild = v[24]
-        var pRsevere = v[25]
-        var pRFatal = v[26]
-
-        var pIter = [pSusceptible, pExposed, pInfectious, pMild, pSevere, pHospital, pFatal, pRMild, pRsevere, pRFatal ]
-
-        P.push([N * pDead, N * pHospital, N * pRecovered, N * pInfectious, N * pExposed ])
-
-        Iters.push(pIter)
-        // Iters.push(v)
-        // Need to change the daily outputs to match the SEIR. Need 9 parameters.
-         
-        TI.push((pSusceptible))
+        Iters.push(v)
+        TI.push(N*(1-v[0]))
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
       }
-      // console.log(t, 'before', v)
       v =integrate(method,f,v,t,dt);
       t+=dt
-      // console.log(t, 'after', v)
-      // console.log('')
     }
     return {"P": P,
-            "deaths": N * pDead,
-            "total": (1 - pSusceptible) ,
+            "deaths": N*v[9],
+            "total": 1-v[0],
             "total_infected": TI,
             "Iters":Iters,
             "dIters": f}
   }
-
-
-
-    // var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
-    // dt = totalDays / steps / interpolation_steps
-    // var x = [1, 0, I0 / (N - I0), 0, 0, 0, 0, 0, 0, 0]
-
-    // var x = [];
-    // var length = 34; // user defined length
-
-    // for(var i = 0; i < length; i++) {
-    //   x.push(0);
-    // }
-
-    // x[19] = I0/N
-    // x[2]  = I0/N
-    // x[0]   = 1 - I0/N
-
-    // var t = 0
-
-    // var P = []
-    // var totalInfected = []
-    // var Iters = []
-
-    // for (var step = 0; step < steps; step++) {
-    //   // iterate substeps
-    //   for (var substep = 0; substep < interpolation_steps; substep++){
-    //     x = Integrator.integrate('RK4', SEIRC, x, t, dt)
-    //     t += dt
-    //   }
-
-    //   // record results
-    //   //    Dead   Hospital          Recovered        Infectious   Exposed
-    //   P.push([ N * populationUpdated[33], N * (populationUpdated[29] + populationUpdated[30]), N * (populationUpdated[31] + populationUpdated[32]), N * populationUpdated[2], N * populationUpdated[1] ])
-    //   // P.push([ N*x[9], N*(x[5]+x[6]),  N*(x[7] + x[8]), N*x[2],    N * x[1]])
-    //   Iters.push(populationUpdated)
-    //   totalInfected.push(N * (1 - x[0]))
-    //   // console.log((x[0] + x[1] + x[2] + x[3] + x[4] + x[5] + x[6] + x[7] + x[8] + x[9]))
-    //   // console.log(x[0] , x[1] , x[2] , x[3] , x[4] , x[5] , x[6] , x[7] , x[8] , x[9])
-    // }
-
-    // return {
-    //   'P': P,
-    //   'deaths': N * populationUpdated[35],
-    //   'total': 1 - x[0],
-    //   'total_infected': totalInfected,
-    //   'Iters': Iters,
-    //   'dIters': f
-    // }
-    //   var S        = x[0] // Susectable
-    //   var E        = x[1] // Exposed
-    //   var I        = x[2] // Infectious
-    //   var Mild     = x[3] // Recovering (Mild)
-    //   var Severe   = x[4] // Recovering (Severe at home)
-    //   var Severe_H = x[5] // Recovering (Severe in hospital)
-    //   var Fatal    = x[6] // Recovering (Fatal)
-    //   var R_Mild   = x[7] // Recovered
-    //   var R_Severe = x[8] // Recovered
-    //   var R_Fatal  = x[9] // Dead
-
-    //   var p_severe = P_SEVERE
-    //   var p_fatal  = CFR
-    //   var p_mild   = 1 - P_SEVERE - CFR
-
-    //   var dS        = -beta*I*S
-    //   var dE        =  beta*I*S - a*E
-    //   var dI        =  a*E - gamma*I
-    //   var dMild     =  p_mild*gamma*I   - (1/D_recovery_mild)*Mild
-    //   var dSevere   =  p_severe*gamma*I - (1/D_hospital_lag)*Severe
-    //   var dSevere_H =  (1/D_hospital_lag)*Severe - (1/D_recovery_severe)*Severe_H
-    //   var dFatal    =  p_fatal*gamma*I  - (1/D_death)*Fatal
-    //   var dR_Mild   =  (1/D_recovery_mild)*Mild
-    //   var dR_Severe =  (1/D_recovery_severe)*Severe_H
-    //   var dR_Fatal  =  (1/D_death)*Fatal
-
-    //   //      0   1   2   3      4        5          6       7        8          9
-    //   return [dS, dE, dI, dMild, dSevere, dSevere_H, dFatal, dR_Mild, dR_Severe, dR_Fatal]
-    // }
-
-    // // var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
-    // var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
-    // var t = 0
-
-    // var P  = []
-    // var TI = []
-    // var Iters = []
-    // while (steps--) {
-    //   if ((steps+1) % (sample_step) == 0) {
-    //         //    Dead   Hospital          Recovered        Infectious   Exposed
-    //     P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    N*v[1] ])
-    //     // P.push([ N*v[9], N*(v[5]+v[6]),  N*(v[7] + v[8]), N*v[2],    0 ])
-    //     Iters.push(v)
-    //     TI.push(N*(1-v[0]))
-    //     // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
-    //     // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
-    //   }
-    //   v =integrate(method,f,v,t,dt);
-    //   t+=dt
-    // }
-    // return {"P": P,
-    //         "deaths": N*v[9],
-    //         "total": 1-v[0],
-    //         "total_infected": TI,
-    //         "Iters":Iters,
-    //         "dIters": f}
-  // }
   /////////////////////////////////////////////////////////////////////////////
 
   function max(P, checked) {
@@ -720,11 +430,11 @@
 
   // create a function that only runs after modified parameters stop changing rapidly
   const compute = debounce((...params) => {
-    Sol = get_solution_seirc(...params)
+    Sol = get_solution_seir(...params)
   }, 60)
 
   // compute whenever values change
-  $: _ = compute(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested) //
+  $: _ = compute(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New)
 
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
@@ -1563,129 +1273,6 @@
       <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Time to hospitalization.<br></div>
       <div class="slidertext">{D_hospital_lag} Days</div>
       <input class="range" type=range bind:value={D_hospital_lag} min={0.5} max=100 step=0.01>
-    </div>
-
-
-
-  </div>
-</div>
-
-
-<div style="height:280px;">
-  <div class="minorTitle">
-    <div style="margin: 0px 0px 5px 4px" class="minorTitleColumn">Contact Tracing</div>
-    <div style="flex: 0 0 20; width:20px"></div>
-    <!-- <div style="margin: 0px 4px 5px 0px" class="minorTitleColumn">Clinical Dynamics</div> -->
-  </div>
-  <div class = "row">
-
-    <div class="column">
-      <div class="paneltitle">Participation</div>
-      <div class="paneldesc" style="height:30px">Percentage of the population that participates<br></div>
-      <div class="slidertext">{(p_c*100).toFixed(0)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={p_c} min={0} max={1.} step=0.01>
-
-      <div class="paneldesc" style="height:30px">Day that contact tracing begins<br></div>
-      <div class="slidertext">{(D_contact_begins)} days</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={D_contact_begins} min={0} max={TotalDays} step=1>
-
-      <!-- <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Number of initial infections.<br></div>
-      <div class="slidertext">{I0}</div>
-      <input class="range" type=range bind:value={I0} min={1} max=10000 step=1>
-      <div class="paneldesc" style="height:30px; border-top: 1px solid #EEE; padding-top: 10px">Total number of days<br></div>
-      <div class="slidertext">{TotalDays} days</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={TotalDays} min={0} max={600} step=1.> -->
-    </div>
-
-    <div class="column">
-      <div class="paneltitle">Number of contacts</div>
-      <div class="paneldesc" style="height:30px">The average number of contacts made<br></div>
-      <div class="slidertext">{R_c} </div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={R_c} min={0} max={60} step=.1>
-
-      <div class="paneldesc" style="height:29px;border-top: 1px solid #EEE; padding-top: 10px">Time period contacts should be notified<br></div>
-      <div class="slidertext">{tau_c} Days</div>
-      <input class="range" type=range bind:value={tau_c} min={0} max={90} step=1>
-
-<!--       <div class="paneldesc" style="height:29px">{@html math_inline("\\mathcal{R}_0")} after social distancing is relaxed<br></div>
-      <div class="slidertext">{R0New.toFixed(2)}</div>
-      <input class="range" type=range bind:value={R0New} min=0.01 max=10 step=0.01> -->
-
-    </div>
-
-    <div class="column">
-      <div class="paneltext">
-      <div class="paneltitle">Testing Availability</div>
-      <div class="paneldesc">Number of tests performed each day<br></div>
-      </div>
-      <div class="slidertext">{N_test}</div>
-      <input class="range" type=range bind:value={N_test} min=0 max={N} step=1>
-
-      <div class="paneldesc" >Percentage of people who have been notified of a potential contact that get tested each day(capped by total available tests).<br></div>
-      <div class="slidertext">{(frac_c_tested*100).toFixed(0)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_c_tested} min={0} max={1.} step=0.01>
-
-      <div class="paneldesc" >Percentage of infectious are tested each day (capped by remaining tests after those who have been notified have been tested).<br></div>
-      <div class="slidertext">{(frac_i_tested*100).toFixed(0)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_i_tested} min={0} max={1.} step=0.01>
-
-      
-
-    </div>
-
-    <div class="column">
-      <div class="paneltitle">Test parameters</div>
-      <div class="paneldesc" style="height:30px">Time it takes to return test results<br></div>
-      <div class="slidertext">{(tau_test).toFixed(2)} days</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={tau_test} min={0.1} max={24} step=0.1>
-
-      <div class="paneldesc" style="height:30px">Percentage of false positives<br></div>
-      <div class="slidertext">{(f_pos*100).toFixed(0)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={f_pos} min={0} max={1.-f_neg} step=0.01>
-
-      <div class="paneldesc" style="height:30px">Percentage of false negatives<br></div>
-      <div class="slidertext">{(f_neg*100).toFixed(0)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={f_neg} min={0} max={1-f_pos} step=0.01>
-    </div>
-
-    <div class="column">
-      <div class="paneltitle">Effectiveness of isolation</div>
-      <div class="paneldesc" style="height:29px">{@html math_inline("\\mathcal{R}_0")} for those who are isolating through contact tracing<br></div>
-      <div class="slidertext">{R_iso.toFixed(2)}</div>
-      <input class="range" type=range bind:value={R_iso} min=0.01 max=10 step=0.01>
-
-    </div>
-
-    <div style="flex: 0 0 20; width:20px"></div>
-
-    <div class="column">
-     <!--  <div class="paneltitle">Mortality Statistics</div>
-      <div class="paneldesc" style="height:30px">Case fatality rate.<br></div>
-      <div class="slidertext">{(CFR*100).toFixed(2)} %</div>
-      <input class="range" style="margin-bottom: 8px" type=range bind:value={CFR} min={0} max=1 step=0.0001>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Time from end of incubation to death.<br></div>
-      <div class="slidertext">{Time_to_death} Days</div>
-      <input class="range" type=range bind:value={Time_to_death} min={(D_infectious)+0.1} max=100 step=0.01>
-    </div>
-
-    <div class="column">
-      <div class="paneltitle">Recovery Times</div>
-      <div class="paneldesc" style="height:30px">Length of hospital stay<br></div>
-      <div class="slidertext">{D_recovery_severe} Days</div>
-      <input class="range" style="margin-bottom: 8px" type=range bind:value={D_recovery_severe} min={0.1} max=100 step=0.01>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Recovery time for mild cases<br></div>
-      <div class="slidertext">{D_recovery_mild} Days</div>
-      <input class="range" type=range bind:value={D_recovery_mild} min={0.5} max=100 step=0.01>
-    </div>
-
-    <div class="column">
-      <div class="paneltitle">Care statistics</div>
-      <div class="paneldesc" style="height:30px">Hospitalization rate.<br></div>
-      <div class="slidertext">{(P_SEVERE*100).toFixed(2)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={P_SEVERE} min={0} max=1 step=0.0001>
-      <div class="paneldesc" style="height:29px; border-top: 1px solid #EEE; padding-top: 10px">Time to hospitalization.<br></div>
-      <div class="slidertext">{D_hospital_lag} Days</div>
-      <input class="range" type=range bind:value={D_hospital_lag} min={0.5} max=100 step=0.01> -->
     </div>
 
 

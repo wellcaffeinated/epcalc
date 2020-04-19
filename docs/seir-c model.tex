@@ -117,7 +117,7 @@ While in $S_{w}$ or $S_{t}$ there is a chance of becoming infected and moving to
 \label{E:dSc}
  \frac{dS^{c}}{dt} &=& \gamma^{c} p_{c} S -[p_{t} +\frac{1}{\tau_{iso}} +\gamma_{iso}] S^{c}, \\
  %
- \frac{dS^{c}_{w}}{dt} &=& p_{t}p_{c} S + p^{c}_{t} S^{c} - [\frac{1}{\tau_{t}}  + \frac{1}{\tau_{iso}}  + \gamma_{iso}] S^{c}_{w}, \\ 
+ \frac{dS^{c}_{w}}{dt} &=& p_{t}p_{c} S + p^{c}_{t} S^{c} - [\frac{1}{\tau_{t}} + \gamma_{iso}] S^{c}_{w}, \\ 
  %
  \frac{dN^{c}_{S}}{dt} &=& \frac{f_{pos}}{\tau_{t}} S^{c}_{w} - [\frac{1}{\tau_{iso}}  + \gamma_{iso}] N^{c}_{S}.  
 \end{eqnarray}
@@ -137,7 +137,7 @@ E_{iso} &=& E^{c} + E^{c}_{w} + E_{w} + E_{t} + N^{c}_{E}
 The rate of change of $E$, the exposed population not isolating, is determined by:
 \begin{eqnarray}
 \label{E:dE}
-\frac{dE}{dt} &=& \gamma_{0}S  + \frac{1}{\tau_{iso}}[E^{c} + E_{t} + N^{c}_{E} + ^N{c}_{E'}] + \frac{f_{neg}}{\tau_{t}}[E_{w} + E^{c}_{w}] -  [\gamma^{c} p_{c} +p_{t} + \frac{1}{\tau_{inc}}] E.
+\frac{dE}{dt} &=& \gamma_{0}S  + \frac{1}{\tau_{iso}}[E^{c} + E_{t} + N^{c}_{E} + N^{c}_{E'}] + \frac{f_{neg}}{\tau_{t}}[E_{w} + E^{c}_{w}] -  [\gamma^{c} p_{c} +p_{t} + \frac{1}{\tau_{inc}}] E.
 \end{eqnarray}
 $E$ grows in size due to infections from S, as well as individuals who individuals who are exposed but finish their isolation ($E^{c} + E_{t} + N^{c}_{E}$), and those that are exposed but register a falser negative when tested. $E$ is diminished by those who are notified through contact tracing that they need to isolate, those that are selected for testing, and those that become infectious and move to the next phase. Most of the following equations for the exposed population also feature a rate $\frac{1}{\tau_{inc}}$ that moves them to the infectious phase.
 
@@ -153,9 +153,9 @@ Both of the populations $E_{w}$ and $E_{t}$ also grow from people in their count
 There are three groups who are exposed and are also participating in contact tracing. Their dynamics are governed by:
 \begin{eqnarray}
 \label{E:dEc}
- \frac{dE^{c}}{dt} &=& \gamma_{iso} S^{c} + \gamma^{c} p_{c} E -[p_{t} +\frac{1}{\tau_{iso}} + \frac{1}{\tau_{inc}}] E^{c}, \\
+ \frac{dE^{c}}{dt} &=& \gamma_{iso} S^{c} + \gamma^{c} p_{c} E -[p^{c}_{t} +\frac{1}{\tau_{iso}} + \frac{1}{\tau_{inc}}] E^{c}, \\
  %
- \frac{dE^{c}_{w}}{dt} &=& \gamma_{iso} S^{c}_{w} + p_{t}p_{c} E + p^{c}_{t}E^{c} - [\frac{1}{\tau_{t}}  + \frac{1}{\tau_{iso}}  + \frac{1}{\tau_{inc}}] E^{c}_{w}, \\ 
+ \frac{dE^{c}_{w}}{dt} &=& \gamma_{iso} S^{c}_{w} + p_{t}p_{c} E + p^{c}_{t}E^{c} - [\frac{1}{\tau_{t}}  + \frac{1}{\tau_{inc}}] E^{c}_{w}, \\ 
  %
  \frac{dN^{c}_{E}}{dt} &=&  \frac{(1-f_{neg})}{\tau_{t}} E^{c}_{w} - [\frac{1}{\tau_{iso}}  + \frac{1}{\tau_{inc}}] N^{c}_{E}, \\ 
  %
@@ -195,13 +195,13 @@ The portion of $I_{tot}$ that is isolating is made up of six different subpopula
 Finally, we have the rate equations for those who are infectious and participating in contact tracing:
 \begin{eqnarray}
 \label{E:dIc}
- \frac{dI^{c}}{dt} &=& \frac{1}{\tau_{inc}} E^{c} + \gamma^{c} p_{c} I -[p_{t} +\frac{1}{\tau_{iso}} + \frac{1}{\tau_{inf}}] I^{c}, \\
+ \frac{dI^{c}}{dt} &=& \frac{1}{\tau_{inc}} E^{c} + \gamma^{c} p_{c} I -[p^{c}_{t} +\frac{1}{\tau_{iso}} + \frac{1}{\tau_{inf}}] I^{c}, \\
  %
- \frac{dI^{c}_{w}}{dt} &=& \frac{1}{\tau_{inc}} E^{c}_{w} + p_{t}p_{c} I + p^{c}_{t}I^{c} - [\frac{1}{\tau_{t}}  + \frac{1}{\tau_{iso}}  + \frac{1}{\tau_{inf}}] I^{c}_{w}, \\ 
+ \frac{dI^{c}_{w}}{dt} &=& \frac{1}{\tau_{inc}} E^{c}_{w} + p_{t}p_{c} I + p^{c}_{t}I^{c} - [\frac{1}{\tau_{t}}  + \frac{1}{\tau_{inf}}] I^{c}_{w}, \\ 
  %
  \frac{dN^{c}_{I}}{dt} &=&  \frac{(1-f_{neg})}{\tau_{t}} I^{c}_{w} - [\frac{1}{\tau_{iso}}  + \frac{1}{\tau_{inf}}] N^{c}_{I}, \\
  %.
- \frac{dN^{c}_{I'}}{dt} &=&  \frac{1}{\tau_{inc}} [N^{c}_{E} + N^{c}_{E'}] - \frac{1}{\tau_{inf}}N^{c}_{I'}.
+ \frac{dN^{c}_{I'}}{dt} &=&  \frac{1}{\tau_{inc}} [N^{c}_{E} + N^{c}_{E'}] - [\frac{1}{\tau_{inf}} + \frac{1}{\tau_{iso}}] N^{c}_{I'}.
 \end{eqnarray}
 Those who are notified through contact tracing, but have not yet been tested join $I^{c}$. Those who are participating in contact tracing and are selected for testing move to $I^{c}_{w}$ where they wait for their test results an average time of $\tau_{t}$. A positive test result moves them to the notification layer $N^{c}_{I}$ where their contacts are notified. Finally, those who tested positive in $N^{c}_{E}$ (where they performed the relevant notifications) move instead to $N^{c}_{I'}$ to ensure they don't trigger a second round of notifications when they become infectious.
 

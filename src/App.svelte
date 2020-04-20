@@ -93,6 +93,7 @@
   $: tau_test = 1
   $: tau_iso = 14
   $: tau_c = 7
+  $: tau_wait_until_tested = 1
   $: R_iso = .3
   $: R_c = 60
   $: f_pos = 0.0
@@ -215,7 +216,7 @@
   }
 
 
-  function get_solution_seirc(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested) {
+  function get_solution_seirc(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested, p_c) {
     // 
     var interpolation_steps = 40
     var steps = 100*interpolation_steps
@@ -339,6 +340,10 @@
       var R_Severe = x[25] // Recovered
       var R_Fatal = x[26] // Dead
 
+      var Rc = x[27]
+      var Rcw = x[28]
+      var NcR = x[29]
+
 
 
       // set the probabilities for determining the severity of the disease.
@@ -366,54 +371,58 @@
 
       // figure out the relative rates of testing between those who are in contact tracing, and those who are not.
       // First, the number of tests consumed by those in contact tracing who have been notified of a possible exposure.
-      var Nc_tot = Sc + Ec + Ic
+      var Nc_tot = Sc + Ec + Ic + Rc 
       // If the number of people who have been notified exceeds the number of tests, all the tests are used on this population
       // and none are left for the general population.
       var p_ctest = frac_c_tested
       var p_test = 0
       var p_itest = frac_i_tested
 
-      // If there are more people who have been notified of possible contacts than tests for a day, then all the tests go to the potentially contacted population
-      // if (  Nc_tot * frac_c_tested * N > N_test ){
-      //   p_itest = 0
-      //   p_ctest = N_test/(Nc_tot *N)
-      //   p_test = 0
-      // }
-      // else if ( (I * frac_i_tested + Nc_tot * frac_c_tested) *N > N_test ){
-      //   p_ctest = frac_c_tested
-      //   p_itest = (N_test - p_ctest * N ) / I
-      //   p_test  = 0
-      // }
-      // else{
-      //   p_itest = frac_i_tested
-      //   p_ctest = frac_c_tested
-      //   p_test  = (N_test - (p_itest + p_ctest)* N)/(S + E + I)
-      // }
+      var ptest = N_test / N
+
+      // //If there are more people who have been notified of possible contacts than tests for a day, then all the tests go to the potentially contacted population
+      if (  Nc_tot * frac_c_tested > ptest ){
+        p_ctest = ptest/ Nc_tot
+        p_itest = 0
+        p_test = 0
+      }
+      else if ( (I * frac_i_tested + Nc_tot * frac_c_tested) > ptest ){
+        p_ctest = frac_c_tested 
+        p_itest = (ptest - p_ctest )/I  
+        p_test  = 0
+      }
+      else{
+        p_itest = frac_i_tested 
+        p_ctest = frac_c_tested 
+        p_test  = ptest - p_itest*I - p_ctest * Nc_tot
+        // p_test  = (N_test - (p_itest + p_ctest)* N)/(S + E + I)
+      }
     
 
-      // if (Nc_tot*frac_c_tested > N_test){
-      //   p_ctest = N_test/ Nc_tot
-      //   p_test  = 0. 
-      // } else{
-      //   p_ctest = Nc_tot * frac_c_tested/N
-      //   p_test  = (N_test  - frac_c_tested * Nc_tot)/N
-      // }
-
+  
+      // NcR = 0
+      // console.log(N* NcR)
 
       var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
       var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
-      var Nc = NcS + NcE + NcI // total number of people who are notifying
-
+      var Nc = NcS + NcE + NcI + NcIp + NcR// total number of people who are notifying
+      var Rtot = Mild + Severe + Severe_H + Fatal 
       // console.log( (Nc_tot + Nc) * N, (Sw + St + Ew + Et + Iw + It) * N)
 
 
       var gamma_0    = I * R0 / tau_inf       // The effective infectious rate for those who are not isolating. 
       var gamma_iso  = Iiso * R_iso / tau_inf  // The effective infectious rate for those who are  isolating. 
-      var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who 
+      // var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who 
+      var gamma_c = R_c/tau_c * (NcS + NcE + NcIp) + (R_c - R0)/tau_c * (NcI+ NcR)/N //rate of notification of individuals who are not infectious
+      var gamma_p = R_iso / tau_inf * Itot/N   // The infectious rate for those who are susceptible and isolating.
 
 
       if (t > InterventionTime && isItTimeToIntervene < dutycycle){//} && t< InterventionTime + duration){
         gamma_0 = (InterventionAmt)*gamma_0
+        // gamma_c = 0
+        // p_c = 0
+        // p_test = 0
+        // gamma_iso = 0
       }else if(t > InterventionTime && isItTimeToIntervene >= dutycycle ){//&& t< InterventionTime + duration){
         gamma_0 = R0New/R0*gamma_0
         // R0 = R0New
@@ -423,11 +432,13 @@
       }
 
       if (t < D_contact_begins ){
-        // gamma_iso = 0.*gamma_0
+        gamma_iso = 0.*gamma_0
         gamma_c = 0 * gamma_c
-        // p_c = 0.
-        // p_ctest = 0
-        p_test = N_test/N
+        p_c = 0.
+        p_ctest = 0
+        p_itest = 0
+        p_test = 0
+        // p_test = N_test/N
       }
 
 
@@ -445,32 +456,41 @@
       // var gamma_iso  = Iiso * R_iso / tau_inf  // The effective infectious rate for those who are  isolating. 
       // var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who need to be notified of possible exposure.
 
-      var dS    = -(gamma_0 + gamma_c * p_c +p_test) * S + 1/tau_iso *(Sc +St + NcS) + (1 -f_pos)/tau_test * (Sw + Scw)
-      var dSw   = p_test * (1 - p_c) * S - (1/tau_test + gamma_iso) * Sw
-      var dSt   = f_pos/tau_test * Sw - (1/tau_iso + gamma_iso) * St
-      var dSc   = gamma_c * p_c * S - (p_ctest + 1/tau_iso + gamma_iso) * Sc
-      var dScw  = p_test * p_c * S + p_ctest * Sc - (1/tau_test + gamma_iso) * Scw
-      var dNcS  = f_pos/tau_test * Scw - (1/tau_iso + gamma_iso) * NcS 
+      var dS    = -(gamma_0 + gamma_iso + gamma_c * p_c +p_test/tau_wait_until_tested) * S + 1/tau_iso *(Sc +St + NcS) + (1 -f_pos)/tau_test * (Sw + Scw)
+      var dSw   = p_test/tau_wait_until_tested * (1 - p_c) * S - (1/tau_test + gamma_p) * Sw
+      var dSt   = f_pos/tau_test * Sw - (1/tau_iso + gamma_p) * St
+      var dSc   = gamma_c * p_c * S - (p_ctest/tau_wait_until_tested + 1/tau_iso + gamma_p) * Sc
+      var dScw  = p_test/tau_wait_until_tested * p_c * S + p_ctest/tau_wait_until_tested * Sc - (1/tau_test + gamma_p) * Scw
+      var dNcS  = f_pos/tau_test * Scw - (1/tau_iso + gamma_p) * NcS 
       // var dSiso = dSw + dSt + dSc + dScw +dNcS
       // var dStot = dS + dSiso
 
-      var dE    = gamma_0 * S + 1/tau_iso *(Ec +Et + NcE + NcEp) + f_neg/tau_test * (Ew + Ecw) - (gamma_c * p_c + p_test + 1/tau_inc) * E
-      var dEw   = gamma_iso * Sw + p_test * (1 - p_c) * E - (1/tau_test + 1/tau_inc) * Ew
-      var dEt   = gamma_iso * St + (1 - f_neg)/tau_test * Ew - (1/tau_iso + 1/tau_inc) * Et
-      var dEc   = gamma_iso * Sc + gamma_c * p_c * E - (p_ctest + 1/tau_iso + 1/tau_inc) * Ec
-      var dEcw  = gamma_iso * Scw + p_test * p_c * E + p_ctest * Ec - (1/tau_test + 1/tau_inc) * Ecw
-      var dNcE  = gamma_iso * NcS + (1 - f_neg)/tau_test * Ecw - (1/tau_iso + 1/tau_inc) * NcE 
-      var dNcEp = (gamma_iso * NcS - (1/tau_iso + 1/tau_inc) * NcEp ) * 0
+      var ratioNcI = (NcI+ NcR) / (Itot + Rtot)
+      // console.log(ratioNcI)
+      
+
+      var dE    = (gamma_0 + gamma_iso)*(1 - ratioNcI * p_c) * S + 1/tau_iso *(Ec +Et + NcE + NcEp) + f_neg/tau_test * (Ew + Ecw) - (gamma_c * p_c + p_test/tau_wait_until_tested + 1/tau_inc) * E
+      var dEw   = gamma_p * Sw + p_test/tau_wait_until_tested * (1 - p_c) * E - (1/tau_test + 1/tau_inc) * Ew
+      var dEt   = gamma_p * St + (1 - f_neg)/tau_test * Ew - (1/tau_iso + 1/tau_inc) * Et
+      var dEc   = gamma_p * Sc + (gamma_0 + gamma_iso)* ratioNcI * p_c * S + gamma_c * p_c * E - (p_ctest/tau_wait_until_tested + 1/tau_iso + 1/tau_inc) * Ec
+      var dEcw  = gamma_p * Scw + p_test/tau_wait_until_tested * p_c * E + p_ctest/tau_wait_until_tested * Ec - (1/tau_test + 1/tau_inc) * Ecw
+      var dNcE  = gamma_p * NcS + (1 - f_neg)/tau_test * Ecw - (1/tau_iso + 1/tau_inc) * NcE 
+      // var dNcEp = (gamma_p * NcS - (1/tau_iso + 1/tau_inc) * NcEp ) * 0
       // var dEiso = dEw + dEt + dEc + dEcw + dNcE + dNcEp
       // var dEtot = dE + dEiso
       
-      var dI    = 1/tau_inc * E  + 1/tau_iso *(Ic +It + NcI + NcIp) + f_neg/tau_test * (Iw + Icw) - (gamma_c * p_c + p_itest + 1/tau_inf) * I
-      var dIw   = 1/tau_inc * Ew + p_itest * (1 - p_c) * I - (1/tau_test + 1/tau_inf) * Iw
+      var dI    = 1/tau_inc * E  + 1/tau_iso *(Ic +It + NcI + NcIp) + f_neg/tau_test * (Iw + Icw) - (gamma_c * p_c + p_itest/tau_wait_until_tested + 1/tau_inf) * I
+      var dIw   = 1/tau_inc * Ew + p_itest/tau_wait_until_tested * (1 - p_c) * I - (1/tau_test + 1/tau_inf) * Iw
       var dIt   = 1/tau_inc * Et + (1 - f_neg)/tau_test * Iw - (1/tau_iso + 1/tau_inf) * It
-      var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ctest + 1/tau_iso + 1/tau_inf) * Ic
-      var dIcw  = 1/tau_inc * Ecw + p_test * p_c * I + p_ctest * Ic - (1/tau_test + 1/tau_inf) * Icw
-      var dNcI  = (1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf) )* NcI 
-      var dNcIp = (1/tau_inc * (NcE + NcEp) - (1/tau_iso + 1/tau_inf) * NcIp ) * 0
+      var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ctest/tau_wait_until_tested + 1/tau_iso + 1/tau_inf) * Ic
+      var dIcw  = 1/tau_inc * Ecw + p_itest/tau_wait_until_tested * p_c * I + p_ctest/tau_wait_until_tested * Ic - (1/tau_test + 1/tau_inf) * Icw
+      var dNcI  = 1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf)* NcI 
+      var dNcIp = (1/tau_inc * NcE - (1/tau_iso + 1/tau_inf) * NcIp )
+
+      // R terms for ensuring notifications still take place
+      var dRc = 1/tau_inf * Ic - (p_ctest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc
+      var dRcw = 1/tau_inf * Icw - (1/tau_test +1/(D_recovery_mild))* Rcw
+      var dNcR = 1/tau_inf * NcI + (1 - f_neg)/tau_test * Rcw - (1/tau_iso + 1/tau_inf)*NcR
 
       // var dIiso = dIw + dIt + dIc + dIcw + NcI + NcIp 
       // var dItot = dI + dIiso
@@ -492,28 +512,29 @@
       // populationUpdated.push(dEtot + Etot) 
       // populationUpdated.push(dItot + Itot) 
       // populationUpdated.push(dRtot + Rtot) 
-      populationUpdated.push(dS) 
+      populationUpdated.push(dS)    //0
       populationUpdated.push(dSw) 
       populationUpdated.push(dSt) 
       populationUpdated.push(dSc) 
       populationUpdated.push(dScw) 
-      populationUpdated.push(dNcS) 
+      populationUpdated.push(dNcS) //5
       // populationUpdated.push(dSiso) 
-      populationUpdated.push(dE) 
+      populationUpdated.push(dE)   //6
       populationUpdated.push(dEw) 
       populationUpdated.push(dEt) 
       populationUpdated.push(dEc) 
       populationUpdated.push(dEcw) 
-      populationUpdated.push(dNcE) 
-      populationUpdated.push(dNcEp) 
+      populationUpdated.push(dNcE) //11
+      // populationUpdated.push(dNcEp) 
+      populationUpdated.push(0) //12
       // populationUpdated.push(dEiso) 
-      populationUpdated.push(dI) 
-      populationUpdated.push(dIw) 
-      populationUpdated.push(dIt) 
-      populationUpdated.push(dIc) 
-      populationUpdated.push(dIcw) 
-      populationUpdated.push(dNcI) 
-      populationUpdated.push(dNcIp) 
+      populationUpdated.push(dI)  //13
+      populationUpdated.push(dIw)  //14
+      populationUpdated.push(dIt) //15
+      populationUpdated.push(dIc)  //16
+      populationUpdated.push(dIcw) //17
+      populationUpdated.push(dNcI) //18
+      populationUpdated.push(dNcIp) //18
       // populationUpdated.push(dIiso) 
       populationUpdated.push(dMild)       // index 20
       populationUpdated.push(dSevere)     // index 21
@@ -523,9 +544,22 @@
       populationUpdated.push(dR_Severe)   // index 25
       populationUpdated.push(dR_Fatal)    // index 26
 
+      // population contact tracing recovered
+      populationUpdated.push(dRc)
+      populationUpdated.push(dRcw)
+      populationUpdated.push(dNcR)
+
+      // console.log(Ic * N, Icw * N, NcI * N, NcIp * N)
+      var Stot = S + Sw + St + Sc + Scw +NcS
+      var Etot = E + Ew + Et + Ec + Ecw +NcE
+      // var Rtot = Mild + Severe + Severe_H + Fatal + R_Mild + R_Severe + R_Fatal
+      // var dStot = dS + dSiso
+      // console.log(N, N* (Stot + Itot + Etot + Rtot))
+      // var dNcI  = (1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf) )* NcI
+      // console.log(1/tau_inc,  NcE,  (1 - f_neg)/tau_test,  Icw,  - (1/tau_iso + 1/tau_inf), NcI)
 
 
-      // console.log(S, Stot, populationUpdated[0], dStot, gamma_0, gamma_c,  p_c, p_test)
+      // console.log(S, Stot, populationUpdated[0], dStot, gamma_0, gamma_c,  p_c, p_test/tau_wait_until_tested)
       // console.log('after', populationUpdated)
       // console.log('')
       //          0   1   2   3      4        5          6       7        8          9
@@ -591,6 +625,7 @@
       // console.log(t, 'after', v)
       // console.log('')
     }
+
     return {"P": P,
             "deaths": N * pDead,
             "total": (1 - pSusceptible) ,
@@ -724,7 +759,7 @@
   }, 60)
 
   // compute whenever values change
-  $: _ = compute(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested) //
+  $: _ = compute(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested, p_c) //
 
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
@@ -1605,7 +1640,7 @@
 
       <div class="paneldesc" style="height:29px;border-top: 1px solid #EEE; padding-top: 10px">Time period contacts should be notified<br></div>
       <div class="slidertext">{tau_c} Days</div>
-      <input class="range" type=range bind:value={tau_c} min={0} max={90} step=1>
+      <input class="range" type=range bind:value={tau_c} min={0.1} max={90} step=1>
 
 <!--       <div class="paneldesc" style="height:29px">{@html math_inline("\\mathcal{R}_0")} after social distancing is relaxed<br></div>
       <div class="slidertext">{R0New.toFixed(2)}</div>
@@ -1619,17 +1654,17 @@
       <div class="paneldesc">Number of tests performed each day<br></div>
       </div>
       <div class="slidertext">{N_test}</div>
-      <input class="range" type=range bind:value={N_test} min=0 max={N} step=1>
+      <input class="range" type=range bind:value={N_test} min=0 max={N/10} step=1>
 
-      <div class="paneldesc" >Percentage of people who have been notified of a potential contact that get tested each day(capped by total available tests).<br></div>
+      <div class="paneldesc" >Testing those who have been notified of potential contact.<br></div>
       <div class="slidertext">{(frac_c_tested*100).toFixed(0)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_c_tested} min={0} max={1.} step=0.01>
 
-      <div class="paneldesc" >Percentage of infectious are tested each day (capped by remaining tests after those who have been notified have been tested).<br></div>
+      <div class="paneldesc" >Testing of infectious each day <br></div>
       <div class="slidertext">{(frac_i_tested*100).toFixed(0)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_i_tested} min={0} max={1.} step=0.01>
 
-      
+      <!-- (capped by remaining tests after those who have been notified have been tested). -->
 
     </div>
 

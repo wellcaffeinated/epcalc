@@ -57,6 +57,7 @@
     return r;
   }
 
+  var largeNumber = 1E6
   // Wuhan
   $: Time_to_death     = 16.2
   $: logN              = Math.log(19E6)
@@ -64,7 +65,7 @@
   $: I0                = 1
   $: R0                = 5.7
   $: D_incbation       = 4.2
-  $: D_infectious      = 6
+  $: D_infectious      = 6  
   $: D_recovery_mild   = (14 - 2.9)
   $: D_recovery_severe = (14 - 2.9)
   $: D_hospital_lag    = 5
@@ -79,7 +80,7 @@
   $: duration          = 7*12*1e10
   $: InterventionLength= 90
   $: DaysRelaxed       = 30
-  $: TotalDays         = 160
+  $: TotalDays         = 540
   $: dt                = TotalDays / 100
   $: R0New             = 5.7
   // contact tracing parameters
@@ -230,10 +231,10 @@
       // var nDays = 90
       // var InterventionLength = nDays
       // if (t > InterventionTime && t < InterventionTime + duration && t< InterventionTime + InterventionLength){
-      var nDays = dt*interpolation_steps * 100
-      if (InterventionLength + DaysRelaxed > nDays){
-        DaysRelaxed = nDays - InterventionLength
-      }
+      // var nDays = dt*interpolation_steps * 100
+      // if (InterventionLength + DaysRelaxed > nDays){
+      //   DaysRelaxed = nDays - InterventionLength
+      // }
       var period = InterventionLength + DaysRelaxed
       var dutycycle = InterventionLength / period
       var isItTimeToIntervene = ((t - InterventionTime) % period) / period
@@ -241,61 +242,13 @@
       var a     = 1/D_incbation
       var gamma = 1/D_infectious
       var beta = R0 *gamma
-      // New parameters for contact tracing
-      // var betaC = Rc * gamma  // a rate of contacts with others while infectious
-      // var betaT = Pt/Tt       // rate at which test results are returned
+      // // New parameters for contact tracing
+      // // var betaC = Rc * gamma  // a rate of contacts with others while infectious
+      // // var betaT = Pt/Tt       // rate at which test results are returned
 
       var tau_inc =    D_incbation
       var tau_inf =    D_infectious
 
-
-      
-
-      // var Stot = x[0]   // the total Susceptible population
-      // var Etot = x[1]   // the total Exposed population
-      // var Itot = x[2]   // the total Infectious population
-      // var Rtot = x[3]   // the total Recovered population
-
-      // // Now list all the subpopulations that are Susceptible
-      // var S    = x[4]   // Susceptible population that is not isolating
-      // var Sw   = x[5]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      // var St   = x[6]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      // //  /// Susceptible and particpates in contact tracing
-      // var Sc   = x[7]  // notified of a possible exposure and isolates, but not tested 
-      // var Scw  = x[8]  // notified of possible exposure and waiting for test results
-      // var NcS  = x[9]  // False positive. Isolates and notifies others of potential exposure.
-      // var Siso = x[10]   // Total population isolating in S. Siso = Sw + St + Sc + Scw + NcS
-
-      // // Now list all the subpopulations that are Exposed
-      // var E    = x[11]   // Exposed population that is not isolating
-      // var Ew   = x[12]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      // var Et   = x[13]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      // //  /// Exposed and particpates in contact tracing
-      // var Ec   = x[14]  // notified of a possible exposure and isolates, but not tested 
-      // var Ecw  = x[15]  // notified of possible exposure and waiting for test results
-      // var NcE  = x[16]  // False positive. Isolates and notifies others of potential exposure.
-      // var NcEp = x[17]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Eiso = x[18]   // Total population isolating in E. Eiso = Ew + Et + Ec + Ecw + NcE + NcEp
-
-      // // Now list all the subpopulations that are Infectious
-      // var I    = x[19]   // Infectious population that is not isolating
-      // var Iw   = x[20]  // Waiting for test results, but do not particpate in contact tracing. Isolates until they get results
-      // var It   = x[21]  // tested positive through a false positive and will isolate, but do not participate in contact tracing
-      // //  /// Infectious and particpates in contact tracing
-      // var Ic   = x[22]  // notified of a possible exposure and isolates, but not tested 
-      // var Icw  = x[23]  // notified of possible exposure and waiting for test results
-      // var NcI  = x[24]  // False positive. Isolates and notifies others of potential exposure.
-      // var NcIp = x[25]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Iiso = x[26]   // Total population isolating in I. Iiso = Iw + It + Ic + Icw + NcI + NcIp
-
-      // // Now for the extra parameters related to deaths, mild, severe, and hospitalization rates
-      // var Mild = x[27] // Recovering (Mild)
-      // var Severe = x[28] // Recovering (Severe at home)
-      // var Severe_H = x[29] // Recovering (Severe in hospital)
-      // var Fatal = x[30] // Recovering (Fatal)
-      // var R_Mild = x[31] // Recovered
-      // var R_Severe = x[32] // Recovered
-      // var R_Fatal = x[33] // Dead
 
       // look at only the variables with rate changes. Exclude the total populations and the total iso populations.
 
@@ -351,6 +304,14 @@
       var p_fatal = CFR
       var p_mild = 1 - P_SEVERE - CFR
 
+      // // First, check to see if any populations have gone negative. If so, force them to 0. Otherwise numerical fluctuations can drive the population negative.
+      // if (S < 0){ S = 0}
+      // if (Sc < 0){ Sc = 0}
+      // if (Sw < 0){ Sw = 0}
+      // if (Scw < 0){ Scw = 0}
+      // if (St < 0){ St = 0}
+      // if (NcS < 0){ Sc = 0}
+
       // Rate equations governing the population dynamics.
 
       // var dS = -beta * I * S
@@ -372,6 +333,17 @@
       // figure out the relative rates of testing between those who are in contact tracing, and those who are not.
       // First, the number of tests consumed by those in contact tracing who have been notified of a possible exposure.
       var Nc_tot = Sc + Ec + Ic + Rc 
+      var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
+      var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
+      var Nc = NcS + NcE + NcI + NcIp + NcR// total number of people who are notifying
+      var Rtot = Mild + Severe + Severe_H + Fatal + R_Mild + R_Severe + R_Fatal
+      // console.log( (Nc_tot + Nc) * N, (Sw + St + Ew + Et + Iw + It) * N)
+      var Stot = S + Sw + St + Sc + Scw +NcS
+      var Etot = E + Ew + Et + Ec + Ecw +NcE
+      var tot = Stot + Etot + Itot + Rtot 
+      // console.log(tot, Itot, Iiso, Iw,  It,  Ic,  Icw,  NcI,  NcIp)
+      // console.log(tot, Itot, I)//, Iw,  It,  Ic,  Icw,  NcI,  NcIp)
+
       // If the number of people who have been notified exceeds the number of tests, all the tests are used on this population
       // and none are left for the general population.
       var p_ctest = frac_c_tested
@@ -381,73 +353,88 @@
       var ptest = N_test / N
 
       // //If there are more people who have been notified of possible contacts than tests for a day, then all the tests go to the potentially contacted population
-      if (  Nc_tot * frac_c_tested > ptest ){
-        p_ctest = ptest/ Nc_tot
-        p_itest = 0
+      if (  Itot * frac_i_tested > ptest ){
+        p_itest = ptest/ Itot
+        p_ctest = 0
         p_test = 0
       }
-      else if ( (I * frac_i_tested + Nc_tot * frac_c_tested) > ptest ){
-        p_ctest = frac_c_tested 
-        p_itest = (ptest - p_ctest )/I  
+      else if ( (Itot * frac_i_tested + Nc_tot * frac_c_tested) > ptest ){
+        p_itest = frac_i_tested 
+        p_ctest = (ptest - p_itest * Itot )/Nc_tot  
         p_test  = 0
       }
       else{
         p_itest = frac_i_tested 
         p_ctest = frac_c_tested 
-        p_test  = ptest - p_itest*I - p_ctest * Nc_tot
+        p_test  = ptest - p_itest*Itot - p_ctest * Nc_tot
         // p_test  = (N_test - (p_itest + p_ctest)* N)/(S + E + I)
       }
+
+      if (Itot <= 0){ p_itest = 0}
+      if (Nc_tot <=0){p_ctest = 0}
+
     
 
   
       // NcR = 0
       // console.log(N* NcR)
 
-      var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
-      var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
-      var Nc = NcS + NcE + NcI + NcIp + NcR// total number of people who are notifying
-      var Rtot = Mild + Severe + Severe_H + Fatal 
-      // console.log( (Nc_tot + Nc) * N, (Sw + St + Ew + Et + Iw + It) * N)
+      
+
+      // console.log(R0)
+      // else if(t > InterventionTime + duration) {
+      //   // gamma_0 = gamma_0 *.5
+      // }
 
 
       var gamma_0    = I * R0 / tau_inf       // The effective infectious rate for those who are not isolating. 
       var gamma_iso  = Iiso * R_iso / tau_inf  // The effective infectious rate for those who are  isolating. 
       // var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who 
-      var gamma_c = R_c/tau_c * (NcS + NcE + NcIp) + (R_c - R0)/tau_c * (NcI+ NcR)/N //rate of notification of individuals who are not infectious
-      var gamma_p = R_iso / tau_inf * Itot/N   // The infectious rate for those who are susceptible and isolating.
-
-
+      
       if (t > InterventionTime && isItTimeToIntervene < dutycycle){//} && t< InterventionTime + duration){
         gamma_0 = (InterventionAmt)*gamma_0
-        // gamma_c = 0
-        // p_c = 0
-        // p_test = 0
-        // gamma_iso = 0
+        // R0 = InterventionAmt * R0
+
       }else if(t > InterventionTime && isItTimeToIntervene >= dutycycle ){//&& t< InterventionTime + duration){
         gamma_0 = R0New/R0*gamma_0
         // R0 = R0New
       }
-      else if(t > InterventionTime + duration) {
-        gamma_0 = gamma_0 *.5
-      }
+
+      var gamma_c = R_c/tau_c * (NcS + NcE + NcIp) + (R_c - gamma_0*tau_inf/I)/tau_c * (NcI)// + NcR) //rate of notification of individuals who are not infectious
+
+
+
+      var gamma_p = R_iso * Itot  / tau_inf  // The infectious rate for those who are susceptible and isolating.
+
+
+      if (gamma_c < 0){gamma_c =0}
+
+      var ratioNcI = (NcI + NcR) / (Itot + Rtot)
+      // var ratioNcI = (NcI) / (Itot)
+      // var ratioNcI = p_itest * p_c 
+      if (ratioNcI < 0){ratioNcI = 0}
+      if (ratioNcI > 1){ratioNcI = 1}
+
+
+      
 
       if (t < D_contact_begins ){
-        gamma_iso = 0.*gamma_0
-        gamma_c = 0 * gamma_c
-        p_c = 0.
+        gamma_iso = 0.
+        gamma_c = 0
         p_ctest = 0
         p_itest = 0
         p_test = 0
+        ratioNcI = 0
         // p_test = N_test/N
       }
 
 
+      // gamma_iso = 0
+      // var offset = 29
+      // var seasonal_effect   = .46 * 0
+      // var forcing = (t) => (1 + seasonal_effect*Math.cos(2*3.14159265*(Math.floor(t) - offset)/365))
 
-      var offset = 29
-      var seasonal_effect   = .46 * 0
-      var forcing = (t) => (1 + seasonal_effect*Math.cos(2*3.14159265*(Math.floor(t) - offset)/365))
-
-      beta = beta*forcing(t)/forcing(0) // Forcing, with R0 correction
+      // beta = beta*forcing(t)/forcing(0) // Forcing, with R0 correction
 
       // var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
       // var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
@@ -464,8 +451,6 @@
       var dNcS  = f_pos/tau_test * Scw - (1/tau_iso + gamma_p) * NcS 
       // var dSiso = dSw + dSt + dSc + dScw +dNcS
       // var dStot = dS + dSiso
-
-      var ratioNcI = (NcI+ NcR) / (Itot + Rtot)
       // console.log(ratioNcI)
       
 
@@ -488,9 +473,9 @@
       var dNcIp = (1/tau_inc * NcE - (1/tau_iso + 1/tau_inf) * NcIp )
 
       // R terms for ensuring notifications still take place
-      var dRc = 1/tau_inf * Ic - (p_ctest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc
-      var dRcw = 1/tau_inf * Icw - (1/tau_test +1/(D_recovery_mild))* Rcw
-      var dNcR = 1/tau_inf * NcI + (1 - f_neg)/tau_test * Rcw - (1/tau_iso + 1/tau_inf)*NcR
+      var dRc = (1/tau_inf * Ic - (p_ctest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc) * 1
+      var dRcw = (1/tau_inf * Icw - (1/tau_test +1/(D_recovery_mild))* Rcw) * 1
+      var dNcR = (1/tau_inf * NcI + (1 - f_neg)/tau_test * Rcw - (1/tau_iso + 1/D_recovery_mild)*NcR) * 1
 
       // var dIiso = dIw + dIt + dIc + dIcw + NcI + NcIp 
       // var dItot = dI + dIiso
@@ -505,6 +490,44 @@
       var dR_Mild = (1 / D_recovery_mild) * Mild
       var dR_Severe = (1 / D_recovery_severe) * Severe_H
       var dR_Fatal = (1 / D_death) * Fatal
+
+
+      // First, check to see if any populations will negative. If so, force them to 0. Set the population change rate so the population goes to 0 instead.
+      if (S +dS < 0){ dS = -S}
+      if (Sc +dSc < 0){ dSc = -Sc}
+      if (Sw +dSw < 0){ dSw = -Sw}
+      if (St +dSt < 0){ dSt = -St}
+      if (Scw +dScw < 0){ dScw = -Scw}
+      if (NcS +dNcS < 0){ dNcS = -NcS}
+
+      if (E +dE < 0){ dE = -E}
+      if (Ec +dEc < 0){ dEc = -Ec}
+      if (Ew +dEw < 0){ dEw = -Ew}
+      if (Et +dEt < 0){ dEt = -Et}
+      if (Ecw +dEcw < 0){ dEcw = -Ecw}
+      if (NcE +dNcE < 0){ dNcE = -NcE}
+      // if (NcEp +dNcEp < 0){ dNcEp = -NcEp}
+
+      if (I +dI < 0){ dI = -I}
+      if (Ic +dIc < 0){ dIc = -Ic}
+      if (Iw +dIw < 0){ dIw = -Iw}
+      if (It +dIt < 0){ dIt = -It}
+      if (Icw +dIcw < 0){ dIcw = -Icw}
+      if (NcI +dNcI < 0){ dNcI = -NcI}
+      if (NcIp +dNcIp < 0){ dNcIp = -NcIp}
+
+      // track contacts
+      var dREc = gamma_p * Sc //+ (gamma_0 + gamma_iso)* ratioNcI * p_c * S + gamma_c * p_c * E
+      var dRIc = 1/tau_inc * Ec + gamma_c * p_c * I
+      var dRNcI = 1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw
+      var dRI   = 1/tau_inc * E  + f_neg/tau_test * (Iw + Icw) //1/tau_iso *(Ic +Ict + NcI + NcIp)// + f_neg/tau_test * (Iw + Icw) 
+
+      var dRE   = (gamma_0 + gamma_iso)*(1 - ratioNcI * p_c) * S + 1/tau_iso *(Ec +Et + NcE + NcEp) + f_neg/tau_test * (Ew + Ecw)
+
+      var dRSc  = gamma_c * p_c * S
+      // console.log(E, Ec, dEc, gamma_p, gamma_0, gamma_iso, ratioNcI)
+
+       
       
       var populationUpdated = []
 
@@ -549,9 +572,20 @@
       populationUpdated.push(dRcw)
       populationUpdated.push(dNcR)
 
+      // specific populations for references. These are the total number of individuals who pass through specific populations
+      populationUpdated.push(dRSc)   // index  30
+      populationUpdated.push(dRE)      // index 31
+      populationUpdated.push(dREc)     // index 32
+      populationUpdated.push(dRI)   // index 33
+      populationUpdated.push(dRIc)  // index 34
+      populationUpdated.push(dRNcI)  // index 35
+
+      // console.log(S, Sc, dSc, gamma_c)//, - (p_ctest/tau_wait_until_tested + 1/tau_iso + gamma_p) * Sc)
+      // console.log(tot, Stot, Etot, Itot, Rtot)
+
       // console.log(Ic * N, Icw * N, NcI * N, NcIp * N)
-      var Stot = S + Sw + St + Sc + Scw +NcS
-      var Etot = E + Ew + Et + Ec + Ecw +NcE
+      // var Stot = S + Sw + St + Sc + Scw +NcS
+      // var Etot = E + Ew + Et + Ec + Ecw +NcE
       // var Rtot = Mild + Severe + Severe_H + Fatal + R_Mild + R_Severe + R_Fatal
       // var dStot = dS + dSiso
       // console.log(N, N* (Stot + Itot + Etot + Rtot))
@@ -569,7 +603,7 @@
 
     // var v = [1 - I0/N, 0, I0/N, 0, 0, 0, 0, 0, 0, 0]
     // var v = [1, 0, I0/(N-I0), 0, 0, 0, 0, 0, 0, 0]
-    var length = 34; // user defined length
+    var length = 40; // user defined length
     var v = []
     for(var i = 0; i < length; i++) {
       v.push(0);
@@ -618,6 +652,16 @@
         TI.push((pSusceptible))
         // console.log((v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7] + v[8] + v[9]))
         // console.log(v[0] , v[1] , v[2] , v[3] , v[4] , v[5] , v[6] , v[7] , v[8] , v[9])
+
+        // Now going to account for my own logging parameters to monitor totals
+        var pSc = v[30]
+        var pE = v[31]
+        var pEc = v[32]
+        var pI = v[33]
+        var pIc = v[34]
+        var pNcI = v[35]
+
+        // console.log(pSc * N, pEc * N, pIc * N, pNcI *N)
       }
       // console.log(t, 'before', v)
       v =integrate(method,f,v,t,dt);
@@ -631,7 +675,14 @@
             "total": (1 - pSusceptible) ,
             "total_infected": TI,
             "Iters":Iters,
-            "dIters": f}
+            "dIters": f,
+            "NcI": N*pNcI,
+            "Sc": N* pSc,
+            "E": N* pE,
+            "Ec": N* pEc,
+            "I": N* pI,
+            "Ic": N* pIc,
+          }
   }
 
 
@@ -751,7 +802,8 @@
           "total": 0,
           "total_infected": [],
           "Iters":[[]],
-          "dIters": () => [[]]}
+          "dIters": () => [[]],
+          "NcI": 0}
 
   // create a function that only runs after modified parameters stop changing rapidly
   const compute = debounce((...params) => {
@@ -771,6 +823,12 @@
   $: dIters         = Sol["dIters"]
   $: Pmax           = max(P, checked)
   $: lock           = false
+  $: Sc             = Sol['Sc']
+  $: E             = Sol['E']
+  $: Ec             = Sol['Ec']
+  $: I             = Sol['I']
+  $: Ic             = Sol['Ic']
+  $: NcI            = Sol["NcI"]
 
 
   var colors = [ "#386cb0", "#8da0cb", "#4daf4a", "#f0027f", "#fdc086"]
@@ -1729,6 +1787,16 @@
 </div>
 
 <div style="position: relative; height: 12px"></div>
+<p class = "center">
+<b> Testing </b><br>
+Sc = {Sc} <br>
+E = {E} <br>
+Ec = {Ec} <br>
+I = {I} <br>
+Ic = {Ic} <br>
+NcI = {NcI} <br>
+<p>
+
 
 <p class = "center">
 <b> Overview </b><br>

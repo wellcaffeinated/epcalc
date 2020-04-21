@@ -71,7 +71,7 @@
   $: D_hospital_lag    = 5
   $: D_death           = Time_to_death - D_infectious
   $: CFR               = 0.02
-  $: InterventionTime  = 100
+  $: InterventionTime  = 42
   $: OMInterventionAmt = 0.90
   $: InterventionAmt   = 1 - OMInterventionAmt
   $: Time              = 220
@@ -1229,7 +1229,7 @@
 
 </style>
 
-<h2>Epidemic Calculator</h2>
+<h2>Epidemic Calculator with contact tracing</h2>
 
 <div class="chart" style="display: flex; max-width: 1120px">
 
@@ -1735,9 +1735,13 @@
 
     <div class="column">
       <div class="paneltitle">Effectiveness of isolation</div>
-      <div class="paneldesc" style="height:29px">{@html math_inline("\\mathcal{R}_0")} for those who are isolating through contact tracing<br></div>
+      <div class="paneldesc">{@html math_inline("\\mathcal{R}_0")} for those who are isolating through contact tracing<br></div>
       <div class="slidertext">{R_iso.toFixed(2)}</div>
       <input class="range" type=range bind:value={R_iso} min=0.01 max=10 step=0.01>
+
+       <div class="paneldesc" style="border-top: 1px solid #EEE; padding-top: 10px">Length of isolation for those who test positive or have been contacted<br></div>
+      <div class="slidertext">{tau_iso} Days</div>
+      <input class="range" type=range bind:value={tau_iso } min={0.1} max={90} step=1>
 
     </div>
 

@@ -370,21 +370,20 @@
         // p_test  = (N_test - (p_itest + p_ctest)* N)/(S + E + I)
       }
 
+      var p_ntest = p_itest
+
+      if (p_itest > p_ctest && p_itest > p_test){
+        p_ntest = p_itest
+      }
+      else if (p_ctest > p_test && p_ctest > p_test){
+        p_ntest = p_ctest
+      }
+      else{
+        p_ntest = p_test
+      }
+
       if (Itot <= 0){ p_itest = 0}
       if (Nc_tot <=0){p_ctest = 0}
-
-    
-
-  
-      // NcR = 0
-      // console.log(N* NcR)
-
-      
-
-      // console.log(R0)
-      // else if(t > InterventionTime + duration) {
-      //   // gamma_0 = gamma_0 *.5
-      // }
 
 
       var gamma_0    = I * R0 / tau_inf       // The effective infectious rate for those who are not isolating. 
@@ -401,11 +400,7 @@
       }
 
       var gamma_c = R_c/tau_c * (NcS + NcE + NcIp) + (R_c - gamma_0*tau_inf/I)/tau_c * (NcI)// + NcR) //rate of notification of individuals who are not infectious
-
-
-
       var gamma_p = R_iso * Itot  / tau_inf  // The infectious rate for those who are susceptible and isolating.
-
 
       if (gamma_c < 0){gamma_c =0}
 
@@ -414,9 +409,6 @@
       // var ratioNcI = p_itest * p_c 
       if (ratioNcI < 0){ratioNcI = 0}
       if (ratioNcI > 1){ratioNcI = 1}
-
-
-      
 
       if (t < D_contact_begins ){
         gamma_iso = 0.
@@ -467,14 +459,14 @@
       var dI    = 1/tau_inc * E  + 1/tau_iso *(Ic +It + NcI + NcIp) + f_neg/tau_test * (Iw + Icw) - (gamma_c * p_c + p_itest/tau_wait_until_tested + 1/tau_inf) * I
       var dIw   = 1/tau_inc * Ew + p_itest/tau_wait_until_tested * (1 - p_c) * I - (1/tau_test + 1/tau_inf) * Iw
       var dIt   = 1/tau_inc * Et + (1 - f_neg)/tau_test * Iw - (1/tau_iso + 1/tau_inf) * It
-      var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ctest/tau_wait_until_tested + 1/tau_iso + 1/tau_inf) * Ic
-      var dIcw  = 1/tau_inc * Ecw + p_itest/tau_wait_until_tested * p_c * I + p_ctest/tau_wait_until_tested * Ic - (1/tau_test + 1/tau_inf) * Icw
+      var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ntest/tau_wait_until_tested + 1/tau_iso + 1/tau_inf) * Ic
+      var dIcw  = 1/tau_inc * Ecw + p_itest/tau_wait_until_tested * p_c * I + p_ntest/tau_wait_until_tested * Ic - (1/tau_test + 1/tau_inf) * Icw
       var dNcI  = 1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf)* NcI 
       var dNcIp = (1/tau_inc * NcE - (1/tau_iso + 1/tau_inf) * NcIp )
 
       // R terms for ensuring notifications still take place
-      var dRc = (1/tau_inf * Ic - (p_ctest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc) * 1
-      var dRcw = (1/tau_inf * Icw - (1/tau_test +1/(D_recovery_mild))* Rcw) * 1
+      var dRc = (1/tau_inf * Ic - (p_ntest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc) * 1
+      var dRcw = (1/tau_inf * Icw + (p_ntest/tau_wait_until_tested)*Rc- (1/tau_test +1/(D_recovery_mild))* Rcw) * 1
       var dNcR = (1/tau_inf * NcI + (1 - f_neg)/tau_test * Rcw - (1/tau_iso + 1/D_recovery_mild)*NcR) * 1
 
       // var dIiso = dIw + dIt + dIc + dIcw + NcI + NcIp 
@@ -1714,13 +1706,13 @@
       <div class="slidertext">{N_test}</div>
       <input class="range" type=range bind:value={N_test} min=0 max={N/10} step=1>
 
-      <div class="paneldesc" >Testing those who have been notified of potential contact.<br></div>
-      <div class="slidertext">{(frac_c_tested*100).toFixed(0)} %</div>
-      <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_c_tested} min={0} max={1.} step=0.01>
-
-      <div class="paneldesc" >Testing of infectious each day <br></div>
+      <div class="paneldesc" >Fraction of infectious to attempt to test each day (subject to available number of tests)<br></div>
       <div class="slidertext">{(frac_i_tested*100).toFixed(0)} %</div>
       <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_i_tested} min={0} max={1.} step=0.01>
+
+      <div class="paneldesc" >Fraction of contacts to attempt to test each day (subject to available number of tests)<br></div>
+      <div class="slidertext">{(frac_c_tested*100).toFixed(0)} %</div>
+      <input class="range" style="margin-bottom: 8px"type=range bind:value={frac_c_tested} min={0} max={1.} step=0.01>
 
       <!-- (capped by remaining tests after those who have been notified have been tested). -->
 

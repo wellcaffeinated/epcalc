@@ -100,6 +100,8 @@
   $: f_pos = 0.0
   $: f_neg = 0.
   $: D_contact_begins = 0
+  $: frac_population = 1
+  $: pop_name = 'General Population'
 
   $: state = location.protocol + '//' + location.host + location.pathname + "?" + queryString.stringify({"Time_to_death":Time_to_death,
                "logN":logN,
@@ -114,6 +116,39 @@
                "InterventionAmt":InterventionAmt,
                "D_hospital_lag":D_hospital_lag,
                "P_SEVERE": P_SEVERE})
+
+
+  var generalPop = {
+                    'dt': dt
+                  , 'N': N
+                  , 'R0': R0
+                  , 'D_incbation': D_incbation 
+                  , 'D_infectious': D_infectious 
+                  , 'D_recovery_mild': D_recovery_mild 
+                  , 'D_hospital_lag': D_hospital_lag 
+                  , 'D_recovery_severe': D_recovery_severe 
+                  , 'D_death': D_death 
+                  , 'P_SEVERE': P_SEVERE 
+                  , 'CFR': CFR 
+                  , 'InterventionTime': InterventionTime 
+                  , 'InterventionAmt': InterventionAmt 
+                  , 'duration': duration 
+                  , 'InterventionLength': InterventionLength 
+                  , 'DaysRelaxed': DaysRelaxed 
+                  , 'R0New': R0New   
+                  , 'N_test': N_test
+                  , 'frac_c_tested': frac_c_tested
+                  , 'frac_i_tested': frac_i_tested
+                  , 'p_c': p_c 
+                  , 'R_iso': R_iso
+                  , 'R_c': R_c
+                  , 'f_pos': f_pos
+                  , 'f_neg': f_neg
+                  , 'D_contact_begins': D_contact_begins  
+                  , 'frac_population': frac_population
+                  , 'pop_name': pop_name            
+                }
+  var popInputs = [generalPop]
 
 // dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration
 
@@ -218,11 +253,154 @@
 
 
   function get_solution_seirc(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested, p_c) {
-    // 
+    // function get_solution_seirc(p) {
+    // popInputs
+    // p = p[0]
     var interpolation_steps = 40
     var steps = 100*interpolation_steps
     var dt = dt/interpolation_steps
     var sample_step = interpolation_steps
+
+    function dScalc(population, g, test, tau, p_c){
+      var S = population['S']
+      var Sw = population['Sw']
+      var St = population['St']
+      var Sc = population['Sc']
+      var Scw = population['Scw']
+      var NcS = population['NcS']
+
+      var dS    = -(g['gamma_0'] + g['gamma_iso'] + g['gamma_c'] * p_c +test['p_test']/tau['tau_wait_until_tested']) * S + 1/tau['tau_iso'] *(Sc +St + NcS) + (1 -test['f_pos'])/tau['tau_test'] * (Sw + Scw)
+      var dSw   = test['p_test']/tau['tau_wait_until_tested'] * (1 - p_c) * S - (1/tau['tau_test'] + g['gamma_p']) * Sw
+      var dSt   = test['f_pos']/tau['tau_test'] * Sw - (1/tau['tau_iso'] + g['gamma_p']) * St
+      var dSc   = g['gamma_c'] * p_c * S - (test['p_ctest']/tau['tau_wait_until_tested'] + 1/tau['tau_iso'] + g['gamma_p']) * Sc
+      var dScw  = test['p_test']/tau['tau_wait_until_tested'] * p_c * S + test['p_ctest']/tau['tau_wait_until_tested'] * Sc - (1/tau['tau_test'] + g['gamma_p']) * Scw
+      var dNcS  = test['f_pos']/tau['tau_test'] * Scw - (1/tau['tau_iso'] + g['gamma_p']) * NcS 
+
+      var dSpop = {
+                  'dS': dS
+                , 'dSw': dSw
+                , 'dSt': dSt
+                , 'dSc': dSc
+                , 'dScw': dScw
+                , 'dNcS': dNcS
+      }
+
+    function dEcalc(population, g, test, tau, p_c, ratioNcI){
+      var E = population['E']
+      var Ew = population['Ew']
+      var Et = population['Et']
+      var Ec = population['Ec']
+      var Ecw = population['Ecw']
+      var NcE = population['NcE']
+      var S = population['S']
+      var Sw = population['Sw']
+      var St = population['St']
+      var Sc = population['Sc']
+      var Scw = population['Scw']
+      var NcS = population['NcS']
+      
+      var dE    = (g['gamma_0'] + g['gamma_iso'])*(1 - ratioNcI * p_c) * S + 1/tau['tau_iso'] *(Ec +Et + NcE + NcEp) + test['f_neg']/tau['tau_test'] * (Ew + Ecw) - (g['gamma_c'] * p_c + test['p_test']/tau['tau_wait_until_tested'] + 1/tau['tau_inc']) * E
+      var dEw   = g['gamma_p'] * Sw + test['p_test']/tau['tau_wait_until_tested'] * (1 - p_c) * E - (1/tau['tau_test'] + 1/tau['tau_inc']) * Ew
+      var dEt   = g['gamma_p'] * St + (1 - test['f_neg'])/tau['tau_test'] * Ew - (1/tau['tau_iso'] + 1/tau['tau_inc']) * Et
+      var dEc   = g['gamma_p'] * Sc + (g['gamma_0'] + g['gamma_iso'])* ratioNcI * p_c * S + g['gamma_c'] * p_c * E - (test['p_ctest']/tau['tau_wait_until_tested'] + 1/tau['tau_iso'] + 1/tau['tau_inc']) * Ec
+      var dEcw  = g['gamma_p'] * Scw + test['p_test']/tau['tau_wait_until_tested'] * p_c * E + test['p_ctest']/tau['tau_wait_until_tested'] * Ec - (1/tau['tau_test'] + 1/tau['tau_inc']) * Ecw
+      var dNcE  = g['gamma_p'] * NcS + (1 - test['f_neg'])/tau['tau_test'] * Ecw - (1/tau['tau_iso'] + 1/tau['tau_inc']) * NcE
+
+      var dEpop = {
+                  'dE': dE
+                , 'dEw': dEw
+                , 'dEt': dEt
+                , 'dEc': dEc
+                , 'dEcw': dEcw
+                , 'dNcE': dNcE
+      }  
+      // console.log(dSpop)
+      return(dEpop)
+    }
+
+    function dIcalc(population, g, test, tau, p_c){
+      var E = population['E']
+      var Ew = population['Ew']
+      var Et = population['Et']
+      var Ec = population['Ec']
+      var Ecw = population['Ecw']
+      var NcE = population['NcE']
+      var I = population['I']
+      var Iw = population['Iw']
+      var It = population['It']
+      var Ic = population['Ic']
+      var Icw = population['Icw']
+      var NcI = population['NcI']
+      var NcIp = population['NcIp']
+      
+      var dI    = 1/tau['tau_inc'] * E  + 1/tau['tau_iso'] *(Ic +It + NcI + NcIp) + test['f_neg']/tau['tau_test'] * (Iw + Icw) - (g['gamma_c'] * p_c + test['p_itest']/tau['tau_wait_until_tested'] + 1/tau['tau_inf']) * I
+      var dIw   = 1/tau['tau_inc'] * Ew + test['p_itest']/tau['tau_wait_until_tested'] * (1 - p_c) * I - (1/tau['tau_test'] + 1/tau['tau_inf']) * Iw
+      var dIt   = 1/tau['tau_inc'] * Et + (1 - test['f_neg'])/tau['tau_test'] * Iw - (1/tau['tau_iso'] + 1/tau['tau_inf']) * It
+      var dIc   = 1/tau['tau_inc'] * Ec + g['gamma_c'] * p_c * I - (test['p_ntest']/tau['tau_wait_until_tested'] + 1/tau['tau_iso'] + 1/tau['tau_inf']) * Ic
+      var dIcw  = 1/tau['tau_inc'] * Ecw + test['p_itest']/tau['tau_wait_until_tested'] * p_c * I + test['p_ntest']/tau['tau_wait_until_tested'] * Ic - (1/tau['tau_test'] + 1/tau['tau_inf']) * Icw
+      var dNcI  = 1/tau['tau_inc'] * NcE + (1 - test['f_neg'])/tau['tau_test'] * Icw - (1/tau['tau_iso'] + 1/tau['tau_inf'])* NcI 
+      var dNcIp = (1/tau['tau_inc'] * NcE - (1/tau['tau_iso'] + 1/tau['tau_inf']) * NcIp )
+
+      var dIpop = {
+                  'dI': dI
+                , 'dIw': dIw
+                , 'dIt': dIt
+                , 'dIc': dIc
+                , 'dIcw': dIcw
+                , 'dNcI': dNcI
+                , 'dNcIp': dNcIp
+      }  
+      // console.log(dSpop)
+      return(dIpop)
+    }
+
+    function dRcalc(population, g, test, tau, p_fatal, Itot){
+      var I = population['I']
+      var Iw = population['Iw']
+      var It = population['It']
+      var Ic = population['Ic']
+      var Icw = population['Icw']
+      var NcI = population['NcI']
+      var NcIp = population['NcIp']
+      var Rc = population['Rc']
+      var Rcw = population['Rcw']
+      var NcR = population['NcR']
+      var Mild = population['Mild']
+      var Severe = population['Severe']
+      var Severe_H = population['Severe_H']
+      var Fatal = population['Fatal']
+      var R_Mild = population['R_Mild']
+      var R_Severe = population['R_Severe']
+      var R_Fatal = population['R_Fatal']
+
+      // var Itot = I + Iw + It + Ic + Icw + NcI + NcIp
+      
+      var dRc = (1/tau['tau_inf'] * Ic - (test['p_ntest']/tau['tau_wait_until_tested'] + 1/(tau['D_recovery_mild']) ) *Rc) * 1
+      var dRcw = (1/tau['tau_inf'] * Icw + (test['p_ntest']/tau['tau_wait_until_tested'])*Rc- (1/tau['tau_test'] +1/(tau['D_recovery_mild']))* Rcw) * 1
+      var dNcR = (1/tau['tau_inf'] * NcI + (1 - test['f_neg'])/tau['tau_test'] * Rcw - (1/tau['tau_iso'] + 1/tau['D_recovery_mild'])*NcR) * 1
+      var dMild = p_mild * 1/tau['tau_inf'] * Itot - (1 / tau['D_recovery_mild']) * Mild
+      var dSevere = p_severe * 1/tau['tau_inf'] * Itot - (1 / tau['D_hospital_lag']) * Severe
+      var dSevere_H = (1 / tau['D_hospital_lag']) * Severe - (1 / tau['D_recovery_severe']) * Severe_H
+      var dFatal = p_fatal * 1/tau['tau_inf'] * Itot - (1 / tau['D_death']) * Fatal
+      var dR_Mild = (1 / tau['D_recovery_mild']) * Mild
+      var dR_Severe = (1 / tau['D_recovery_severe']) * Severe_H
+      var dR_Fatal = (1 / tau['D_death']) * Fatal
+
+      var dRpop = {
+                'dRc': dRc
+                ,'dRcw': dRcw
+                ,'dNcR': dNcR
+                ,'dMild': dMild
+                ,'dSevere': dSevere
+                ,'dSevere_H': dSevere_H
+                ,'dFatal': dFatal
+                ,'dR_Mild': dR_Mild
+                ,'dR_Severe': dR_Severe
+                ,'dR_Fatal': dR_Fatal
+      }  
+      // console.log(dSpop)
+      return(dRpop)
+    }
 
     var method = Integrators["RK38"]
     function f(t, x){
@@ -260,7 +438,6 @@
       var Sc   = x[3]  // notified of a possible exposure and isolates, but not tested 
       var Scw  = x[4]  // notified of possible exposure and waiting for test results
       var NcS  = x[5]  // False positive. Isolates and notifies others of potential exposure.
-      // var Siso = x[]   // Total population isolating in S. Siso = Sw + St + Sc + Scw + NcS
 
       // Now list all the subpopulations that are Exposed
       var E    = x[6]   // Exposed population that is not isolating
@@ -271,7 +448,6 @@
       var Ecw  = x[10]  // notified of possible exposure and waiting for test results
       var NcE  = x[11]  // False positive. Isolates and notifies others of potential exposure.
       var NcEp = x[12]  // Tested positive, but already compvared the notification process in a previous disease phase.
-      // var Eiso = x[]   // Total population isolating in E. Eiso = Ew + Et + Ec + Ecw + NcE + NcEp
 
       // Now list all the subpopulations that are Infectious
       var I    = x[13]   // Infectious population that is not isolating
@@ -304,31 +480,6 @@
       var p_fatal = CFR
       var p_mild = 1 - P_SEVERE - CFR
 
-      // // First, check to see if any populations have gone negative. If so, force them to 0. Otherwise numerical fluctuations can drive the population negative.
-      // if (S < 0){ S = 0}
-      // if (Sc < 0){ Sc = 0}
-      // if (Sw < 0){ Sw = 0}
-      // if (Scw < 0){ Scw = 0}
-      // if (St < 0){ St = 0}
-      // if (NcS < 0){ Sc = 0}
-
-      // Rate equations governing the population dynamics.
-
-      // var dS = -beta * I * S
-      // var dE = beta * I * S - a * E
-      // var dI = a * E - gamma * I
-      // var dMild = p_mild * gamma * I - (1 / D_recovery_mild) * Mild
-      // var dSevere = p_severe * gamma * I - (1 / D_hospital_lag) * Severe
-      // var dSevere_H = (1 / D_hospital_lag) * Severe - (1 / D_recovery_severe) * Severe_H
-      // var dFatal = p_fatal * gamma * I - (1 / D_death) * Fatal
-      // var dR_Mild = (1 / D_recovery_mild) * Mild
-      // var dR_Severe = (1 / D_recovery_severe) * Severe_H
-      // var dR_Fatal = (1 / D_death) * Fatal
-
-      // var dStot = 
-      // var dEtot = 
-      // var dItot = 
-      // var dRtot =
 
       // figure out the relative rates of testing between those who are in contact tracing, and those who are not.
       // First, the number of tests consumed by those in contact tracing who have been notified of a possible exposure.
@@ -420,68 +571,145 @@
         // p_test = N_test/N
       }
 
+      var tau = { 
+               'tau_wait_until_tested': tau_wait_until_tested
+              ,'tau_test': tau_test
+              ,'tau_iso': tau_iso
+              ,'D_recovery_mild': D_recovery_mild
+              ,'D_hospital_lag': D_hospital_lag
+              ,'D_recovery_severe': D_recovery_severe
+              ,'D_death': D_recovery_severe
+            }
 
-      // gamma_iso = 0
-      // var offset = 29
-      // var seasonal_effect   = .46 * 0
-      // var forcing = (t) => (1 + seasonal_effect*Math.cos(2*3.14159265*(Math.floor(t) - offset)/365))
+      var gamma = {
+                  'gamma_0': gamma_0
+                , 'gamma_iso': gamma_iso
+                , 'gamma_p' : gamma_p
+                , 'gamma_c' : gamma_c
+      }
 
-      // beta = beta*forcing(t)/forcing(0) // Forcing, with R0 correction
+      var test = {
+                 'p_test': p_test
+               , 'p_itest': p_itest
+               , 'p_ctest': p_ctest
+               , 'p_ntest': p_ntest
+               , 'f_pos' : f_pos
+               , 'f_neg' : f_neg
+      }
 
-      // var Iiso =  Iw + It + Ic + Icw + NcI + NcIp
-      // var Itot = I + Iiso //+ (dI + dIw + dIt + dIc + dIcw + dNcI + dNcIp)
+      var population = {
+                   'S': S
+                 , 'Sw': Sw
+                 , 'St': St 
+                 , 'Sc': Sc 
+                 , 'Scw': Scw 
+                 , 'NcS': NcS
+                 , 'E':  E
+                 , 'Ew':  Ew
+                 , 'Et':  Et
+                 , 'Ec':  Ec
+                 , 'Ecw':  Ecw
+                 , 'NcE':  NcE
+                 , 'NcEp':  NcEp
+                 , 'I':  I
+                 , 'Iw':  Iw
+                 , 'It':  It
+                 , 'Ic':  Ic
+                 , 'Icw':  Icw
+                 , 'NcI':  NcI
+                 , 'NcIp':  NcIp
+                 , 'Mild':  Mild
+                 , 'Severe':  Severe
+                 , 'Severe_H':  Severe_H
+                 , 'Fatal':  Fatal
+                 , 'R_Mild':  R_Mild
+                 , 'R_Severe':  R_Severe
+                 , 'R_Fatal':  R_Fatal
+                 , 'Rc':  Rc
+                 , 'Rcw':  Rcw
+                 , 'NcR':  NcR
+      }
 
-      // var gamma_0    = I * R0 / tau_inf       // The effective infectious rate for those who are not isolating. 
-      // var gamma_iso  = Iiso * R_iso / tau_inf  // The effective infectious rate for those who are  isolating. 
-      // var gamma_c    = (NcS + NcE + NcI) * R_c / tau_c  // the effective rate of total contact by those particpating in contact tracing. These are the folks who need to be notified of possible exposure.
+      var Schange = dScalc(population, gamma, test, tau, p_c)
+      var dS    = Schange['dS'] 
+      var dSw   = Schange['dSw']
+      var dSt   = Schange['dSt']
+      var dSc   = Schange['dSc']
+      var dScw  = Schange['dScw']
+      var dNcS  = Schange['dNcS'] 
 
-      var dS    = -(gamma_0 + gamma_iso + gamma_c * p_c +p_test/tau_wait_until_tested) * S + 1/tau_iso *(Sc +St + NcS) + (1 -f_pos)/tau_test * (Sw + Scw)
-      var dSw   = p_test/tau_wait_until_tested * (1 - p_c) * S - (1/tau_test + gamma_p) * Sw
-      var dSt   = f_pos/tau_test * Sw - (1/tau_iso + gamma_p) * St
-      var dSc   = gamma_c * p_c * S - (p_ctest/tau_wait_until_tested + 1/tau_iso + gamma_p) * Sc
-      var dScw  = p_test/tau_wait_until_tested * p_c * S + p_ctest/tau_wait_until_tested * Sc - (1/tau_test + gamma_p) * Scw
-      var dNcS  = f_pos/tau_test * Scw - (1/tau_iso + gamma_p) * NcS 
-      // var dSiso = dSw + dSt + dSc + dScw +dNcS
-      // var dStot = dS + dSiso
+
+
+      // var dS    = -(gamma_0 + gamma_iso + gamma_c * p_c +p_test/tau_wait_until_tested) * S + 1/tau_iso *(Sc +St + NcS) + (1 -f_pos)/tau_test * (Sw + Scw)
+      // var dSw   = p_test/tau_wait_until_tested * (1 - p_c) * S - (1/tau_test + gamma_p) * Sw
+      // var dSt   = f_pos/tau_test * Sw - (1/tau_iso + gamma_p) * St
+      // var dSc   = gamma_c * p_c * S - (p_ctest/tau_wait_until_tested + 1/tau_iso + gamma_p) * Sc
+      // var dScw  = p_test/tau_wait_until_tested * p_c * S + p_ctest/tau_wait_until_tested * Sc - (1/tau_test + gamma_p) * Scw
+      // var dNcS  = f_pos/tau_test * Scw - (1/tau_iso + gamma_p) * NcS 
+
+      var dSiso = dSw + dSt + dSc + dScw +dNcS
+      var dStot = dS + dSiso
       // console.log(ratioNcI)
       
+      var Echange = dEcalc(population, gamma, test, tau, p_c, ratioNcI)
+      var dE    = Echange['dE'] 
+      var dEw   = Echange['dEw']
+      var dEt   = Echange['dEt']
+      var dEc   = Echange['dEc']
+      var dEcw  = Echange['dEcw']
+      var dNcE  = Echange['dNcE'] 
 
-      var dE    = (gamma_0 + gamma_iso)*(1 - ratioNcI * p_c) * S + 1/tau_iso *(Ec +Et + NcE + NcEp) + f_neg/tau_test * (Ew + Ecw) - (gamma_c * p_c + p_test/tau_wait_until_tested + 1/tau_inc) * E
-      var dEw   = gamma_p * Sw + p_test/tau_wait_until_tested * (1 - p_c) * E - (1/tau_test + 1/tau_inc) * Ew
-      var dEt   = gamma_p * St + (1 - f_neg)/tau_test * Ew - (1/tau_iso + 1/tau_inc) * Et
-      var dEc   = gamma_p * Sc + (gamma_0 + gamma_iso)* ratioNcI * p_c * S + gamma_c * p_c * E - (p_ctest/tau_wait_until_tested + 1/tau_iso + 1/tau_inc) * Ec
-      var dEcw  = gamma_p * Scw + p_test/tau_wait_until_tested * p_c * E + p_ctest/tau_wait_until_tested * Ec - (1/tau_test + 1/tau_inc) * Ecw
-      var dNcE  = gamma_p * NcS + (1 - f_neg)/tau_test * Ecw - (1/tau_iso + 1/tau_inc) * NcE 
+      // var dE    = (gamma_0 + gamma_iso)*(1 - ratioNcI * p_c) * S + 1/tau_iso *(Ec +Et + NcE + NcEp) + f_neg/tau_test * (Ew + Ecw) - (gamma_c * p_c + p_test/tau_wait_until_tested + 1/tau_inc) * E
+      // var dEw   = gamma_p * Sw + p_test/tau_wait_until_tested * (1 - p_c) * E - (1/tau_test + 1/tau_inc) * Ew
+      // var dEt   = gamma_p * St + (1 - f_neg)/tau_test * Ew - (1/tau_iso + 1/tau_inc) * Et
+      // var dEc   = gamma_p * Sc + (gamma_0 + gamma_iso)* ratioNcI * p_c * S + gamma_c * p_c * E - (p_ctest/tau_wait_until_tested + 1/tau_iso + 1/tau_inc) * Ec
+      // var dEcw  = gamma_p * Scw + p_test/tau_wait_until_tested * p_c * E + p_ctest/tau_wait_until_tested * Ec - (1/tau_test + 1/tau_inc) * Ecw
+      // var dNcE  = gamma_p * NcS + (1 - f_neg)/tau_test * Ecw - (1/tau_iso + 1/tau_inc) * NcE 
       // var dNcEp = (gamma_p * NcS - (1/tau_iso + 1/tau_inc) * NcEp ) * 0
       // var dEiso = dEw + dEt + dEc + dEcw + dNcE + dNcEp
       // var dEtot = dE + dEiso
+
+      var Ichange = dIcalc(population, gamma, test, tau, p_c, ratioNcI)
+      var dI    = Ichange['dI'] 
+      var dIw   = Ichange['dIw']
+      var dIt   = Ichange['dIt']
+      var dIc   = Ichange['dIc']
+      var dIcw  = Ichange['dIcw']
+      var dNcI  = Ichange['dNcI'] 
+      var dNcIp  = Ichange['dNcIp'] 
       
-      var dI    = 1/tau_inc * E  + 1/tau_iso *(Ic +It + NcI + NcIp) + f_neg/tau_test * (Iw + Icw) - (gamma_c * p_c + p_itest/tau_wait_until_tested + 1/tau_inf) * I
-      var dIw   = 1/tau_inc * Ew + p_itest/tau_wait_until_tested * (1 - p_c) * I - (1/tau_test + 1/tau_inf) * Iw
-      var dIt   = 1/tau_inc * Et + (1 - f_neg)/tau_test * Iw - (1/tau_iso + 1/tau_inf) * It
-      var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ntest/tau_wait_until_tested + 1/tau_iso + 1/tau_inf) * Ic
-      var dIcw  = 1/tau_inc * Ecw + p_itest/tau_wait_until_tested * p_c * I + p_ntest/tau_wait_until_tested * Ic - (1/tau_test + 1/tau_inf) * Icw
-      var dNcI  = 1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf)* NcI 
-      var dNcIp = (1/tau_inc * NcE - (1/tau_iso + 1/tau_inf) * NcIp )
+      // var dI    = 1/tau_inc * E  + 1/tau_iso *(Ic +It + NcI + NcIp) + f_neg/tau_test * (Iw + Icw) - (gamma_c * p_c + p_itest/tau_wait_until_tested + 1/tau_inf) * I
+      // var dIw   = 1/tau_inc * Ew + p_itest/tau_wait_until_tested * (1 - p_c) * I - (1/tau_test + 1/tau_inf) * Iw
+      // var dIt   = 1/tau_inc * Et + (1 - f_neg)/tau_test * Iw - (1/tau_iso + 1/tau_inf) * It
+      // var dIc   = 1/tau_inc * Ec + gamma_c * p_c * I - (p_ntest/tau_wait_until_tested + 1/tau_iso + 1/tau_inf) * Ic
+      // var dIcw  = 1/tau_inc * Ecw + p_itest/tau_wait_until_tested * p_c * I + p_ntest/tau_wait_until_tested * Ic - (1/tau_test + 1/tau_inf) * Icw
+      // var dNcI  = 1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf)* NcI 
+      // var dNcIp = (1/tau_inc * NcE - (1/tau_iso + 1/tau_inf) * NcIp )
+
+      var Rchange = dRcalc(population, gamma, test, tau, p_c, pDead, Itot)
+      var dRc = Rchange['dRc']
+      var dRcw = Rchange['dRcw']
+      var dNcR = Rchange['dNcR']
+      var dMild = Rchange['dMild']
+      var dSevere = Rchange['dSevere']
+      var dSevere_H = Rchange['dSevere_H']
+      var dFatal = Rchange['dFatal']
+      var dR_Mild = Rchange['dR_Mild']
+      var dR_Severe = Rchange['dR_Severe']
+      var dR_Fatal = Rchange['dR_Fatal']
 
       // R terms for ensuring notifications still take place
-      var dRc = (1/tau_inf * Ic - (p_ntest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc) * 1
-      var dRcw = (1/tau_inf * Icw + (p_ntest/tau_wait_until_tested)*Rc- (1/tau_test +1/(D_recovery_mild))* Rcw) * 1
-      var dNcR = (1/tau_inf * NcI + (1 - f_neg)/tau_test * Rcw - (1/tau_iso + 1/D_recovery_mild)*NcR) * 1
-
-      // var dIiso = dIw + dIt + dIc + dIcw + NcI + NcIp 
-      // var dItot = dI + dIiso
+      // var dRc = (1/tau_inf * Ic - (p_ntest/tau_wait_until_tested + 1/(D_recovery_mild) ) *Rc) * 1
+      // var dRcw = (1/tau_inf * Icw + (p_ntest/tau_wait_until_tested)*Rc- (1/tau_test +1/(D_recovery_mild))* Rcw) * 1
+      // var dNcR = (1/tau_inf * NcI + (1 - f_neg)/tau_test * Rcw - (1/tau_iso + 1/D_recovery_mild)*NcR) * 1
       
-      // var dRtot = dItot/tau_inf
-      
-      
-      var dMild = p_mild * 1/tau_inf * Itot - (1 / D_recovery_mild) * Mild
-      var dSevere = p_severe * 1/tau_inf * Itot - (1 / D_hospital_lag) * Severe
-      var dSevere_H = (1 / D_hospital_lag) * Severe - (1 / D_recovery_severe) * Severe_H
-      var dFatal = p_fatal * 1/tau_inf * Itot - (1 / D_death) * Fatal
-      var dR_Mild = (1 / D_recovery_mild) * Mild
-      var dR_Severe = (1 / D_recovery_severe) * Severe_H
-      var dR_Fatal = (1 / D_death) * Fatal
+      // var dMild = p_mild * 1/tau_inf * Itot - (1 / D_recovery_mild) * Mild
+      // var dSevere = p_severe * 1/tau_inf * Itot - (1 / D_hospital_lag) * Severe
+      // var dSevere_H = (1 / D_hospital_lag) * Severe - (1 / D_recovery_severe) * Severe_H
+      // var dFatal = p_fatal * 1/tau_inf * Itot - (1 / D_death) * Fatal
+      // var dR_Mild = (1 / D_recovery_mild) * Mild
+      // var dR_Severe = (1 / D_recovery_severe) * Severe_H
+      // var dR_Fatal = (1 / D_death) * Fatal
 
 
       // First, check to see if any populations will negative. If so, force them to 0. Set the population change rate so the population goes to 0 instead.
@@ -804,7 +1032,7 @@
 
   // compute whenever values change
   $: _ = compute(dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration, InterventionLength, DaysRelaxed, R0New, tau_test, tau_iso, tau_c, R_iso, R_c, f_pos, f_neg, frac_c_tested, D_contact_begins, N_test, frac_i_tested, p_c) //
-
+  // $: _ = compute(popInputs)
   $: P              = Sol["P"].slice(0,100)
   $: timestep       = dt
   $: tmax           = dt*100

@@ -353,14 +353,17 @@ where:
 % \end{bmatrix}
 % \end{eqnarray}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Outcomes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 This is part of the $R$ section in a traditional $SEIR$ model. We divide this into several transition times as it make take a patient some time to recover after they are infectious (and therefore still test positive). We divide these up into those who are asymptomatic, mild, and severe. Those who are severe have a chance $p_h$ of needing hospitalization or making a recovery $R$. Those who are hospitalized can recover $R$ or die $D$. We denote the intermetiate states where someone is in the recovery process $O$ for outcomes.
- 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Asymptomatic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Those who are asymptomatic, but not particpating in contact tracing, have a population that changes:
 \begin{eqnarray}
-\frac{d\bar{A}}{dt} &=& \boldsymbol{\bar{A}_{m}}  \bar{A} + \boldsymbol{\bar{T}_{\bar{E}\bar{A}}}  \bar{I}^{a}, 
+\frac{d\bar{A}}{dt} &=& \boldsymbol{\bar{A}_{m}}  \bar{A} + \boldsymbol{\bar{T}_{\bar{I}\bar{A}}}  \bar{I}^{a}, 
 \end{eqnarray}
 where:
 %
@@ -377,7 +380,7 @@ where:
 \bar{A}_{g} \\ \bar{A}_{w}\\ \bar{A}_{t}
 \end{bmatrix}, \\ 
 %
-\boldsymbol{\bar{T}_{\bar{E}\bar{A}}} &=&
+\boldsymbol{\bar{T}_{\bar{I}\bar{A}}} &=&
 \begin{bmatrix}
 \frac{1}{\tau_{inf}}  & 0                 & 0 \\ 
  0          &  \frac{1}{\tau_{inf}}  & 0 \\ 
@@ -388,7 +391,7 @@ where:
 
 Those who are participating in contact tracing, but are asymptomatic have the following population change as a function of time:
 \begin{eqnarray}
-\frac{d\dot{A}}{dt} &=& \boldsymbol{\dot{A}_{m}}  \dot{A} + \boldsymbol{\dot{T}_{\dot{E}\dot{A}}}  \dot{I}^{a}, 
+\frac{d\dot{A}}{dt} &=& \boldsymbol{\dot{A}_{m}}  \dot{A} + \boldsymbol{\dot{T}_{\dot{I}\dot{A}}}  \dot{I}^{a}, 
 \end{eqnarray}
 where:
 %
@@ -409,7 +412,7 @@ p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_
 \end{bmatrix}, \\ 
 %
 % 
-\boldsymbol{\dot{T}_{\dot{E}\dot{A}}} &=&
+\boldsymbol{\dot{T}_{\dot{I}\dot{A}}} &=&
 \begin{bmatrix}
 \frac{1}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
  0          &  \frac{1}{\tau_{inf}}  & 0 & 0 & 0 \\ 
@@ -626,11 +629,13 @@ p^{sev}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{h}}  & 0 &
 % \end{bmatrix}
 % \end{eqnarray}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Hospitalized}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Those that are hospitalized 
 The population dynamics for those hospitalized who are not contact tracing is given as:
 \begin{eqnarray}
-\frac{d\bar{H}}{dt} &=& \boldsymbol{\bar{H}_{m}}  \bar{H} + \boldsymbol{\bar{T}_{\bar{I}\bar{H}}}  \bar{I}, 
+\frac{d\bar{H}}{dt} &=& \boldsymbol{\bar{H}_{m}}  \bar{H} + \boldsymbol{\bar{T}_{\bar{X}\bar{H}}}  \bar{X}, 
 \end{eqnarray}
 %
 where:
@@ -647,7 +652,7 @@ where:
 \bar{H}_{g} \\ \bar{H}_{w}\\ \bar{H}_{t}
 \end{bmatrix}, \\ 
 %
-\boldsymbol{\bar{T}_{\bar{I}\bar{H}}} &=&
+\boldsymbol{\bar{T}_{\bar{X}\bar{H}}} &=&
 \begin{bmatrix}
 \frac{1}{\tau_{h}}  & 0                 & 0 \\ 
  0          &  \frac{1}{\tau_{h}}  & 0 \\ 
@@ -658,7 +663,7 @@ where:
 
 Those who participate in contact tracing and are hospitalized automatically notify all of their prior contacts regardless if they have been tested. There is no effect if they are notified of a potential contact.
 \begin{eqnarray}
-\frac{d\dot{H}}{dt} &=& \boldsymbol{\dot{H}_{m}}  \dot{H} + \boldsymbol{\dot{T}_{\dot{X}\dot{H}}}  \dot{I}, 
+\frac{d\dot{H}}{dt} &=& \boldsymbol{\dot{H}_{m}}  \dot{H} + \boldsymbol{\dot{T}_{\dot{X}\dot{H}}}  \dot{X}, 
 \end{eqnarray}
 %
 \begin{eqnarray}
@@ -679,10 +684,10 @@ p^{sev}_{t}  & -\frac{1}{\tau_{t}} - \gamma^{sev}      &  0    & 0  \\
 %
 \boldsymbol{\dot{T}_{\dot{X}\dot{H}}} &=&
 \begin{bmatrix}
-\frac{1}{\tau_{h}}  & \frac{1}{\tau_{h}} & 0 & 0 & 0 \\ 
-0          & 0                 &  \frac{1}{\tau_{h}} & 0 & 0 \\ 
-0           & 0                 &  0 & \frac{1}{\tau_{h}} & 0 \\ 
- 0       &  0  & 0 & 0 & \frac{1}{\tau_{h}} \\ 
+\frac{1}{\tau_{h}}  & 0 & 0 & 0 \\ 
+0                         &  \frac{1}{\tau_{h}} & 0 & 0 \\ 
+0                          &  0 & \frac{1}{\tau_{h}} & 0 \\ 
+ 0        & 0 & 0 & \frac{1}{\tau_{h}} \\ 
 % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\
 \end{bmatrix}
 \end{eqnarray}
@@ -720,52 +725,51 @@ Now for the mega array composed of smaller populations:
 \begin{eqnarray}
 &\frac{dP}{dt} = \nonumber \\
 &\begin{bmatrix}
-\bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & \dot{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & T_{\dot{S}\dot{E}} & 0 & \dot{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & T_{\bar{E}\bar{I}} & 0 & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & T_{\dot{E}\dot{I}} & 0 & \dot{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & T_{\bar{E}\bar{I}^{a}} & 0 & \bar{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & T_{\dot{E}\dot{I}^{a}} & 0 & \dot{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}^{a}\bar{A}} & 0 & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}^{a}\dot{A}} & 0 & \dot{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}\bar{M}} & 0 & \bar{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{M}} & 0 & \dot{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}\bar{X}} & 0 & \bar{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{X}} & 0 & \dot{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{X}\bar{H}} & 0 & \bar{H}_{m} & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{X}\dot{H}} & 0 & \dot{H}_{m} & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{sev}} & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0 & 0 & 0 \nonumber \\
-% 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\
+\bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & \dot{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & T_{\dot{S}\dot{E}} & 0 & \dot{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & \frac{(1-p_{a})}{\tau_{inc}} & 0 & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & T_{\dot{E}\dot{I}} & 0 & \dot{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & \frac{p_{a}}{\tau_{inc}} & 0 & \bar{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & T_{\dot{E}\dot{I}^{a}} & 0 & \dot{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{inf}} & 0 & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{inf}} & 0 & \dot{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & \bar{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & \dot{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{sev}}{\tau_{inf}} & 0 & \bar{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{X}} & 0 & \dot{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}} & 0 & \bar{H}_{m} & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}} & 0 & \dot{H}_{m} & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 \\[.1cm]
+0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{sev}} & 0 & 0 & 0 & 0 & 0 \\[.1cm]
+0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0 & 0 & 0 \nonumber \\[.1cm]
+% 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\[.1cm]
 \end{bmatrix}
 %
 \cdot
 \begin{bmatrix}
-\bar{S} \\
-\bar{S} \\
-\dot{S} \\
-\bar{E} \\
-\dot{E} \\
-\bar{I} \\
-\dot{I} \\
-\bar{I}^{a} \\
-\dot{I}^{a} \\
-\bar{A} \\
-\dot{A} \\
-\bar{M} \\
-\dot{M} \\
-\bar{X} \\
-\dot{X} \\
-\bar{H} \\
-\dot{H} \\
-\bar{D} \\
-\dot{D} \\
-\bar{R} \\
-\dot{R}
+\bar{S} \\[.1cm]
+\dot{S} \\[.1cm]
+\bar{E} \\[.1cm]
+\dot{E} \\[.1cm]
+\bar{I} \\[.1cm]
+\dot{I} \\[.1cm]
+\bar{I}^{a} \\[.1cm]
+\dot{I}^{a} \\[.1cm]
+\bar{A} \\[.1cm]
+\dot{A} \\[.1cm]
+\bar{M} \\[.1cm]
+\dot{M} \\[.1cm]
+\bar{X} \\[.1cm]
+\dot{X} \\[.1cm]
+\bar{H} \\[.1cm]
+\dot{H} \\[.1cm]
+\bar{D} \\[.1cm]
+\dot{D} \\[.1cm]
+\bar{R} \\[.1cm]
+\dot{R} \\[.1cm]
 
 \end{bmatrix}
 \end{eqnarray}

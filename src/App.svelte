@@ -118,37 +118,36 @@
                "P_SEVERE": P_SEVERE})
 
 
-  var generalPop = {
-                    'dt': dt
-                  , 'N': N
-                  , 'R0': R0
-                  , 'D_incbation': D_incbation 
-                  , 'D_infectious': D_infectious 
-                  , 'D_recovery_mild': D_recovery_mild 
-                  , 'D_hospital_lag': D_hospital_lag 
-                  , 'D_recovery_severe': D_recovery_severe 
-                  , 'D_death': D_death 
-                  , 'P_SEVERE': P_SEVERE 
-                  , 'CFR': CFR 
-                  , 'InterventionTime': InterventionTime 
-                  , 'InterventionAmt': InterventionAmt 
-                  , 'duration': duration 
-                  , 'InterventionLength': InterventionLength 
-                  , 'DaysRelaxed': DaysRelaxed 
-                  , 'R0New': R0New   
-                  , 'N_test': N_test
-                  , 'frac_c_tested': frac_c_tested
-                  , 'frac_i_tested': frac_i_tested
-                  , 'p_c': p_c 
-                  , 'R_iso': R_iso
-                  , 'R_c': R_c
-                  , 'f_pos': f_pos
-                  , 'f_neg': f_neg
-                  , 'D_contact_begins': D_contact_begins  
-                  , 'frac_population': frac_population
-                  , 'pop_name': pop_name            
-                }
-  var popInputs = [generalPop]
+  // var generalPop = {
+  //                  'N': N
+  //                 , 'R0': R0
+  //                 , 'D_incbation': D_incbation 
+  //                 , 'D_infectious': D_infectious 
+  //                 , 'D_recovery_mild': D_recovery_mild 
+  //                 , 'D_hospital_lag': D_hospital_lag 
+  //                 , 'D_recovery_severe': D_recovery_severe 
+  //                 , 'D_death': D_death 
+  //                 , 'P_SEVERE': P_SEVERE 
+  //                 , 'CFR': CFR 
+  //                 , 'InterventionTime': InterventionTime 
+  //                 , 'InterventionAmt': InterventionAmt 
+  //                 , 'duration': duration 
+  //                 , 'InterventionLength': InterventionLength 
+  //                 , 'DaysRelaxed': DaysRelaxed 
+  //                 , 'R0New': R0New   
+  //                 , 'N_test': N_test
+  //                 , 'frac_c_tested': frac_c_tested
+  //                 , 'frac_i_tested': frac_i_tested
+  //                 , 'p_c': p_c 
+  //                 , 'R_iso': R_iso
+  //                 , 'R_c': R_c
+  //                 , 'f_pos': f_pos
+  //                 , 'f_neg': f_neg
+  //                 , 'D_contact_begins': D_contact_begins  
+  //                 , 'frac_population': frac_population
+  //                 , 'pop_name': pop_name            
+  //               }
+  // var popInputs = [generalPop]
 
 // dt, N, I0, R0, D_incbation, D_infectious, D_recovery_mild, D_hospital_lag, D_recovery_severe, D_death, P_SEVERE, CFR, InterventionTime, InterventionAmt, duration
 
@@ -283,7 +282,9 @@
                 , 'dSc': dSc
                 , 'dScw': dScw
                 , 'dNcS': dNcS
-      }
+                }
+      return(dSpop)
+    }
 
     function dEcalc(population, g, test, tau, p_c, ratioNcI){
       var E = population['E']
@@ -299,7 +300,7 @@
       var Scw = population['Scw']
       var NcS = population['NcS']
       
-      var dE    = (g['gamma_0'] + g['gamma_iso'])*(1 - ratioNcI * p_c) * S + 1/tau['tau_iso'] *(Ec +Et + NcE + NcEp) + test['f_neg']/tau['tau_test'] * (Ew + Ecw) - (g['gamma_c'] * p_c + test['p_test']/tau['tau_wait_until_tested'] + 1/tau['tau_inc']) * E
+      var dE    = (g['gamma_0'] + g['gamma_iso'])*(1 - ratioNcI * p_c) * S + 1/tau['tau_iso'] *(Ec +Et + NcE ) + test['f_neg']/tau['tau_test'] * (Ew + Ecw) - (g['gamma_c'] * p_c + test['p_test']/tau['tau_wait_until_tested'] + 1/tau['tau_inc']) * E
       var dEw   = g['gamma_p'] * Sw + test['p_test']/tau['tau_wait_until_tested'] * (1 - p_c) * E - (1/tau['tau_test'] + 1/tau['tau_inc']) * Ew
       var dEt   = g['gamma_p'] * St + (1 - test['f_neg'])/tau['tau_test'] * Ew - (1/tau['tau_iso'] + 1/tau['tau_inc']) * Et
       var dEc   = g['gamma_p'] * Sc + (g['gamma_0'] + g['gamma_iso'])* ratioNcI * p_c * S + g['gamma_c'] * p_c * E - (test['p_ctest']/tau['tau_wait_until_tested'] + 1/tau['tau_iso'] + 1/tau['tau_inc']) * Ec
@@ -354,7 +355,7 @@
       return(dIpop)
     }
 
-    function dRcalc(population, g, test, tau, p_fatal, Itot){
+    function dRcalc(population, g, test, tau, p_fatal, p_mild, p_severe, Itot){
       var I = population['I']
       var Iw = population['Iw']
       var It = population['It']
@@ -686,7 +687,7 @@
       // var dNcI  = 1/tau_inc * NcE + (1 - f_neg)/tau_test * Icw - (1/tau_iso + 1/tau_inf)* NcI 
       // var dNcIp = (1/tau_inc * NcE - (1/tau_iso + 1/tau_inf) * NcIp )
 
-      var Rchange = dRcalc(population, gamma, test, tau, p_c, pDead, Itot)
+      var Rchange = dRcalc(population, gamma, test, tau, p_c, pDead, p_mild, p_severe, Itot)
       var dRc = Rchange['dRc']
       var dRcw = Rchange['dRcw']
       var dNcR = Rchange['dNcR']

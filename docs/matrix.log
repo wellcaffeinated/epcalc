@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  24 APR 2020 01:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  24 APR 2020 01:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -453,25 +453,30 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 30.
  [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] 
 [3] [4] [5]
-[6] [7]
+[6] [7] [8]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 764.
+               Default added (so using `tbp') on input line 774.
 
-[8]
 No file matrix.bbl.
-[9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 824.
+[9pdfTeX warning (ext4): destination with the same identifier (name{equation.5.
+76}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.834 \end{document}
+                    ] [10]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 834.
  (./matrix.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 824.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 824.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 834.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 834.
 Package rerunfilecheck Info: File `matrix.out' has not changed.
 (rerunfilecheck)             Checksum: 3C7FC5C3881E69DD4028BCFF770F0B7B;837.
  ) 
 Here is how much of TeX's memory you used:
  8448 strings out of 480608
- 121411 string characters out of 5903631
- 459004 words of memory out of 5000000
+ 121405 string characters out of 5903631
+ 463006 words of memory out of 5000000
  24131 multiletter control sequences out of 15000+600000
  541256 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -499,10 +504,10 @@ ive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texli
 ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive
 /2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2
 020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on matrix.pdf (9 pages, 275918 bytes).
+Output written on matrix.pdf (10 pages, 277010 bytes).
 PDF statistics:
- 252 PDF objects out of 1000 (max. 8388607)
- 215 compressed objects within 3 object streams
+ 255 PDF objects out of 1000 (max. 8388607)
+ 217 compressed objects within 3 object streams
  65 named destinations out of 1000 (max. 500000)
  113 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -702,14 +702,14 @@ p_{d} &=& \frac{C_{FR}}{1- p_{a} - p_{mild}}.
 \subsection{Recovery}
 Finally, we consider those who recover and are now considered immune. Again we consider those who recover and contact trace and those who abstain. For the non participants we have:
 \begin{eqnarray}
-\frac{d\bar{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{r}} \bar{H}_{tot} + \frac{1}{\tau_{mild}} \bar{M}_{tot} + \frac{1}{\tau_{a}} \bar{A}_{tot}, \\
+\frac{d\bar{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \bar{H}_{tot} + \frac{1}{\tau_{mild}} \bar{M}_{tot} + \frac{1}{\tau_{a}} \bar{A}_{tot}, \\
 \bar{H}_{tot} &=&  \bar{H} + \bar{H}_{w} + \bar{H}_{t} , \\
 \bar{M}_{tot} &=&  \bar{M} + \bar{M}_{w} + \bar{M}_{t}, \\
 \bar{A}_{tot} &=&  \bar{A} + \bar{A}_{w} + \bar{A}_{t},  
 \end{eqnarray}
 and for those who do particpate in contact tracing the recovery rate is:
 \begin{eqnarray}
-\frac{d\dot{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{r}} \dot{H}_{tot} + \frac{1}{\tau_{mild}} \dot{M}_{tot} + \frac{1}{\tau_{a}} \dot{A}_{tot}, \\
+\frac{d\dot{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \dot{H}_{tot} + \frac{1}{\tau_{mild}} \dot{M}_{tot} + \frac{1}{\tau_{a}} \dot{A}_{tot}, \\
 \dot{H}_{tot} &=&  \dot{H} + \dot{H}_{w} + \dot{H}_{n} + \dot{H}_{n'} , \\
 \dot{M}_{tot} &=&  \dot{M} + \dot{M}_{q} + \dot{M}_{w} + \dot{M}_{n} + \dot{M}_{n'}, \\
 \dot{A}_{tot} &=&  \dot{A} + \dot{A}_{q} + \dot{A}_{w} + \dot{A}_{n} + \dot{A}_{n'}. 
@@ -718,23 +718,28 @@ and for those who do particpate in contact tracing the recovery rate is:
 
 Now for the mega array composed of smaller populations:
 \begin{eqnarray}
-\begin{bmatrix}
-\bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & \dot{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & T_{\dot{S}\dot{E}} & 0 & \dot{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & T_{\bar{E}\bar{I}} & 0 & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & T_{\dot{E}\dot{I}} & 0 & \dot{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & T_{\bar{E}\bar{I}^{a}} & 0 & \bar{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & T_{\dot{E}\dot{I}^{a}} & 0 & \dot{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}^{a}\bar{A}} & 0 & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}^{a}\dot{A}} & 0 & \dot{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}\bar{M}} & 0 & \bar{M}_{m} & 0 & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{M}} & 0 & \dot{M}_{m} & 0 & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}\bar{X}} & 0 & \bar{X}_{m} & 0 & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{X}} & 0 & \dot{X}_{m} & 0 & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{X}\bar{H}} & 0 & \bar{H}_{m} & 0 \\ 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{X}\dot{H}} & 0 & \dot{H}_{m} \\ 
+&\frac{dP}{dt} = \nonumber \\
+&\begin{bmatrix}
+\bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & \dot{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & T_{\dot{S}\dot{E}} & 0 & \dot{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & T_{\bar{E}\bar{I}} & 0 & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & T_{\dot{E}\dot{I}} & 0 & \dot{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & T_{\bar{E}\bar{I}^{a}} & 0 & \bar{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & T_{\dot{E}\dot{I}^{a}} & 0 & \dot{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}^{a}\bar{A}} & 0 & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}^{a}\dot{A}} & 0 & \dot{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}\bar{M}} & 0 & \bar{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{M}} & 0 & \dot{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{I}\bar{X}} & 0 & \bar{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{I}\dot{X}} & 0 & \dot{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\bar{X}\bar{H}} & 0 & \bar{H}_{m} & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\dot{X}\dot{H}} & 0 & \dot{H}_{m} & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{sev}} & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0 & 0 & 0 \nonumber \\
 % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\
 \end{bmatrix}
 %
@@ -757,6 +762,11 @@ T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
 \dot{X} \\
 \bar{H} \\
 \dot{H} \\
+\bar{D} \\
+\dot{D} \\
+\bar{R} \\
+\dot{R}
+
 \end{bmatrix}
 \end{eqnarray}
 
@@ -811,7 +821,7 @@ $\gamma^{c}_{true}$ & Rate of true notifications of individuals who have become 
 \begin{eqnarray}
 \gamma^{c}_{false} &=& \beta_{c} (\dot{S}_{n} + \dot{E}_{n} + \dot{I}_{n'} + \dot{I}^{a}_{n'} + \boldsymbol{\dot{R}_{n'}}) + \frac{(R_{c}-R_{0})}{\tau_{c}}(\dot{I}_{n} + \dot{I}^{a}_{n} + \boldsymbol{\dot{R}_{n}}), \\
 %
-\gamma^{c}_{true} &=& =\beta_{0} (\dot{I}_{n} + \dot{I}^{a}_{n} + \boldsymbol{\dot{R}_{n}}), \\ 
+\gamma^{c}_{true} &=& \beta_{0} (\dot{I}_{n} + \dot{I}^{a}_{n} + \boldsymbol{\dot{R}_{n}}), \\ 
 %
 \boldsymbol{\dot{R}_{n'}} &=& \dot{A}_{n'} + \dot{M}_{n'} + \dot{X}_{n'} + \dot{H}_{n'}, \\
 %

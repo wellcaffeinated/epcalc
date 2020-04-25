@@ -1,0 +1,14 @@
+\BOOKMARK [0][-]{section*.2}{SEIR-C: An epidemic model that includes contact tracing}{}% 2
+\BOOKMARK [1][-]{section*.1}{Abstract}{section*.2}% 1
+\BOOKMARK [1][-]{section*.3}{Description of model}{section*.2}% 3
+\BOOKMARK [2][-]{section*.4}{Conventions and notation}{section*.3}% 4
+\BOOKMARK [1][-]{section*.5}{Susceptible}{section*.2}% 5
+\BOOKMARK [1][-]{section*.6}{Exposure}{section*.2}% 6
+\BOOKMARK [1][-]{section*.7}{Infectious}{section*.2}% 7
+\BOOKMARK [1][-]{section*.8}{Outcomes}{section*.2}% 8
+\BOOKMARK [2][-]{section*.9}{Asymptomatic}{section*.8}% 9
+\BOOKMARK [3][-]{section*.10}{Mild}{section*.9}% 10
+\BOOKMARK [2][-]{section*.11}{Severe}{section*.8}% 11
+\BOOKMARK [3][-]{section*.12}{Hospitalized}{section*.11}% 12
+\BOOKMARK [2][-]{section*.13}{Deaths}{section*.8}% 13
+\BOOKMARK [2][-]{section*.14}{Recovery}{section*.8}% 14

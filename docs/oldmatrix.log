@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  24 APR 2020 23:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  24 APR 2020 16:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**matrix.tex
-(./matrix.tex
+**oldmatrix.tex
+(./oldmatrix.tex
 LaTeX2e <2020-02-02> patch level 5
 L3 programming layer <2020-03-06>
 (/usr/local/texlive/2020/texmf-dist/tex/latex/revtex/revtex4-2.cls
@@ -359,42 +359,38 @@ LaTeX Info: Redefining \bm on input line 209.
 Package: ulem 2019/11/18
 \ULdepth=\dimen151
 )
-(/usr/local/texlive/2020/texmf-dist/tex/latex/bbold/bbold.sty
-Package: bbold 1994/04/06 Bbold symbol package
-)
 Class revtex4-2 Info: Unrecognized LaTeX tabular. Please update this document c
-lass! (Proceeding with fingers crossed.) on input line 15.
-Class revtex4-2 Info: cite was not loaded (OK!) on input line 15.
-Class revtex4-2 Info: mcite was not loaded (OK!) on input line 15.
-Class revtex4-2 Info: multicol was not loaded (OK!) on input line 15.
+lass! (Proceeding with fingers crossed.) on input line 14.
+Class revtex4-2 Info: cite was not loaded (OK!) on input line 14.
+Class revtex4-2 Info: mcite was not loaded (OK!) on input line 14.
+Class revtex4-2 Info: multicol was not loaded (OK!) on input line 14.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count272
 \l__pdf_internal_box=\box65
 )
-(./matrix.aux)
-\openout1 = `matrix.aux'.
+No file oldmatrix.aux.
+\openout1 = `oldmatrix.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
 \AtBeginShipoutBox=\box66
-Package hyperref Info: Link coloring OFF on input line 15.
-
+Package hyperref Info: Link coloring OFF on input line 14.
 (/usr/local/texlive/2020/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -407,15 +403,13 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count273
 )
-LaTeX Info: Redefining \ref on input line 15.
-LaTeX Info: Redefining \pageref on input line 15.
-LaTeX Info: Redefining \nameref on input line 15.
- (./matrix.out) (./matrix.out)
+LaTeX Info: Redefining \ref on input line 14.
+LaTeX Info: Redefining \pageref on input line 14.
+LaTeX Info: Redefining \nameref on input line 14.
 \@outlinefile=\write4
-\openout4 = `matrix.out'.
+\openout4 = `oldmatrix.out'.
 
-
-(/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count274
 \scratchdimen=\dimen152
@@ -437,76 +431,65 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Class revtex4-2 Info: Taking \maketitle back from hyperref on input line 15.
-\openout3 = `matrixNotes.bib'.
+Class revtex4-2 Info: Taking \maketitle back from hyperref on input line 14.
+\openout3 = `oldmatrixNotes.bib'.
 
-LaTeX Font Info:    Trying to load font information for U+lasy on input line 33
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 30
 .
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 30.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 30.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <9> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 30.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
-<Basic_SEIR.png, id=81, 1146.2825pt x 482.80376pt>
-File: Basic_SEIR.png Graphic file (type png)
-<use Basic_SEIR.png>
-Package pdftex.def Info: Basic_SEIR.png  used on input line 60.
-(pdftex.def)             Requested size: 361.34999pt x 152.19449pt.
- [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<SEIR_testing_no_contact.png, id=103, 1073.00874pt x 613.29124pt>
-File: SEIR_testing_no_contact.png Graphic file (type png)
-<use SEIR_testing_no_contact.png>
-Package pdftex.def Info: SEIR_testing_no_contact.png  used on input line 77.
-(pdftex.def)             Requested size: 361.34999pt x 206.53235pt.
-<SEIR with contact tracing.png, id=104, 1176.395pt x 987.69pt>
-File: SEIR with contact tracing.png Graphic file (type png)
-<use SEIR with contact tracing.png>
-Package pdftex.def Info: SEIR with contact tracing.png  used on input line 92.
-(pdftex.def)             Requested size: 252.94499pt x 212.36427pt.
-<SEIR_testing_and__contact_transitions.png, id=105, 1387.1825pt x 759.83875pt>
-File: SEIR_testing_and__contact_transitions.png Graphic file (type png)
-<use SEIR_testing_and__contact_transitions.png>
-Package pdftex.def Info: SEIR_testing_and__contact_transitions.png  used on inp
-ut line 99.
-(pdftex.def)             Requested size: 469.75499pt x 257.30986pt.
- [2 <./Basic_SEIR.png>]
-[3 <./SEIR_testing_no_contact.png> <./SEIR with contact tracing.png>] [4 <./SEI
-R_testing_and__contact_transitions.png>]
-LaTeX Font Info:    Trying to load font information for U+bbold on input line 2
-38.
-
-(/usr/local/texlive/2020/texmf-dist/tex/latex/bbold/Ubbold.fd) [5] [6] [7]
-[8] [9] [10]
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 30.
+ [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] 
+[3] [4] [5]
+[6] [7] [8]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 826.
+               Default added (so using `tbp') on input line 774.
 
-No file matrix.bbl.
-[11] [12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 886.
- (./matrix.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 886.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 886.
-Package rerunfilecheck Info: File `matrix.out' has not changed.
-(rerunfilecheck)             Checksum: 3920FE6C3CC34D67DBC8788552950634;1231.
+No file oldmatrix.bbl.
+[9pdfTeX warning (ext4): destination with the same identifier (name{equation.5.
+76}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.834 \end{document}
+                    ] [10]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 834.
+ (./oldmatrix.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 834.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 834.
+
+
+Package rerunfilecheck Warning: File `oldmatrix.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `oldmatrix.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  3C7FC5C3881E69DD4028BCFF770F0B7B;837.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right .
+
+
  ) 
 Here is how much of TeX's memory you used:
- 8534 strings out of 480608
- 123193 string characters out of 5903631
- 463930 words of memory out of 5000000
- 24189 multiletter control sequences out of 15000+600000
- 542184 words of font info for 63 fonts, out of 8000000 for 9000
+ 8428 strings out of 480608
+ 121206 string characters out of 5903631
+ 462825 words of memory out of 5000000
+ 24116 multiletter control sequences out of 15000+600000
+ 541256 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,15n,37p,1536b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2020/texmf-dist/fonts/type1/public/bbold-type1/bbold10.pf
-b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy
+ 34i,15n,37p,1326b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy
 5.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10
 .pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
 pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pf
@@ -528,12 +511,11 @@ exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texl
 ive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texli
 ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive
 /2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2
-020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/202
-0/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on matrix.pdf (12 pages, 694042 bytes).
+020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on oldmatrix.pdf (10 pages, 275970 bytes).
 PDF statistics:
- 310 PDF objects out of 1000 (max. 8388607)
- 260 compressed objects within 3 object streams
- 78 named destinations out of 1000 (max. 500000)
- 173 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 211 PDF objects out of 1000 (max. 8388607)
+ 174 compressed objects within 2 object streams
+ 65 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

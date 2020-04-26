@@ -68,7 +68,7 @@ A modified SEIR model that is widely used also accounts for asymptomatic individ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We will first extend the basic SEIR model described in the previous section to include testing. An important consideration is how long it takes to get test results on average ($\tau_{t}$), as well as the percentage of tests that return a false positive ($f_{pos}$) or a false negative $f_{neg}$. In general, the probability that someone will be given a test is $p_{t}$, but it is possible to test those who show symptoms ($p^{i}_t$) as well as those who are hospitalized ($p^{sev}_{t}$) at a higher rate. 
 
-For each of the different populations $S$, $E$, $I$, $I^{a}$, $A$, $M$, $X$, and $H$, we consider three different subpopulations. There are those who have not yet been tested (which we denote with a ``$u$'' subscript, i.e. $S_{u}$), those who have been tested but are waiting for their results (denoted by a ``$w$'', i.e. $S_{w}$), and finally those who have tested positive (denoted a ``t'' subscript, i.e. $S_{t}$). In figure XXX each of these not tested, waiting, and positive tests are represented as layers. To simplify matters, individuals can move between layers within their current population group, but when transitioning to a the next phase of the disease must stay within their layer. For example, someone who is in the exposed phase and waiting for their test results, $E_{w}$ can move to $E_{t}$ if they test positive. They also have a chance of moving to the infectious phase $I_{w}$ where they continue to wait for their test results. However, they cannot move to $I_{t}$ directly from $E_{w}$ ($E_{w} \rightarrow I_{t}$). Instead they have to follow the path $E_{w} \rightarrow I_{w} \rightarrow I_{t}$. 
+For each of the different populations $S$, $E$, $I$, $I^{a}$, $A$, $M$, $X$, and $H$, we consider three different subpopulations. There are those who have not yet been tested (which we denote with a ``$u$'' subscript, i.e. $S_{u}$), those who have been tested but are waiting for their results (denoted by a ``$w$'', i.e. $S_{w}$), and finally those who have tested positive (denoted a ``t'' subscript, i.e. $S_{t}$). In figure \ref{f:SEIR-contact} each of these not tested, waiting, and positive tests are represented as layers. To simplify matters, individuals can move between layers within their current population group, but when transitioning to a the next phase of the disease must stay within their layer. For example, someone who is in the exposed phase and waiting for their test results, $E_{w}$ can move to $E_{t}$ if they test positive. They also have a chance of moving to the infectious phase $I_{w}$ where they continue to wait for their test results. However, they cannot move to $I_{t}$ directly from $E_{w}$ ($E_{w} \rightarrow I_{t}$). Instead they have to follow the path $E_{w} \rightarrow I_{w} \rightarrow I_{t}$. 
 
 We assume that those who are waiting for their test results quarantine themselves. If an individual tests positive, then they continue to quarantine for an average time of $\tau_{iso}$, after which they return to the general population. We assume that anyone who has tested positive will not be tested again unless their quarantine period ends before recovery and they return to the non-tested population. Those who develop severe symptoms and are hospitalized will remain quarantined. For those in the susceptible population who are quarantined, this leads to a reduction in their probability of infection by a factor $d_{r}$. For those in the infectous group who are quarantining, their ability to infect others ($R_{0}$) is reduced by a factor $d_{r}$. If an individual tests negative while in $S_{w}$ they return to $S_{u}$ and stop quarantining. Similarily, those who are infectious that test negative (through a false negative) will return to either $I_{u}$ or $I^{a}_{u}$ where they will resume infecting others at the original $R_{0}$. 
 
@@ -111,7 +111,7 @@ and a negative test result is:
 \end{eqnarray}
 Individuals will wait for an average for $\tau_{t}$ for their test results. Those who test positive quarantine (move to $J_{t}$), while those who test negative return to $J_{u}$. 
 
-After an average time $\tau_{iso}$, those who are in $J_{t}$ can return back to $J_{u}$ as their quarantine period is over. The matrix for this transition is:
+After an average time $\tau_{iso}$, thos e who are in $J_{t}$ can return back to $J_{u}$ as their quarantine period is over. The matrix for this transition is:
 \begin{eqnarray} 
 \sigma_{iso} &=& \frac{1}{\tau_{iso}}
     \begin{bmatrix}
@@ -204,7 +204,7 @@ SEIR with testing incorporated. It is convenient to divide each population into 
 \section{SEIR with contact tracing (SEIR-C)}
 We can further build on the SEIR model with testing to incorporate contact tracing. We first consider automatic contact tracing facilitated through technology. There are many proposed methods for carrying this out, with many center around defining contacts made through bluetooth enabled devices. Here we take a technology agnostic approach, and consider some fraction of the population $p_{c}$ that chooses to particpate in contact tracing. We therefore divide the population in those who do not contact trace and those that do, and treat their population dynamics separately. Someone who starts in the contact tracing group cannot migrate to the non contact tracing population, but someone who is contact tracing can infect someone who is not (and vice-versa). As shown in figure XXXX, we now have two separate sets of population transfer dynamics to consider. We label all the population groups who do not participate in contact tracing with a bar accent (for example, $\bar{S}$), and those who do particpate with a check accent (for example, $\check{E}$). We keep this notation throughout. Those who do not participate in contact tracing have dynamics described by the SEIR-T model described in the previous section.
 
-The flow of the population not particpating in contact tracing reduces to the case where we only have testing (as shown in figure XXXXX). However, those particpating in contact tracing have one additional state that needs to be accounted for. Those who are untested in a group now have a chance to quarantine themselves when they are notified of a past contact with someone who is infectious. These individuals move from the population $J_{u}$ to $J_{q}$. Those who are in $J_{q}$ are tested at a rate of $r^{c}_{t}$. Anyone chosen for testing in $J_{u}$ or $J_{q}$ move to the waiting state $J_{w}$ until their test results come back. If the test is negative, they return to $J_{u}$, but if it is positive, the move to $J_{n}$. As individuals move from $J_{w}$ to $J_{n}$ they notifiy all of their potential contacts to quarantine themselves (move from $J_{u}$ to $J_{q}$). 
+The flow of the population not particpating in contact tracing reduces to the case where we only have testing (as shown in figure XXXXX). However, those particpating in contact tracing have one additional state that needs to be accounted for. Those who are untested in a group now have a chance to quarantine themselves when they are notified of a past contact with someone who is infectious. These individuals move from the population $J_{u}$ to $J_{q}$. Those who are in $J_{q}$ are tested at a rate of $r^{c}_{t}$. Anyone chosen for testing in $J_{u}$ or $J_{q}$ move to the waiting state $J_{w}$ until their test results come back. If the test is negative, they return to $J_{u}$, but if it is positive, the move to $J_{n}$. As individuals move from $J_{w}$ to $J_{n}$ they notifiy all of their potential contacts to quarantine themselves (move from $J_{u}$ to $J_{q}$). Individuals who are waiting for test, already quarantined, or have already tested positive are not affected by notifications. It takes a positive test at any stage to start the contact tracing process.
 
 As in the testing section, we consider a population $J$ to be represented by the vector:
 \begin{eqnarray}
@@ -262,6 +262,85 @@ Similar to SEIR-T, we have transition matrices for those who are tested ($\bolds
     \end{bmatrix}
 \end{eqnarray}
 
+We can now write down the rate equations for each of the disease phases that particpate in contact tracing. Their general form is nearly identical to those used in SEIR-T, and they are given by:
+\begin{eqnarray}
+% dS/dt
+\frac{d \boldsymbol{\check{S}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + f_{pos} \boldsymbol{\check{\sigma}_{+}} + (1-f_{pos}) \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} \right) - \boldsymbol{\check{T}_{S \rightarrow E}}, \\
+%
+% T_{S -> E}
+\boldsymbol{\check{T}_{S \rightarrow E}} &=& \beta
+    \begin{bmatrix}
+    1 & 0 & 0 & 0 \\ 
+    0 & d_{r} & 0 & 0 \\
+    0 & 0 & d_{r} \\
+    0 & 0 & & 0 & d_{r}
+    \end{bmatrix} \\ 
+%
+% beta
+\beta &=& \frac{R_{0}}{N\tau_{inf}} \left[ {I^{u}_{tot}} + d_{r} (I_{tot} - {I^{u}_{tot}}) \right], \\%
+% %
+% Iutot
+{I^{u}_{tot}} &=& {\check{I}_{u}} + {\check{I}^{a}_{u}}+ {{I}_{u}} + {{I}^{a}_{u}} \\ 
+% %
+% % Itot
+% % \boldsymbol{I^{tot} &=& \boldsymbol{{I}^{tot}} + \boldsymbol{\check{I}^{tot}}+ \boldsymbol{{I}_{u}} + \boldsymbol{{I}^{a}_{u}}
+\end{eqnarray}
+For both the $\frac{d \boldsymbol{\check{S}}}{dt}$ and $\frac{d \boldsymbol{\bar{S}}}{dt}$ terms, the value of $\beta$ needs to be modified to include the populations of those who particpate in contact tracing, and those who do no. Anyone who is infectious can infect someone who is susceptibe regardless of whether they participate in contact tracing or not. We also have the value of $\gamma^{c}_{F}$ which represents the individuals who are notified to quarantine through a contact that did not infect them. The total number of contacts an infected person makes on average is $R_{c}$, however only $R_{0}$ of those contacts will lead to an infection. Those who are in the susceptible and exposed populations cannot infect others, so all of their contacts self quarantine without being infected. For those in the other phases (except recovered and death), $(R_{c} - R_{0})$ will quarantine without being infected. The notifications take on average time $\tau_{n}$ to carry out, and occur whenever population transfers from $J_{w} \rightarrow J_{n}$, with an average rate of change of $\frac{J_{w}}{\tau_{t}}$ goverened by the time it takes to get a test result. Here we have:
+\begin{eqnarray}
+% gamma^{c}_{F}
+\gamma^{c}_{F} &=& \frac{R_{c}}{(1+\tau_{n})}\frac{(f_{pos} \check{S}_{w} + (1-f_{neg})\check{E}_{w})}{N \tau_{t}} \nonumber \\ 
+&& + \frac{(R_{c} - R_{0})}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{I}_{w} + \check{I^{a}}_{w} + \check{A}_{w} + \check{M}_{w} + \check{X}_{w} + \check{H}_{w} + \check{D}_{w} + \check{R}_{w} )}{N \tau_{t}}.
+\end{eqnarray} 
+
+The next rate equations again closely follow the form of their counterparts in SEIR-R, and are given as:
+\begin{eqnarray}
+%
+% dE/dt
+\frac{d \boldsymbol{\check{E}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{E}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inc}} \mathbb{1} \right) \cdot \boldsymbol{\check{E}} + \boldsymbol{\check{T}_{S \rightarrow E}} \cdot \boldsymbol{\check{S}}, \\
+%
+%dI/dT
+\frac{d \boldsymbol{\check{I}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\ 
+%
+%dIa/dt
+\frac{d \boldsymbol{\check{I}^{a}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\
+%
+% dA/dt
+\frac{d \boldsymbol{\check{A}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{\check{A}} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}^{a}}, \\
+%
+% dM/dt
+\frac{d \boldsymbol{\check{M}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{\check{M}} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\ 
+%
+% dX/dt
+\frac{d \boldsymbol{\check{X}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{h}} \mathbb{1} \right) \cdot \boldsymbol{\check{X}} + \frac{(1-p_{m})}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\
+% 
+% dH/dt
+\frac{d \boldsymbol{\check{H}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{sev}} \mathbb{1} \right) \cdot \boldsymbol{\check{H}} + \frac{1}{\tau_{h}} \mathbb{1} \cdot \boldsymbol{\check{X}}.
+\end{eqnarray}
+
+Those who are infectious (or were infectious but have moved on to $A$, $X$, $M$, $H$, $D$, or $R$) all infect on average $R_{0}$ individuals. We need to consider the notification rates for those who are able to sucessfully identify someone they infected and have them quarantine. We assume here that those who are in $I$ or $I^{a}$ can only notify those who are in $E$, and that those who are in $A$, $X$, $M$, $H$, $D$, or $R$ can only notify those in $I$ or $I^{a}$ of a true infection. The notification rate for those in $E$ is therefore given as:
+\begin{eqnarray}
+% \gamma^{c}_{E}
+\gamma^{c}_{E} &=& \frac{R_{0}}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{I}_{w} + \check{I^{a}}_{w})}{N \tau_{t}},
+\end{eqnarray} 
+and the true notification rates for those in $I_{u}$ and $I^{a}_{u}$ are:
+\begin{eqnarray}
+% \gamma^{c}_{I}
+\gamma^{c}_{I} &=&  \frac{R_{0}}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{A}_{w} + \check{M}_{w} + \check{X}_{w} + \check{H}_{w} + \check{D}_{w} + \check{R}_{w} )}{N\tau_{t}}.
+\end{eqnarray}   
+
+As before, a fraction $p_{d}$ of those who are hospitalized will die after an average time $\tau_{d}$, or recover after a time $\tau_{sev}$. To find $p_{d}$, we must use the case fatality rate, $C_{FR}$ to figure out the percantage of those hospitalized that will die. Since the case fatality rate applies to all infections, we need to determine the average fraction of the population that will end up in the hospital. Anyone who who gets tested while in the hospital, but dies before their results are returned still need to trigger a round of notifications. Therefore, we need to track the dynamic of $D_{w} \rightarrow D_{n}$. This leads to a rate of change of the death population of:
+\begin{eqnarray}
+\frac{d \boldsymbol{\check{D}}}{dt} &=& (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} \boldsymbol{\check{D}} +  \frac{p_{d}}{\tau_{sev}} \mathbb{1} \cdot \boldsymbol{\check{X}}. 
+\end{eqnarray}
+
+Similarly, we must also track the dynamics of those who recover while waiting for their test results so the proper notifications can be sent out. This leads to:
+\begin{eqnarray}
+\frac{d \boldsymbol{\check{R}}}{dt} &=& (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} \boldsymbol{\check{R}} + \frac{1}{\tau_{a}} \mathbb{1} \cdot \boldsymbol{\check{A}} + \frac{1}{\tau_{mild}} \mathbb{1} \cdot \boldsymbol{\check{M}} + \frac{(1-p_{d})}{\tau_{sev}} \mathbb{1} \cdot \boldsymbol{\check{X}}. 
+\end{eqnarray}
+
+
+
+
 \begin{figure}
 \centering
 \includegraphics[width=3.5in]{SEIR with contact tracing}
@@ -271,560 +350,476 @@ Similar to SEIR-T, we have transition matrices for those who are tested ($\bolds
 
 \begin{figure}
 \centering
-\includegraphics[width=6.5in]{SEIR_testing_and__contact_transitions}
+\includegraphics[width=6.5in]{SEIR-CT_4layer}
 \caption{\label{f:SEIR-contact}
  Layers for contact tracing, as well as the transition rates between populations.}
 \end{figure}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Description of model}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Here we modify the SEIR model to include contact tracing and testing...
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Description of model}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here we modify the SEIR model to include contact tracing and testing...
+
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \subsection{Conventions and notation}
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % The populations are divided into those who particpate in contact tracing and those who do not. During each phase of the disease progression, there is never a transfer of popoulation from the group that is contact tracing and those who are not. We denote any population, $J$, that does not contact trace with a bar ($\bar{J}$) and those who do contact trace with a dot ($\check{J}$). 
+
+% % In this model, anyone who is notified of a potential exposure through contact tracing is quarantined for some average time $\tau_{iso}$. During this time, their $R_{0}$ is reduced by a fraction $d_{r}$, making them far less likely to be exposed to the virus if they are susceptible, or much less likely to infect others if they are infectious. Testing can also take place. The average probability that someone in the general population is selected for testing is $p_{t}$. Later on we will allow for different testing rates for those who have been identified as being potentially exposed through contact tracing ($p^{c}_{t}$), those who show symptoms while infectious($p^{i}_{t}$), and those who develop severe symptoms ($p^{sev}_{t}$). We can also account for tests that return false positives ($f_{pos}$) and false negatives ($f_{neg}$), as well as the time it takes to get the test results ($\tau_{t}$) As in the basic SEIR model, the average time spent in the exposure phase is $\tau_{inc}$, and the time spend in the infectious phase is $\tau_{inf}$. Instead of a monolithic recovery phase, we consider several different subpopulations. There are those who are asymptomatic, those with mild infections, those with severe infections that lead to hospitalizations, and those who die after being hospitalized.
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \subsection{Conventions and notation}
+% \section{Susceptible}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% The populations are divided into those who particpate in contact tracing and those who do not. During each phase of the disease progression, there is never a transfer of popoulation from the group that is contact tracing and those who are not. We denote any population, $J$, that does not contact trace with a bar ($\bar{J}$) and those who do contact trace with a dot ($\check{J}$). 
-
-% In this model, anyone who is notified of a potential exposure through contact tracing is quarantined for some average time $\tau_{iso}$. During this time, their $R_{0}$ is reduced by a fraction $d_{r}$, making them far less likely to be exposed to the virus if they are susceptible, or much less likely to infect others if they are infectious. Testing can also take place. The average probability that someone in the general population is selected for testing is $p_{t}$. Later on we will allow for different testing rates for those who have been identified as being potentially exposed through contact tracing ($p^{c}_{t}$), those who show symptoms while infectious($p^{i}_{t}$), and those who develop severe symptoms ($p^{sev}_{t}$). We can also account for tests that return false positives ($f_{pos}$) and false negatives ($f_{neg}$), as well as the time it takes to get the test results ($\tau_{t}$) As in the basic SEIR model, the average time spent in the exposure phase is $\tau_{inc}$, and the time spend in the infectious phase is $\tau_{inf}$. Instead of a monolithic recovery phase, we consider several different subpopulations. There are those who are asymptomatic, those with mild infections, those with severe infections that lead to hospitalizations, and those who die after being hospitalized.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Susceptible}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The rate of change equations for the susceptible populations that are not contact tracing ($\bar{S}$) are given as:
-\begin{eqnarray}
-\frac{d\bar{S}}{dt} &=& \boldsymbol{\bar{S}_{m}} \cdot  \bar{S}, 
-\end{eqnarray}
-where:
-\begin{eqnarray}
-\boldsymbol{\bar{S}_{m}} &=&
-\begin{bmatrix}
--\gamma^{'} - p_{t}  &  \frac{(1-f_{pos})}{\tau_{t}}             & \frac{1}{\tau_{iso}} \\ 
- p_{t}              & -\frac{1}{\tau_{t}} - d_{r} \gamma^{'}    & 0  \\ 
- 0                  & \frac{f_{pos}}{\tau_{t}}                  &  -d_{r} \gamma^{'}
-\end{bmatrix} \\ 
-%
-\bar{S} &=& 
-\begin{bmatrix}
-\bar{S}_{u} \\ \bar{S}_{w}\\ \bar{S}_{t}
-\end{bmatrix} \\
-\end{eqnarray}
-Here @TODO explain terms.
-
-The rate of change of the susceptible populations that are particpating in contact tracing ($\check{S}$) are given as:
-\begin{eqnarray}
-\frac{d\check{S}}{dt} &=& \boldsymbol{\check{S}_{m}} \cdot \check{S},
-\end{eqnarray}
-where:
-\begin{eqnarray}
-\boldsymbol{\check{S}_{m}} &=&
-\begin{bmatrix}
--\gamma^{'} -\gamma^{c}_{false} - p_{t}  & \frac{1}{\tau_{iso}}     & \frac{(1-f_{pos})}{\tau_{t}}             & \frac{1}{\tau_{iso}} \\ 
-\gamma^{c}_{false}          &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} -d_{r} \gamma^{'}          &  0    & 0  \\ 
-p_{t}                          &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  -d_{r} \gamma^{'}  & 0 \\
-0 & 0 & \frac{f_{pos}}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -d_{r} \gamma^{'}
-\end{bmatrix}, \\
-% %
-\check{S} &=& 
-\begin{bmatrix}
-\check{S}_{u} \\ \check{S}_{q} \\ \check{S}_{w}\\ \check{S}_{n}
-\end{bmatrix}
-\end{eqnarray}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Exposure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The rate of change equations for the exposed populations that are not contact tracing ($\bar{S}$) are given as:
-\begin{eqnarray}
-\frac{d\bar{E}}{dt} &=& \boldsymbol{\bar{E}_{m}} \cdot \bar{E} + \boldsymbol{T_{\bar{S}\bar{E}}}  \bar{S}, 
-\end{eqnarray}
-where:
-\begin{eqnarray}
-\boldsymbol{\bar{E}_{m}} &=&
-\begin{bmatrix}
- - p_{t} -\frac{1}{\tau_{inc}}  &  \frac{(1-f_{neg})}{\tau_{t}}             & \frac{1}{\tau_{iso}} \\ 
- p_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{inc}}  & 0  \\ 
- 0                  & \frac{f_{neg}}{\tau_{t}}                  & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{inc}}
-\end{bmatrix} \\ 
-%
-\bar{E} &=& 
-\begin{bmatrix}
-\bar{E}_{u} \\ \bar{E}_{w}\\ \bar{E}_{t}
-\end{bmatrix} \\
-%
-\boldsymbol{T_{\bar{S}\bar{E}}} &=& 
-    \begin{bmatrix}
-\gamma^{'}  & 0                 & 0 \\ 
- 0          & d_{r} \gamma^{'}  & 0 \\ 
- 0          & 0                 & d_{r} \gamma^{'} 
-\end{bmatrix}.
-%
-\end{eqnarray}
-
-For the exposedß population particpating in contact tracing we have:
-\begin{eqnarray}
-\frac{d\check{E}}{dt} &=& \boldsymbol{\check{E}_{m}} \cdot \check{E} + \boldsymbol{T_{\check{S}\check{E}}}  \check{S}, 
-\end{eqnarray}
-where:
-\begin{eqnarray}
-\boldsymbol{\check{E}_{m}} &=&
-\begin{bmatrix}
- -\gamma^{c}_{false} -\gamma^{c}_{true} - p_{t} -\frac{1}{\tau_{inc}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} \\
-\gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{inc}}      &  0    & 0  \\
-p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{inc}}  & 0 \\
-0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{inc}} 
-\end{bmatrix}, \\ 
-%
-\check{E} &=& 
-\begin{bmatrix}
-\check{E}_{u} \\ \check{E}_{q} \\ \check{E}_{w}\\ \check{E}_{n}
-\end{bmatrix}, \\ 
-%
-\boldsymbol{T_{\check{S}\check{E}}} &=&
-\begin{bmatrix}
-\gamma^{'}  & 0                 & 0                 & 0 \\ 
- 0          & d_{r} \gamma^{'}  & 0                 & 0 \\ 
- 0          & 0                 & d_{r} \gamma^{'}  & 0  \\
- 0          & 0                 & 0                 & d_{r} \gamma^{'}
-\end{bmatrix}.
-\end{eqnarray}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Infectious}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In the infectious population, we must consider that a certain percentage of those infected ($p_{a}$) will be asymptomatic. Those who display no symptoms will not be as likely to be tested, and will be more difficult to quarantine. The asymptomatic individuals will be split between those who contact trace and those who do not. We denote those who are asymptomatic with a superscript $a$. 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Individuals who are infectious and display symptoms}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-First we consider those who display symptoms, but don't contact trace:
-\begin{eqnarray}
-\frac{d\bar{I}}{dt} &=& \boldsymbol{\bar{I}_{m}} \cdot  \bar{I} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \bar{E}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\bar{I}_{m}} &=&
-\begin{bmatrix}
-- p^{i}_{t} -\frac{1}{\tau_{inf}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
- p^{i}_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{inf}}       & 0  \\ 
- 0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{inf}}
-\end{bmatrix}, \\ 
-%
-\bar{I} &=& 
-\begin{bmatrix}
-\bar{I}_{u} \\ \bar{I}_{w}\\ \bar{I}_{t}
-\end{bmatrix}, \\ 
-%
-% \boldsymbol{T_{\bar{E}\bar{I}}} &=&
+% The rate of change equations for the susceptible populations that are not contact tracing ($\bar{S}$) are given as:
+% \begin{eqnarray}
+% \frac{d\bar{S}}{dt} &=& \boldsymbol{\bar{S}_{m}} \cdot  \bar{S}, 
+% \end{eqnarray}
+% where:
+% \begin{eqnarray}
+% \boldsymbol{\bar{S}_{m}} &=&
 % \begin{bmatrix}
-% \frac{(1-p_{a})}{\tau_{inc}}  & 0                 & 0 \\ 
-%  0          &  \frac{(1-p_{a})}{\tau_{inc}}  & 0 \\ 
-%  0          & 0                 &  \frac{(1-p_{a})}{\tau_{inc}} 
+% -\gamma^{'} - p_{t}  &  \frac{(1-f_{pos})}{\tau_{t}}             & \frac{1}{\tau_{iso}} \\ 
+%  p_{t}              & -\frac{1}{\tau_{t}} - d_{r} \gamma^{'}    & 0  \\ 
+%  0                  & \frac{f_{pos}}{\tau_{t}}                  &  -d_{r} \gamma^{'}
+% \end{bmatrix} \\ 
+% %
+% \bar{S} &=& 
+% \begin{bmatrix}
+% \bar{S}_{u} \\ \bar{S}_{w}\\ \bar{S}_{t}
+% \end{bmatrix} \\
+% \end{eqnarray}
+% Here @TODO explain terms.
+
+% The rate of change of the susceptible populations that are particpating in contact tracing ($\check{S}$) are given as:
+% \begin{eqnarray}
+% \frac{d\check{S}}{dt} &=& \boldsymbol{\check{S}_{m}} \cdot \check{S},
+% \end{eqnarray}
+% where:
+% \begin{eqnarray}
+% \boldsymbol{\check{S}_{m}} &=&
+% \begin{bmatrix}
+% -\gamma^{'} -\gamma^{c}_{false} - p_{t}  & \frac{1}{\tau_{iso}}     & \frac{(1-f_{pos})}{\tau_{t}}             & \frac{1}{\tau_{iso}} \\ 
+% \gamma^{c}_{false}          &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} -d_{r} \gamma^{'}          &  0    & 0  \\ 
+% p_{t}                          &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  -d_{r} \gamma^{'}  & 0 \\
+% 0 & 0 & \frac{f_{pos}}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -d_{r} \gamma^{'}
+% \end{bmatrix}, \\
+% % %
+% \check{S} &=& 
+% \begin{bmatrix}
+% \check{S}_{u} \\ \check{S}_{q} \\ \check{S}_{w}\\ \check{S}_{n}
+% \end{bmatrix}
+% \end{eqnarray}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Exposure}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The rate of change equations for the exposed populations that are not contact tracing ($\bar{S}$) are given as:
+% \begin{eqnarray}
+% \frac{d\bar{E}}{dt} &=& \boldsymbol{\bar{E}_{m}} \cdot \bar{E} + \boldsymbol{T_{\bar{S}\bar{E}}}  \bar{S}, 
+% \end{eqnarray}
+% where:
+% \begin{eqnarray}
+% \boldsymbol{\bar{E}_{m}} &=&
+% \begin{bmatrix}
+%  - p_{t} -\frac{1}{\tau_{inc}}  &  \frac{(1-f_{neg})}{\tau_{t}}             & \frac{1}{\tau_{iso}} \\ 
+%  p_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{inc}}  & 0  \\ 
+%  0                  & \frac{f_{neg}}{\tau_{t}}                  & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{inc}}
+% \end{bmatrix} \\ 
+% %
+% \bar{E} &=& 
+% \begin{bmatrix}
+% \bar{E}_{u} \\ \bar{E}_{w}\\ \bar{E}_{t}
+% \end{bmatrix} \\
+% %
+% \boldsymbol{T_{\bar{S}\bar{E}}} &=& 
+%     \begin{bmatrix}
+% \gamma^{'}  & 0                 & 0 \\ 
+%  0          & d_{r} \gamma^{'}  & 0 \\ 
+%  0          & 0                 & d_{r} \gamma^{'} 
 % \end{bmatrix}.
-%
-\end{eqnarray}
-and the idenity matrix is represented as $\mathbb{1}$.
+% %
+% \end{eqnarray}
 
-Those who particpate in contact tracing, are infectious, and display symptoms:
-\begin{eqnarray}
-\frac{d\check{I}}{dt} &=& \boldsymbol{\check{I}_{m}}  \check{I} + \boldsymbol{T_{\check{E}\check{I}}} \cdot  \check{E}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\check{I}_{m}} &=&
-\begin{bmatrix}
- -\gamma^{c}_{false} -\gamma^{c}_{true} - p^{i}_{t} -\frac{1}{\tau_{inf}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} & \frac{1}{\tau_{iso}} \\
- %
-\gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{n}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{inf}}      &  0    & 0  & 0\\
-p^{i}_{t}     &  p^{n}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{inf}}  & 0 & 0\\
-0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{inf}} & 0 \\ 
-0 & 0 & 0 & 0 & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{inf}}
-\end{bmatrix}, \\ 
-%
-\check{I} &=& 
-\begin{bmatrix}
-\check{I}_{u} \\ \check{I}_{q} \\ \check{I}_{w}\\ \check{I}_{n} \\ \check{I}_{n'}
-\end{bmatrix}, \\
-%
-\boldsymbol{T_{\check{E}\check{I}}} &=& \frac{(1-p_{a})}{\tau_{inc}} 
-\begin{bmatrix}
-1  & 0 & 0 & 0 & 0\\ 
-0  & 1 & 0 & 0 & 0 \\ 
-0  & 0 & 1 & 0 & 0 \\ 
-0  & 0 & 0 & 0 & 0 \\ 
-0  & 0 & 0 & 1 & 0 
-\end{bmatrix}.
-\end{eqnarray}
+% For the exposedß population particpating in contact tracing we have:
+% \begin{eqnarray}
+% \frac{d\check{E}}{dt} &=& \boldsymbol{\check{E}_{m}} \cdot \check{E} + \boldsymbol{T_{\check{S}\check{E}}}  \check{S}, 
+% \end{eqnarray}
+% where:
+% \begin{eqnarray}
+% \boldsymbol{\check{E}_{m}} &=&
+% \begin{bmatrix}
+%  -\gamma^{c}_{false} -\gamma^{c}_{true} - p_{t} -\frac{1}{\tau_{inc}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} \\
+% \gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{inc}}      &  0    & 0  \\
+% p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{inc}}  & 0 \\
+% 0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{inc}} 
+% \end{bmatrix}, \\ 
+% %
+% \check{E} &=& 
+% \begin{bmatrix}
+% \check{E}_{u} \\ \check{E}_{q} \\ \check{E}_{w}\\ \check{E}_{n}
+% \end{bmatrix}, \\ 
+% %
+% \boldsymbol{T_{\check{S}\check{E}}} &=&
+% \begin{bmatrix}
+% \gamma^{'}  & 0                 & 0                 & 0 \\ 
+%  0          & d_{r} \gamma^{'}  & 0                 & 0 \\ 
+%  0          & 0                 & d_{r} \gamma^{'}  & 0  \\
+%  0          & 0                 & 0                 & d_{r} \gamma^{'}
+% \end{bmatrix}.
+% \end{eqnarray}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Asymptomatic}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-For those who are asymptomatic, we first look at the group that does not particpate in contact tracing:
-\begin{eqnarray}
-\frac{d\bar{I}^{a}}{dt} &=& \boldsymbol{\bar{I}^{a}_{m}} \cdot \bar{I}^{a} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot  \bar{E}, \\ 
-\boldsymbol{\bar{I}^{a}_{m}} &=& \boldsymbol{\bar{I}_{m}}, \\ 
-%
-\bar{I}^{a} &=& 
-\begin{bmatrix}
-\bar{I}^{a}_{u} \\ \bar{I}^{a}_{w}\\ \bar{I}^{a}_{t}
-\end{bmatrix},
-\end{eqnarray}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Infectious}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% In the infectious population, we must consider that a certain percentage of those infected ($p_{a}$) will be asymptomatic. Those who display no symptoms will not be as likely to be tested, and will be more difficult to quarantine. The asymptomatic individuals will be split between those who contact trace and those who do not. We denote those who are asymptomatic with a superscript $a$. 
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Individuals who are infectious and display symptoms}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% First we consider those who display symptoms, but don't contact trace:
+% \begin{eqnarray}
+% \frac{d\bar{I}}{dt} &=& \boldsymbol{\bar{I}_{m}} \cdot  \bar{I} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \bar{E}, 
+% \end{eqnarray}
 % where:
 % %
 % \begin{eqnarray}
+% \boldsymbol{\bar{I}_{m}} &=&
+% \begin{bmatrix}
+% - p^{i}_{t} -\frac{1}{\tau_{inf}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
+%  p^{i}_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{inf}}       & 0  \\ 
+%  0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{inf}}
+% \end{bmatrix}, \\ 
+% %
+% \bar{I} &=& 
+% \begin{bmatrix}
+% \bar{I}_{u} \\ \bar{I}_{w}\\ \bar{I}_{t}
+% \end{bmatrix}, \\ 
+% %
+% % \boldsymbol{T_{\bar{E}\bar{I}}} &=&
+% % \begin{bmatrix}
+% % \frac{(1-p_{a})}{\tau_{inc}}  & 0                 & 0 \\ 
+% %  0          &  \frac{(1-p_{a})}{\tau_{inc}}  & 0 \\ 
+% %  0          & 0                 &  \frac{(1-p_{a})}{\tau_{inc}} 
+% % \end{bmatrix}.
+% %
+% \end{eqnarray}
+% and the idenity matrix is represented as $\mathbb{1}$.
+
+% Those who particpate in contact tracing, are infectious, and display symptoms:
+% \begin{eqnarray}
+% \frac{d\check{I}}{dt} &=& \boldsymbol{\check{I}_{m}}  \check{I} + \boldsymbol{T_{\check{E}\check{I}}} \cdot  \check{E}, 
+% \end{eqnarray}
+% where:
+% %
+% \begin{eqnarray}
+% \boldsymbol{\check{I}_{m}} &=&
+% \begin{bmatrix}
+%  -\gamma^{c}_{false} -\gamma^{c}_{true} - p^{i}_{t} -\frac{1}{\tau_{inf}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} & \frac{1}{\tau_{iso}} \\
+%  %
+% \gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{n}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{inf}}      &  0    & 0  & 0\\
+% p^{i}_{t}     &  p^{n}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{inf}}  & 0 & 0\\
+% 0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{inf}} & 0 \\ 
+% 0 & 0 & 0 & 0 & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{inf}}
+% \end{bmatrix}, \\ 
+% %
+% \check{I} &=& 
+% \begin{bmatrix}
+% \check{I}_{u} \\ \check{I}_{q} \\ \check{I}_{w}\\ \check{I}_{n} \\ \check{I}_{n'}
+% \end{bmatrix}, \\
+% %
+% \boldsymbol{T_{\check{E}\check{I}}} &=& \frac{(1-p_{a})}{\tau_{inc}} 
+% \begin{bmatrix}
+% 1  & 0 & 0 & 0 & 0\\ 
+% 0  & 1 & 0 & 0 & 0 \\ 
+% 0  & 0 & 1 & 0 & 0 \\ 
+% 0  & 0 & 0 & 0 & 0 \\ 
+% 0  & 0 & 0 & 1 & 0 
+% \end{bmatrix}.
+% \end{eqnarray}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Asymptomatic}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For those who are asymptomatic, we first look at the group that does not particpate in contact tracing:
+% \begin{eqnarray}
+% \frac{d\bar{I}^{a}}{dt} &=& \boldsymbol{\bar{I}^{a}_{m}} \cdot \bar{I}^{a} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot  \bar{E}, \\ 
 % \boldsymbol{\bar{I}^{a}_{m}} &=& \boldsymbol{\bar{I}_{m}}, \\ 
 % %
 % \bar{I}^{a} &=& 
 % \begin{bmatrix}
 % \bar{I}^{a}_{u} \\ \bar{I}^{a}_{w}\\ \bar{I}^{a}_{t}
-% \end{bmatrix}, \\ 
-% %
-% % \boldsymbol{T_{\bar{E}\bar{I}^{a}}} &=&
-% % \begin{bmatrix}
-% % \frac{p_{a}}{\tau_{inc}}  & 0                 & 0 \\ 
-% %  0          &  \frac{p_{a}}{\tau_{inc}}  & 0 \\ 
-% %  0          & 0                 &  \frac{p_{a}}{\tau_{inc}} 
-% % \end{bmatrix}.
+% \end{bmatrix},
 % \end{eqnarray}
+% % where:
+% % %
+% % \begin{eqnarray}
+% % \boldsymbol{\bar{I}^{a}_{m}} &=& \boldsymbol{\bar{I}_{m}}, \\ 
+% % %
+% % \bar{I}^{a} &=& 
+% % \begin{bmatrix}
+% % \bar{I}^{a}_{u} \\ \bar{I}^{a}_{w}\\ \bar{I}^{a}_{t}
+% % \end{bmatrix}, \\ 
+% % %
+% % % \boldsymbol{T_{\bar{E}\bar{I}^{a}}} &=&
+% % % \begin{bmatrix}
+% % % \frac{p_{a}}{\tau_{inc}}  & 0                 & 0 \\ 
+% % %  0          &  \frac{p_{a}}{\tau_{inc}}  & 0 \\ 
+% % %  0          & 0                 &  \frac{p_{a}}{\tau_{inc}} 
+% % % \end{bmatrix}.
+% % \end{eqnarray}
 
 
 
-Finally, we have those who are asymptomatic but are particpating in contact tracing:
-\begin{eqnarray}
-\frac{d\check{I}^{a}}{dt} &=& \boldsymbol{\check{I}^{a}_{m}} \cdot \check{I}^{a} + \boldsymbol{T_{\check{E}\check{I}^{a}}} \cdot  \check{E}, \\
-\boldsymbol{\check{I}^{a}_{m}} &=& \boldsymbol{\check{I}_{m}}, \\ 
-%
-\boldsymbol{T_{\check{E}\check{I}^{a}}} &=& \boldsymbol{T_{\bar{E}\bar{I}^{a}}} \\
-%
-\check{I} &=& 
-\begin{bmatrix}
-\check{I}^{a}_{u} \\[.15cm] \check{I}^{a}_{q} \\[.15cm] \check{I}^{a}_{w}\\[.15cm] \check{I}^{a}_{n} \\[.15cm] \check{I}^{a}_{n'}
-\end{bmatrix}
-\end{eqnarray}
-% %
+% Finally, we have those who are asymptomatic but are particpating in contact tracing:
 % \begin{eqnarray}
+% \frac{d\check{I}^{a}}{dt} &=& \boldsymbol{\check{I}^{a}_{m}} \cdot \check{I}^{a} + \boldsymbol{T_{\check{E}\check{I}^{a}}} \cdot  \check{E}, \\
 % \boldsymbol{\check{I}^{a}_{m}} &=& \boldsymbol{\check{I}_{m}}, \\ 
 % %
-% % \boldsymbol{T_{\check{E}\check{I}^{a}}} &=&
+% \boldsymbol{T_{\check{E}\check{I}^{a}}} &=& \boldsymbol{T_{\bar{E}\bar{I}^{a}}} \\
+% %
+% \check{I} &=& 
+% \begin{bmatrix}
+% \check{I}^{a}_{u} \\[.15cm] \check{I}^{a}_{q} \\[.15cm] \check{I}^{a}_{w}\\[.15cm] \check{I}^{a}_{n} \\[.15cm] \check{I}^{a}_{n'}
+% \end{bmatrix}
+% \end{eqnarray}
+% % %
+% % \begin{eqnarray}
+% % \boldsymbol{\check{I}^{a}_{m}} &=& \boldsymbol{\check{I}_{m}}, \\ 
+% % %
+% % % \boldsymbol{T_{\check{E}\check{I}^{a}}} &=&
+% % % \begin{bmatrix}
+% % % \frac{p_{a}}{\tau_{inc}}  & 0                 & 0 & 0 & 0\\ 
+% % %  0          &  \frac{p_{a}}{\tau_{inc}}  & 0 & 0 & 0 \\ 
+% % %  0          & 0                 &  \frac{p_{a}}{\tau_{inc}} & 0 & 0 \\ 
+% % % 0           & 0                 &  0 & 0 & 0 \\ 
+% % % 0           & 0                 &  0 & \frac{p_{a}}{\tau_{inc}} & 0 \\
+% % % \end{bmatrix}
+% % \end{eqnarray}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Outcomes}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is part of the $R$ section in a traditional $SEIR$ model. We divide this into several transition times as it make take a patient some time to recover after they are infectious (and therefore still test positive). We divide these up into those who are asymptomatic, mild, and severe. Those who are severe have a chance $p_h$ of needing hospitalization or making a recovery $R$. Those who are hospitalized can recover $R$ or die $D$. We denote the intermetiate states where someone is in the recovery process $O$ for outcomes.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Asymptomatic}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Those who are asymptomatic, but not particpating in contact tracing, have a population that changes:
+% \begin{eqnarray}
+% \frac{d\bar{A}}{dt} &=& \boldsymbol{\bar{A}_{m}} \cdot  \bar{A} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot  \bar{I}^{a}, 
+% \end{eqnarray}
+% where:
+% %
+% \begin{eqnarray}
+% \boldsymbol{\bar{A}_{m}} &=&
+% \begin{bmatrix}
+% - p_{t} -\frac{1}{\tau_{a}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
+%  p_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{a}}       & 0  \\ 
+%  0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{a}}
+% \end{bmatrix}, \\ 
+% %
+% \bar{A} &=& 
+% \begin{bmatrix}
+% \bar{A}_{u} \\ \bar{A}_{w}\\ \bar{A}_{t}
+% \end{bmatrix}. \\ 
+% %
+% % \boldsymbol{T_{\bar{I}\bar{A}}} &=&
 % % \begin{bmatrix}
-% % \frac{p_{a}}{\tau_{inc}}  & 0                 & 0 & 0 & 0\\ 
-% %  0          &  \frac{p_{a}}{\tau_{inc}}  & 0 & 0 & 0 \\ 
-% %  0          & 0                 &  \frac{p_{a}}{\tau_{inc}} & 0 & 0 \\ 
-% % 0           & 0                 &  0 & 0 & 0 \\ 
-% % 0           & 0                 &  0 & \frac{p_{a}}{\tau_{inc}} & 0 \\
+% % \frac{1}{\tau_{inf}}  & 0                 & 0 \\ 
+% %  0          &  \frac{1}{\tau_{inf}}  & 0 \\ 
+% %  0          & 0                 &  \frac{1}{\tau_{inf}} 
+% % \end{bmatrix}.
+% % %
+% \end{eqnarray}
+
+% Those who are participating in contact tracing, but are asymptomatic have the following population change as a function of time:
+% \begin{eqnarray}
+% \frac{d\check{A}}{dt} &=& \boldsymbol{\check{A}_{m}} \cdot  \check{A} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot  \check{I}^{a}, 
+% \end{eqnarray}
+% where:
+% %
+% \begin{eqnarray}
+% \boldsymbol{\check{A}_{m}}&=&
+% \begin{bmatrix}
+%  -\gamma^{c}_{false} -\gamma^{c}_{true} - p_{t} -\frac{1}{\tau_{a}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} & \frac{1}{\tau_{iso}} \\
+%  %
+% \gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{a}}      &  0    & 0  & 0\\
+% p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{a}}  & 0 & 0\\
+% 0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{a}} & 0 \\ 
+% 0 & 0 & 0 & 0 & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{a}}
+% \end{bmatrix}, \\ 
+% %
+% \check{A} &=& 
+% \begin{bmatrix}
+% \check{A}_{u} \\ \check{A}_{q} \\ \check{A}_{w}\\ \check{A_{n}} \\ \check{A_{n'}}
+% \end{bmatrix}. \\ 
+% %
+% % 
+% % \boldsymbol{T_{\check{I}\check{A}}} &=&
+% % \begin{bmatrix}
+% % \frac{1}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
+% %  0          &  \frac{1}{\tau_{inf}}  & 0 & 0 & 0 \\ 
+% %  0          & 0                 &  \frac{1}{\tau_{inf}} & 0 & 0 \\ 
+% % 0           & 0                 &  0 & \frac{1}{\tau_{inf}} & 0 \\ 
+% % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{inf}} \\
 % % \end{bmatrix}
 % \end{eqnarray}
+% We must track each of these subpopulations. Even though no one in $A$ is still infectious, they can still test positive and thereby notify others that they need to quarantine themselves (including those who they may have infected). 
 
+% % Now we look at the transition matrix from those who are infectious but asymptomatic to those awaiting their outcome who are asymptomatic. For those not participating in contact tracing, the matrix is:
+% % \begin{eqnarray}
+% % T_{\bar{I^{a}} \rightarrow \bar{A}} &=&
+% % \begin{bmatrix}
+% % \frac{1}{\tau_{inf}}  & 0                 & 0 \\ 
+% %  0          &  \frac{1}{\tau_{inf}}  & 0 \\ 
+% %  0          & 0                 &  \frac{1}{\tau_{inf}} 
+% % \end{bmatrix}.
+% % \end{eqnarray}
+% % For those who particpate in contact tracing and are asymptomatic move from infectious to outcomes with the following transition matrix: 
+% % Transition Econ -> Icon participating in contact (asymptomatic)
+% % \begin{eqnarray}
+% % T_{\check{I}^{a} \rightarrow \check{A}} &=&
+% % \begin{bmatrix}
+% % \frac{1}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
+% %  0          &  \frac{1}{\tau_{inf}}  & 0 & 0 & 0 \\ 
+% %  0          & 0                 &  \frac{1}{\tau_{inf}} & 0 & 0 \\ 
+% % 0           & 0                 &  0 & \frac{1}{\tau_{inf}} & 0 \\ 
+% % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{inf}} \\
+% % \end{bmatrix}
+% % \end{eqnarray}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Outcomes}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-This is part of the $R$ section in a traditional $SEIR$ model. We divide this into several transition times as it make take a patient some time to recover after they are infectious (and therefore still test positive). We divide these up into those who are asymptomatic, mild, and severe. Those who are severe have a chance $p_h$ of needing hospitalization or making a recovery $R$. Those who are hospitalized can recover $R$ or die $D$. We denote the intermetiate states where someone is in the recovery process $O$ for outcomes.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Asymptomatic}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Those who are asymptomatic, but not particpating in contact tracing, have a population that changes:
-\begin{eqnarray}
-\frac{d\bar{A}}{dt} &=& \boldsymbol{\bar{A}_{m}} \cdot  \bar{A} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot  \bar{I}^{a}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\bar{A}_{m}} &=&
-\begin{bmatrix}
-- p_{t} -\frac{1}{\tau_{a}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
- p_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{a}}       & 0  \\ 
- 0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{a}}
-\end{bmatrix}, \\ 
-%
-\bar{A} &=& 
-\begin{bmatrix}
-\bar{A}_{u} \\ \bar{A}_{w}\\ \bar{A}_{t}
-\end{bmatrix}. \\ 
-%
-% \boldsymbol{T_{\bar{I}\bar{A}}} &=&
-% \begin{bmatrix}
-% \frac{1}{\tau_{inf}}  & 0                 & 0 \\ 
-%  0          &  \frac{1}{\tau_{inf}}  & 0 \\ 
-%  0          & 0                 &  \frac{1}{\tau_{inf}} 
-% \end{bmatrix}.
-% %
-\end{eqnarray}
-
-Those who are participating in contact tracing, but are asymptomatic have the following population change as a function of time:
-\begin{eqnarray}
-\frac{d\check{A}}{dt} &=& \boldsymbol{\check{A}_{m}} \cdot  \check{A} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot  \check{I}^{a}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\check{A}_{m}}&=&
-\begin{bmatrix}
- -\gamma^{c}_{false} -\gamma^{c}_{true} - p_{t} -\frac{1}{\tau_{a}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} & \frac{1}{\tau_{iso}} \\
- %
-\gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{a}}      &  0    & 0  & 0\\
-p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{a}}  & 0 & 0\\
-0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{a}} & 0 \\ 
-0 & 0 & 0 & 0 & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{a}}
-\end{bmatrix}, \\ 
-%
-\check{A} &=& 
-\begin{bmatrix}
-\check{A}_{u} \\ \check{A}_{q} \\ \check{A}_{w}\\ \check{A_{n}} \\ \check{A_{n'}}
-\end{bmatrix}. \\ 
-%
-% 
-% \boldsymbol{T_{\check{I}\check{A}}} &=&
-% \begin{bmatrix}
-% \frac{1}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
-%  0          &  \frac{1}{\tau_{inf}}  & 0 & 0 & 0 \\ 
-%  0          & 0                 &  \frac{1}{\tau_{inf}} & 0 & 0 \\ 
-% 0           & 0                 &  0 & \frac{1}{\tau_{inf}} & 0 \\ 
-% 0           & 0                 &  0 & 0 & \frac{1}{\tau_{inf}} \\
-% \end{bmatrix}
-\end{eqnarray}
-We must track each of these subpopulations. Even though no one in $A$ is still infectious, they can still test positive and thereby notify others that they need to quarantine themselves (including those who they may have infected). 
-
-% Now we look at the transition matrix from those who are infectious but asymptomatic to those awaiting their outcome who are asymptomatic. For those not participating in contact tracing, the matrix is:
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsubsection{Mild}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We now deal with the infectious population who develop a mild case (show symptoms), but do not need hospitalization and do not die. These individual recover in a time $\tau_{mild}$, and make up $p_{mild}$ fraction of total infectious cases. Asymptomatic individuals cannot be included in this group. Since we are looking at a subpoulation who aren't asymptomatic, we must account for this. The fraction of nonasymptomatic individuals who develop mild cases is given as:
 % \begin{eqnarray}
-% T_{\bar{I^{a}} \rightarrow \bar{A}} &=&
-% \begin{bmatrix}
-% \frac{1}{\tau_{inf}}  & 0                 & 0 \\ 
-%  0          &  \frac{1}{\tau_{inf}}  & 0 \\ 
-%  0          & 0                 &  \frac{1}{\tau_{inf}} 
-% \end{bmatrix}.
-% \end{eqnarray}
-% For those who particpate in contact tracing and are asymptomatic move from infectious to outcomes with the following transition matrix: 
-% Transition Econ -> Icon participating in contact (asymptomatic)
-% \begin{eqnarray}
-% T_{\check{I}^{a} \rightarrow \check{A}} &=&
-% \begin{bmatrix}
-% \frac{1}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
-%  0          &  \frac{1}{\tau_{inf}}  & 0 & 0 & 0 \\ 
-%  0          & 0                 &  \frac{1}{\tau_{inf}} & 0 & 0 \\ 
-% 0           & 0                 &  0 & \frac{1}{\tau_{inf}} & 0 \\ 
-% 0           & 0                 &  0 & 0 & \frac{1}{\tau_{inf}} \\
-% \end{bmatrix}
+% p_{m} &=& \frac{p_{mild}}{(1 - p_{a})}. 
 % \end{eqnarray}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Mild}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We now deal with the infectious population who develop a mild case (show symptoms), but do not need hospitalization and do not die. These individual recover in a time $\tau_{mild}$, and make up $p_{mild}$ fraction of total infectious cases. Asymptomatic individuals cannot be included in this group. Since we are looking at a subpoulation who aren't asymptomatic, we must account for this. The fraction of nonasymptomatic individuals who develop mild cases is given as:
-\begin{eqnarray}
-p_{m} &=& \frac{p_{mild}}{(1 - p_{a})}. 
-\end{eqnarray}
-
-For those who develop mild cases and do not particpate in contact tracing we have:
-\begin{eqnarray}
-\frac{d\bar{M}}{dt} &=& \boldsymbol{\bar{M}_{m}} \cdot \bar{M} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot  \bar{I}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\bar{M}_{m}} &=&
-\begin{bmatrix}
-- p_{t} -\frac{1}{\tau_{mild}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
- p_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{mild}}       & 0  \\ 
- 0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{mild}}
-\end{bmatrix}, \\ 
-%
-\bar{M} &=& 
-\begin{bmatrix}
-\bar{M}_{u} \\ \bar{M}_{w}\\ \bar{M}_{t}
-\end{bmatrix}. \\ 
-%
-%T_{\bar{I} \rightarrow \bar{M}} 
-% \boldsymbol{T_{\bar{I}\bar{M}}}&=&
-% \begin{bmatrix}
-% \frac{p_{m}}{\tau_{inf}}  & 0                 & 0 \\ 
-%  0          &  \frac{p_{m}}{\tau_{inf}}  & 0 \\ 
-%  0          & 0                 &  \frac{p_{m}}{\tau_{inf}} 
-% \end{bmatrix}.
-%
-\end{eqnarray} 
-
-Finally, for those who develop mild cases and contact trace:
-\begin{eqnarray}
-\frac{d\check{M}}{dt} &=& \boldsymbol{\check{M}_{m}} \cdot \check{M} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot  \check{I}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\check{M}_{m}} &=&
-\begin{bmatrix}
- -\gamma^{c}_{false} -\gamma^{c}_{true} - p_{t} -\frac{1}{\tau_{mild}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} & \frac{1}{\tau_{iso}} \\
- %
-\gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{mild}}      &  0    & 0  & 0\\
-p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{mild}}  & 0 & 0\\
-0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{mild}} & 0 \\ 
-0 & 0 & 0 & 0 & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{mild}}
-\end{bmatrix}, \\ 
-%
-\check{M} &=& 
-\begin{bmatrix}
-\check{M}_{u} \\ \check{M}_{q} \\ \check{M}_{w}\\ \check{M_{n}} \\ \check{M_{n'}}
-\end{bmatrix}. \\ 
-%
-% \boldsymbol{T_{\check{I}\check{M}}} &=&
-% \begin{bmatrix}
-% \frac{p_{m}}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
-%  0          &  \frac{p_{m}}{\tau_{inf}}  & 0 & 0 & 0 \\ 
-%  0          & 0                 &  \frac{p_{m}}{\tau_{inf}} & 0 & 0 \\ 
-% 0           & 0                 &  0 & \frac{p_{m}}{\tau_{inf}} & 0 \\ 
-% 0           & 0                 &  0 & 0 & \frac{p_{m}}{\tau_{inf}} \\
-% \end{bmatrix}.
-%
-\end{eqnarray}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Severe}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The final group we must consider are those who are severe cases. These represent the following fraction of the symptomatic cases that are severe:
-\begin{eqnarray}
-p_{sev} &=& 1 - p_{m},
-\end{eqnarray}
-and lead to hospitalization some time $\tau_{h}$ after they cease to be infectious. We also assume that anyone in the severe category will be tested at a rate $p^{sev}_{t}$ regardless of whether they have been notified of a potential contact Those hospitalized will either recover or die. Those who do not particpate in contact tracing can be descibed by the following dynamics:
-\begin{eqnarray}
-\frac{d\bar{X}}{dt} &=& \boldsymbol{\bar{X}_{m}} \cdot \bar{X} + \frac{p_{sev}}{\tau_{inf}} \mathbb{1} \cdot  \bar{I}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\bar{X}_{m}} &=&
-\begin{bmatrix}
-- p^{sev}_{t} -\frac{1}{\tau_{h}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
- p^{sev}_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{h}}       & 0  \\ 
- 0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{h}}
-\end{bmatrix}, \\ 
-%
-\bar{X} &=& 
-\begin{bmatrix}
-\bar{X}_{u} \\ \bar{X}_{w}\\ \bar{X}_{t}
-\end{bmatrix}. \\ 
-%
-% \boldsymbol{T_{\bar{I}\bar{X}}} &=&
-% \begin{bmatrix}
-% \frac{p_{sev}}{\tau_{inf}}  & 0                 & 0 \\ 
-%  0          &  \frac{p_{}}{\tau_{inf}}  & 0 \\ 
-%  0          & 0                 &  \frac{p_{}}{\tau_{inf}} 
-% \end{bmatrix}.
+% For those who develop mild cases and do not particpate in contact tracing we have:
+% \begin{eqnarray}
+% \frac{d\bar{M}}{dt} &=& \boldsymbol{\bar{M}_{m}} \cdot \bar{M} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot  \bar{I}, 
+% \end{eqnarray}
+% where:
 % %
-\end{eqnarray}
-
-For those who do particpate in contact tracing but develop severe symptoms we have:
-\begin{eqnarray}
-\frac{d\check{X}}{dt} &=& \boldsymbol{\check{X}_{m}} \cdot  \check{X} + \frac{p_{sev}}{\tau_{inf}} \mathbb{1} \cdot  \check{I}, 
-\end{eqnarray}
-where:
-%
-\begin{eqnarray}
-\boldsymbol{\check{X}_{m}} &=&
-\begin{bmatrix}
- %
-- p^{sev}_{t}   - \frac{1}{\tau_{h}}      &  \frac{f_{neg}}{\tau_{t}}    & 0  & 0\\
-p^{sev}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{h}}  & 0 & 0\\
-0 & \frac{(1-f_{neg})}{\tau_{t}}  &  -  \frac{1}{\tau_{h}} & 0 \\ 
-0 & 0 & 0 &  -  \frac{1}{\tau_{h}}
-\end{bmatrix}, \\ 
-%
-\check{X} &=& 
-\begin{bmatrix}
-\check{X}_{u} \\  \check{X}_{w}\\ \check{X_{n}} \\ \check{X_{n'}}
-\end{bmatrix}, \\ 
-%
-\boldsymbol{T_{\check{I}\check{X}}} &=& \frac{p_{sev}}{\tau_{inf}}
-\begin{bmatrix}
-1  & 1 & 0 & 0 & 0 \\ 
-0  & 0 & 0 & 0 & 0 \\ 
-0  & 0 & 0 & 1 & 0 \\ 
-0  & 0 & 0 & 0 & 1 \\ 
-% 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\
-\end{bmatrix}
-% \boldsymbol{T_{\check{I}\check{X}}} &=&
+% \begin{eqnarray}
+% \boldsymbol{\bar{M}_{m}} &=&
 % \begin{bmatrix}
-% \frac{p_{sev}}{\tau_{inf}}  &  \frac{p_{sev}}{\tau_{inf}}                 & 0 & 0 & 0 \\ 
-%  % 0          &  \frac{p_{sev}}{\tau_{inf}}  & 0 & 0 & 0 \\ 
-%  0          & 0                 &  \frac{p_{sev}}{\tau_{inf}} & 0 & 0 \\ 
-% 0           & 0                 &  0 & \frac{p_{sev}}{\tau_{inf}} & 0 \\ 
-% 0           & 0                 &  0 & 0 & \frac{p_{sev}}{\tau_{inf}} \\
-% \end{bmatrix}
-\end{eqnarray}
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Hospitalized}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Those that are hospitalized 
-The population dynamics for those hospitalized who are not contact tracing is given as:
-\begin{eqnarray}
-\frac{d\bar{H}}{dt} &=& \boldsymbol{\bar{H}_{m}} \cdot  \bar{H} + \frac{1}{\tau_{h}} \mathbb{1} \cdot  \bar{X}, 
-\end{eqnarray}
-%
-where:
-\begin{eqnarray}
-\boldsymbol{\bar{H}_{m}} &=&
-\begin{bmatrix}
-- p^{sev}_{t} - \gamma^{sev}  &  \frac{f_{neg}}{\tau_{t}}            & 0 \\ 
- p^{sev}_{t}              & -\frac{1}{\tau_{t}} - \gamma^{sev}       & 0  \\ 
- 0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\gamma^{sev}
-\end{bmatrix}, \\ 
-%
-\bar{H} &=& 
-\begin{bmatrix}
-\bar{H}_{u} \\ \bar{H}_{w}\\ \bar{H}_{t}
-\end{bmatrix}. \\ 
-%
-% \boldsymbol{T_{\bar{X}\bar{H}}} &=&
-% \begin{bmatrix}
-% \frac{1}{\tau_{h}}  & 0                 & 0 \\ 
-%  0          &  \frac{1}{\tau_{h}}  & 0 \\ 
-%  0          & 0                 &  \frac{1}{\tau_{h}} 
-% \end{bmatrix}.
+% - p_{t} -\frac{1}{\tau_{mild}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
+%  p_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{mild}}       & 0  \\ 
+%  0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{mild}}
+% \end{bmatrix}, \\ 
 % %
-\end{eqnarray}
+% \bar{M} &=& 
+% \begin{bmatrix}
+% \bar{M}_{u} \\ \bar{M}_{w}\\ \bar{M}_{t}
+% \end{bmatrix}. \\ 
+% %
+% %T_{\bar{I} \rightarrow \bar{M}} 
+% % \boldsymbol{T_{\bar{I}\bar{M}}}&=&
+% % \begin{bmatrix}
+% % \frac{p_{m}}{\tau_{inf}}  & 0                 & 0 \\ 
+% %  0          &  \frac{p_{m}}{\tau_{inf}}  & 0 \\ 
+% %  0          & 0                 &  \frac{p_{m}}{\tau_{inf}} 
+% % \end{bmatrix}.
+% %
+% \end{eqnarray} 
 
-A fraction $p_{d}$ of those who are hospitalized will die after an average time $\tau_{d}$, or recover after a time $\tau_{sev}$. To find $p_{d}$, we must use the case fatality rate, $C_{FR}$ to figure out the percantage of those hospitalized that will die. Since the case fatality rate applies to all infections, the probability of those who are hospitalized dying is:
-\begin{eqnarray}
-p_{d} &=& \frac{C_{FR}}{1- p_{a} - p_{mild}}.
-\end{eqnarray}
-The effective rate at which individuals leave the hospital is given as:
-\begin{eqnarray}
-\gamma^{sev} &=& \frac{p_{d}}{\tau_{d}} + \frac{(1-p_{d})}{\tau_{sev}}.
-\end{eqnarray}
+% Finally, for those who develop mild cases and contact trace:
+% \begin{eqnarray}
+% \frac{d\check{M}}{dt} &=& \boldsymbol{\check{M}_{m}} \cdot \check{M} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot  \check{I}, 
+% \end{eqnarray}
+% where:
+% %
+% \begin{eqnarray}
+% \boldsymbol{\check{M}_{m}} &=&
+% \begin{bmatrix}
+%  -\gamma^{c}_{false} -\gamma^{c}_{true} - p_{t} -\frac{1}{\tau_{mild}} & \frac{1}{\tau_{iso}}  & \frac{f_{neg}}{\tau_{t}} & \frac{1}{\tau_{iso}} & \frac{1}{\tau_{iso}} \\
+%  %
+% \gamma^{c}_{false} + \gamma^{c}_{true}    &  -p^{c}_{t}  - \frac{1}{\tau_{iso}} - \frac{1}{\tau_{mild}}      &  0    & 0  & 0\\
+% p_{t}     &  p^{c}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{mild}}  & 0 & 0\\
+% 0 & 0 & \frac{(1-f_{neg})}{\tau_{t}}  & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{mild}} & 0 \\ 
+% 0 & 0 & 0 & 0 & -\frac{1}{\tau_{iso}}  -  \frac{1}{\tau_{mild}}
+% \end{bmatrix}, \\ 
+% %
+% \check{M} &=& 
+% \begin{bmatrix}
+% \check{M}_{u} \\ \check{M}_{q} \\ \check{M}_{w}\\ \check{M_{n}} \\ \check{M_{n'}}
+% \end{bmatrix}. \\ 
+% %
+% % \boldsymbol{T_{\check{I}\check{M}}} &=&
+% % \begin{bmatrix}
+% % \frac{p_{m}}{\tau_{inf}}  & 0                 & 0 & 0 & 0\\ 
+% %  0          &  \frac{p_{m}}{\tau_{inf}}  & 0 & 0 & 0 \\ 
+% %  0          & 0                 &  \frac{p_{m}}{\tau_{inf}} & 0 & 0 \\ 
+% % 0           & 0                 &  0 & \frac{p_{m}}{\tau_{inf}} & 0 \\ 
+% % 0           & 0                 &  0 & 0 & \frac{p_{m}}{\tau_{inf}} \\
+% % \end{bmatrix}.
+% %
+% \end{eqnarray}
 
-Those who participate in contact tracing and are hospitalized automatically notify all of their prior contacts regardless if they have been tested. There is no effect if they are notified of a potential contact.
-\begin{eqnarray}
-\frac{d\check{H}}{dt} &=& \boldsymbol{\check{H}_{m}} \cdot \check{H} + \frac{1}{\tau_{h}} \mathbb{1} \cdot  \check{X}, 
-\end{eqnarray}
-%
-\begin{eqnarray}
-\boldsymbol{\check{H}_{m}} &=&
-\begin{bmatrix}
- - p^{sev}_{t} - \gamma^{sev} & \frac{f_{neg}}{\tau_{t}}  & 0 & 0 \\
- %
-p^{sev}_{t}  & -\frac{1}{\tau_{t}} - \gamma^{sev}      &  0    & 0  \\
-    % 0 &  p^{sev}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{hr}}  & 0 & 0\\
- 0 & \frac{(1-f_{neg})}{\tau_{t}}  & - \gamma^{sev}  & 0 \\ 
-0 & 0 & 0 & - \gamma^{sev}
-\end{bmatrix}, \\ 
-%
-\check{H} &=& 
-\begin{bmatrix}
-\check{H}_{u} \\  \check{H}_{w}\\ \check{H_{n}} \\ \check{H_{n'}}
-\end{bmatrix}, \\ 
-%
-% \boldsymbol{T_{\check{X}\check{H}}} &=& \frac{1}{\tau_{h}}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Severe}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The final group we must consider are those who are severe cases. These represent the following fraction of the symptomatic cases that are severe:
+% \begin{eqnarray}
+% p_{sev} &=& 1 - p_{m},
+% \end{eqnarray}
+% and lead to hospitalization some time $\tau_{h}$ after they cease to be infectious. We also assume that anyone in the severe category will be tested at a rate $p^{sev}_{t}$ regardless of whether they have been notified of a potential contact Those hospitalized will either recover or die. Those who do not particpate in contact tracing can be descibed by the following dynamics:
+% \begin{eqnarray}
+% \frac{d\bar{X}}{dt} &=& \boldsymbol{\bar{X}_{m}} \cdot \bar{X} + \frac{p_{sev}}{\tau_{inf}} \mathbb{1} \cdot  \bar{I}, 
+% \end{eqnarray}
+% where:
+% %
+% \begin{eqnarray}
+% \boldsymbol{\bar{X}_{m}} &=&
+% \begin{bmatrix}
+% - p^{sev}_{t} -\frac{1}{\tau_{h}}  &  \frac{f_{neg}}{\tau_{t}}            & \frac{1}{\tau_{iso}} \\ 
+%  p^{sev}_{t}              & -\frac{1}{\tau_{t}} -\frac{1}{\tau_{h}}       & 0  \\ 
+%  0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\frac{1}{\tau_{iso}} -\frac{1}{\tau_{h}}
+% \end{bmatrix}, \\ 
+% %
+% \bar{X} &=& 
+% \begin{bmatrix}
+% \bar{X}_{u} \\ \bar{X}_{w}\\ \bar{X}_{t}
+% \end{bmatrix}. \\ 
+% %
+% % \boldsymbol{T_{\bar{I}\bar{X}}} &=&
+% % \begin{bmatrix}
+% % \frac{p_{sev}}{\tau_{inf}}  & 0                 & 0 \\ 
+% %  0          &  \frac{p_{}}{\tau_{inf}}  & 0 \\ 
+% %  0          & 0                 &  \frac{p_{}}{\tau_{inf}} 
+% % \end{bmatrix}.
+% % %
+% \end{eqnarray}
+
+% For those who do particpate in contact tracing but develop severe symptoms we have:
+% \begin{eqnarray}
+% \frac{d\check{X}}{dt} &=& \boldsymbol{\check{X}_{m}} \cdot  \check{X} + \frac{p_{sev}}{\tau_{inf}} \mathbb{1} \cdot  \check{I}, 
+% \end{eqnarray}
+% where:
+% %
+% \begin{eqnarray}
+% \boldsymbol{\check{X}_{m}} &=&
+% \begin{bmatrix}
+%  %
+% - p^{sev}_{t}   - \frac{1}{\tau_{h}}      &  \frac{f_{neg}}{\tau_{t}}    & 0  & 0\\
+% p^{sev}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{h}}  & 0 & 0\\
+% 0 & \frac{(1-f_{neg})}{\tau_{t}}  &  -  \frac{1}{\tau_{h}} & 0 \\ 
+% 0 & 0 & 0 &  -  \frac{1}{\tau_{h}}
+% \end{bmatrix}, \\ 
+% %
+% \check{X} &=& 
+% \begin{bmatrix}
+% \check{X}_{u} \\  \check{X}_{w}\\ \check{X_{n}} \\ \check{X_{n'}}
+% \end{bmatrix}, \\ 
+% %
+% \boldsymbol{T_{\check{I}\check{X}}} &=& \frac{p_{sev}}{\tau_{inf}}
 % \begin{bmatrix}
 % 1  & 1 & 0 & 0 & 0 \\ 
 % 0  & 0 & 0 & 0 & 0 \\ 
@@ -832,157 +827,241 @@ p^{sev}_{t}  & -\frac{1}{\tau_{t}} - \gamma^{sev}      &  0    & 0  \\
 % 0  & 0 & 0 & 0 & 1 \\ 
 % % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\
 % \end{bmatrix}
-\end{eqnarray}
-% 
-
-\subsection{Deaths}
-In this model, only those who are hospitalized have a probability $p_{d}$ of dying. We will split the population of potential deaths into those who died and were contact tracing and those who died but were not. The two equations describing the death rate are:
-\begin{eqnarray}
-% \frac{d\bar{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \left[ \bar{H} + \bar{H}_{w} + \bar{H}_{t}   \right], \\ 
-% \frac{d\check{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \left[ \check{H} + \check{H}_{w} + \check{H}_{n} + \check{H}_{n'}   \right].
-\frac{d\bar{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \mathbb{1} \cdot \bar{H}, \\ 
-\frac{d\check{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \mathbb{1} \cdot \check{H}.
-\end{eqnarray}
-
-\subsection{Recovery}
-Finally, we consider those who recover and are now considered immune. Again we consider those who recover and contact trace and those who abstain. For the non participants we have:
-\begin{eqnarray}
-% \frac{d\bar{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \bar{H}_{tot} + \frac{1}{\tau_{mild}} \bar{M}_{tot} + \frac{1}{\tau_{a}} \bar{A}_{tot}, \\
-% \bar{H}_{tot} &=&  \bar{H} + \bar{H}_{w} + \bar{H}_{t} , \\
-% \bar{M}_{tot} &=&  \bar{M} + \bar{M}_{w} + \bar{M}_{t}, \\
-% \bar{A}_{tot} &=&  \bar{A} + \bar{A}_{w} + \bar{A}_{t},  
-\frac{d\bar{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \mathbb{1} \cdot \bar{H} + \frac{1}{\tau_{mild}} \mathbb{1}\cdot \bar{M} + \frac{1}{\tau_{a}} \mathbb{1}\cdot \bar{A},
-\end{eqnarray}
-and for those who do particpate in contact tracing the recovery rate is:
-\begin{eqnarray}
-\frac{d\check{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \mathbb{1} \cdot \check{H} + \frac{1}{\tau_{mild}} \mathbb{1}\cdot \check{M} + \frac{1}{\tau_{a}} \mathbb{1}\cdot \check{A},
-% \frac{d\check{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \check{H}_{tot} + \frac{1}{\tau_{mild}} \check{M}_{tot} + \frac{1}{\tau_{a}} \check{A}_{tot}, \\
-% \check{H}_{tot} &=&  \check{H} + \check{H}_{w} + \check{H}_{n} + \check{H}_{n'} , \\
-% \check{M}_{tot} &=&  \check{M} + \check{M}_{q} + \check{M}_{w} + \check{M}_{n} + \check{M}_{n'}, \\
-% \check{A}_{tot} &=&  \check{A} + \check{A}_{q} + \check{A}_{w} + \check{A}_{n} + \check{A}_{n'}. 
-\end{eqnarray}
-
-
-% Now for the mega array composed of smaller populations:
-% \begin{eqnarray}
-% &\frac{dP}{dt} = \nonumber \\
-% &\begin{bmatrix}
-% \bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & \check{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & T_{\check{S}\check{E}} & 0 & \check{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & \frac{(1-p_{a})}{\tau_{inc}} & 0 & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & T_{\check{E}\check{I}} & 0 & \check{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & \frac{p_{a}}{\tau_{inc}} & 0 & \bar{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & T_{\check{E}\check{I}^{a}} & 0 & \check{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{inf}} & 0 & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{inf}} & 0 & \check{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & \bar{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & \check{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{sev}}{\tau_{inf}} & 0 & \bar{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\check{I}\check{X}} & 0 & \check{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}} & 0 & \bar{H}_{m} & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}} & 0 & \check{H}_{m} & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 \\[.1cm]
-% 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{sev}} & 0 & 0 & 0 & 0 & 0 \\[.1cm]
-% 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0 & 0 & 0 \nonumber \\[.1cm]
-% % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\[.1cm]
-% \end{bmatrix}
-% %
-% \cdot
-% \begin{bmatrix}
-% \bar{S} \\[.1cm]
-% \check{S} \\[.1cm]
-% \bar{E} \\[.1cm]
-% \check{E} \\[.1cm]
-% \bar{I} \\[.1cm]
-% \check{I} \\[.1cm]
-% \bar{I}^{a} \\[.1cm]
-% \check{I}^{a} \\[.1cm]
-% \bar{A} \\[.1cm]
-% \check{A} \\[.1cm]
-% \bar{M} \\[.1cm]
-% \check{M} \\[.1cm]
-% \bar{X} \\[.1cm]
-% \check{X} \\[.1cm]
-% \bar{H} \\[.1cm]
-% \check{H} \\[.1cm]
-% \bar{D} \\[.1cm]
-% \check{D} \\[.1cm]
-% \bar{R} \\[.1cm]
-% \check{R} \\[.1cm]
-
-% \end{bmatrix}
+% % \boldsymbol{T_{\check{I}\check{X}}} &=&
+% % \begin{bmatrix}
+% % \frac{p_{sev}}{\tau_{inf}}  &  \frac{p_{sev}}{\tau_{inf}}                 & 0 & 0 & 0 \\ 
+% %  % 0          &  \frac{p_{sev}}{\tau_{inf}}  & 0 & 0 & 0 \\ 
+% %  0          & 0                 &  \frac{p_{sev}}{\tau_{inf}} & 0 & 0 \\ 
+% % 0           & 0                 &  0 & \frac{p_{sev}}{\tau_{inf}} & 0 \\ 
+% % 0           & 0                 &  0 & 0 & \frac{p_{sev}}{\tau_{inf}} \\
+% % \end{bmatrix}
 % \end{eqnarray}
 
-% Create two smaller arrays
-\begin{eqnarray}
-&\frac{d\check{P}}{dt} = \nonumber \\
-&\begin{bmatrix}
-\check{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-T_{\check{S}\check{E}}  & \check{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm]
-0 & T_{\check{E}\check{I}} & \check{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & T_{\check{E}\check{I}^{a}} & 0  & \check{I}^{a}_{m}  & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & 0 & \frac{1}{\tau_{inf}}  & \check{A}_{m} & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & 0  & \check{M}_{m}  & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & T_{\check{I}\check{X}} & 0 & 0 & 0  & \check{X}_{m}  & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}}  & \check{H}_{m}  & 0 & 0 \\[.15cm] 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}}  & 0 & 0 & 0 \\[.15cm]
-0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & \frac{1}{\tau_{mild}}  & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0  \\[.15cm]
-\end{bmatrix}
-\cdot
-\begin{bmatrix}
-\check{S} \\[.15cm]
-\check{E} \\[.15cm]
-\check{I} \\[.15cm]
-\check{I}^{a} \\[.15cm]
-\check{A} \\[.15cm]
-\check{M} \\[.15cm]
-\check{X} \\[.15cm]
-\check{H} \\[.15cm]
-\check{D} \\[.15cm]
-\check{R} \\[.15cm]
-\end{bmatrix}, \\
-%
-&\frac{d\bar{P}}{dt} =  \\
-&\begin{bmatrix}
-\bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-T_{\bar{S}\bar{E}}  & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm]
-0 & \frac{p_{a}}{\tau_{inc}} & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & \frac{(1-p_{a})}{\tau_{inc}} & 0  & \bar{I}^{a}_{m}  & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & 0 & \frac{1}{\tau_{inf}}  & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & 0  & \bar{M}_{m}  & 0 & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & \frac{p_{sev}}{\tau_{inf}} & 0 & 0 & 0  & \bar{X}_{m}  & 0 & 0 & 0 \\[.15cm] 
-0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}}  & \bar{H}_{m}  & 0 & 0 \\[.15cm] 
-0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}}  & 0 & 0 & 0 \\[.15cm]
-0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & \frac{1}{\tau_{mild}}  & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0  \\[.15cm]
-\end{bmatrix}
-\cdot
-\begin{bmatrix}
-\bar{S} \\[.15cm]
-\bar{E} \\[.15cm]
-\bar{I} \\[.15cm]
-\bar{I}^{a} \\[.15cm]
-\bar{A} \\[.15cm]
-\bar{M} \\[.15cm]
-\bar{X} \\[.15cm]
-\bar{H} \\[.15cm]
-\bar{D} \\[.15cm]
-\bar{R} \\[.15cm]
-\end{bmatrix}, \\ 
-%
-&\frac{dP}{dt} =
-\begin{bmatrix}
-\bar{P}_m & 0\\[.15cm]
-0 & \check{P}_{m} \\[.15cm]
-\end{bmatrix}
-\cdot
-\begin{bmatrix}
-\bar{P} \\[.15cm]
-\check{P} \\[.15cm]
-\end{bmatrix},
-\end{eqnarray}
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsubsection{Hospitalized}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Those that are hospitalized 
+% The population dynamics for those hospitalized who are not contact tracing is given as:
+% \begin{eqnarray}
+% \frac{d\bar{H}}{dt} &=& \boldsymbol{\bar{H}_{m}} \cdot  \bar{H} + \frac{1}{\tau_{h}} \mathbb{1} \cdot  \bar{X}, 
+% \end{eqnarray}
+% %
+% where:
+% \begin{eqnarray}
+% \boldsymbol{\bar{H}_{m}} &=&
+% \begin{bmatrix}
+% - p^{sev}_{t} - \gamma^{sev}  &  \frac{f_{neg}}{\tau_{t}}            & 0 \\ 
+%  p^{sev}_{t}              & -\frac{1}{\tau_{t}} - \gamma^{sev}       & 0  \\ 
+%  0                  & \frac{(1- f_{neg})}{\tau_{t}}                        & -\gamma^{sev}
+% \end{bmatrix}, \\ 
+% %
+% \bar{H} &=& 
+% \begin{bmatrix}
+% \bar{H}_{u} \\ \bar{H}_{w}\\ \bar{H}_{t}
+% \end{bmatrix}. \\ 
+% %
+% % \boldsymbol{T_{\bar{X}\bar{H}}} &=&
+% % \begin{bmatrix}
+% % \frac{1}{\tau_{h}}  & 0                 & 0 \\ 
+% %  0          &  \frac{1}{\tau_{h}}  & 0 \\ 
+% %  0          & 0                 &  \frac{1}{\tau_{h}} 
+% % \end{bmatrix}.
+% % %
+% \end{eqnarray}
+
+% A fraction $p_{d}$ of those who are hospitalized will die after an average time $\tau_{d}$, or recover after a time $\tau_{sev}$. To find $p_{d}$, we must use the case fatality rate, $C_{FR}$ to figure out the percantage of those hospitalized that will die. Since the case fatality rate applies to all infections, the probability of those who are hospitalized dying is:
+% \begin{eqnarray}
+% p_{d} &=& \frac{C_{FR}}{1- p_{a} - p_{mild}}.
+% \end{eqnarray}
+% The effective rate at which individuals leave the hospital is given as:
+% \begin{eqnarray}
+% \gamma^{sev} &=& \frac{p_{d}}{\tau_{d}} + \frac{(1-p_{d})}{\tau_{sev}}.
+% \end{eqnarray}
+
+% Those who participate in contact tracing and are hospitalized automatically notify all of their prior contacts regardless if they have been tested. There is no effect if they are notified of a potential contact.
+% \begin{eqnarray}
+% \frac{d\check{H}}{dt} &=& \boldsymbol{\check{H}_{m}} \cdot \check{H} + \frac{1}{\tau_{h}} \mathbb{1} \cdot  \check{X}, 
+% \end{eqnarray}
+% %
+% \begin{eqnarray}
+% \boldsymbol{\check{H}_{m}} &=&
+% \begin{bmatrix}
+%  - p^{sev}_{t} - \gamma^{sev} & \frac{f_{neg}}{\tau_{t}}  & 0 & 0 \\
+%  %
+% p^{sev}_{t}  & -\frac{1}{\tau_{t}} - \gamma^{sev}      &  0    & 0  \\
+%     % 0 &  p^{sev}_{t}                  &  -\frac{1}{\tau_{t}}  - \frac{1}{\tau_{hr}}  & 0 & 0\\
+%  0 & \frac{(1-f_{neg})}{\tau_{t}}  & - \gamma^{sev}  & 0 \\ 
+% 0 & 0 & 0 & - \gamma^{sev}
+% \end{bmatrix}, \\ 
+% %
+% \check{H} &=& 
+% \begin{bmatrix}
+% \check{H}_{u} \\  \check{H}_{w}\\ \check{H_{n}} \\ \check{H_{n'}}
+% \end{bmatrix}, \\ 
+% %
+% % \boldsymbol{T_{\check{X}\check{H}}} &=& \frac{1}{\tau_{h}}
+% % \begin{bmatrix}
+% % 1  & 1 & 0 & 0 & 0 \\ 
+% % 0  & 0 & 0 & 0 & 0 \\ 
+% % 0  & 0 & 0 & 1 & 0 \\ 
+% % 0  & 0 & 0 & 0 & 1 \\ 
+% % % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\
+% % \end{bmatrix}
+% \end{eqnarray}
+% % 
+
+% \subsection{Deaths}
+% In this model, only those who are hospitalized have a probability $p_{d}$ of dying. We will split the population of potential deaths into those who died and were contact tracing and those who died but were not. The two equations describing the death rate are:
+% \begin{eqnarray}
+% % \frac{d\bar{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \left[ \bar{H} + \bar{H}_{w} + \bar{H}_{t}   \right], \\ 
+% % \frac{d\check{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \left[ \check{H} + \check{H}_{w} + \check{H}_{n} + \check{H}_{n'}   \right].
+% \frac{d\bar{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \mathbb{1} \cdot \bar{H}, \\ 
+% \frac{d\check{D}}{dt} &=& \frac{p_{d}}{\tau_{d}} \mathbb{1} \cdot \check{H}.
+% \end{eqnarray}
+
+% \subsection{Recovery}
+% Finally, we consider those who recover and are now considered immune. Again we consider those who recover and contact trace and those who abstain. For the non participants we have:
+% \begin{eqnarray}
+% % \frac{d\bar{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \bar{H}_{tot} + \frac{1}{\tau_{mild}} \bar{M}_{tot} + \frac{1}{\tau_{a}} \bar{A}_{tot}, \\
+% % \bar{H}_{tot} &=&  \bar{H} + \bar{H}_{w} + \bar{H}_{t} , \\
+% % \bar{M}_{tot} &=&  \bar{M} + \bar{M}_{w} + \bar{M}_{t}, \\
+% % \bar{A}_{tot} &=&  \bar{A} + \bar{A}_{w} + \bar{A}_{t},  
+% \frac{d\bar{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \mathbb{1} \cdot \bar{H} + \frac{1}{\tau_{mild}} \mathbb{1}\cdot \bar{M} + \frac{1}{\tau_{a}} \mathbb{1}\cdot \bar{A},
+% \end{eqnarray}
+% and for those who do particpate in contact tracing the recovery rate is:
+% \begin{eqnarray}
+% \frac{d\check{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \mathbb{1} \cdot \check{H} + \frac{1}{\tau_{mild}} \mathbb{1}\cdot \check{M} + \frac{1}{\tau_{a}} \mathbb{1}\cdot \check{A},
+% % \frac{d\check{R}}{dt} &=& \frac{(1 - p_{d})}{\tau_{sev}} \check{H}_{tot} + \frac{1}{\tau_{mild}} \check{M}_{tot} + \frac{1}{\tau_{a}} \check{A}_{tot}, \\
+% % \check{H}_{tot} &=&  \check{H} + \check{H}_{w} + \check{H}_{n} + \check{H}_{n'} , \\
+% % \check{M}_{tot} &=&  \check{M} + \check{M}_{q} + \check{M}_{w} + \check{M}_{n} + \check{M}_{n'}, \\
+% % \check{A}_{tot} &=&  \check{A} + \check{A}_{q} + \check{A}_{w} + \check{A}_{n} + \check{A}_{n'}. 
+% \end{eqnarray}
+
+
+% % Now for the mega array composed of smaller populations:
+% % \begin{eqnarray}
+% % &\frac{dP}{dt} = \nonumber \\
+% % &\begin{bmatrix}
+% % \bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & \check{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % T_{\bar{S}\bar{E}} & 0 & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & T_{\check{S}\check{E}} & 0 & \check{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & \frac{(1-p_{a})}{\tau_{inc}} & 0 & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & T_{\check{E}\check{I}} & 0 & \check{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & \frac{p_{a}}{\tau_{inc}} & 0 & \bar{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & T_{\check{E}\check{I}^{a}} & 0 & \check{I}^{a}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{inf}} & 0 & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{inf}} & 0 & \check{A}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & \bar{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & \check{M}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{sev}}{\tau_{inf}} & 0 & \bar{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & T_{\check{I}\check{X}} & 0 & \check{X}_{m} & 0 & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}} & 0 & \bar{H}_{m} & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}} & 0 & \check{H}_{m} & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 & 0 \\[.1cm] 
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}} & 0 & 0 & 0 & 0 \\[.1cm]
+% % 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{sev}} & 0 & 0 & 0 & 0 & 0 \\[.1cm]
+% % 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & 0 & \frac{1}{\tau_{mild}} & 0 & 0 & 0 & 0 & 0 & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0 & 0 & 0 \nonumber \\[.1cm]
+% % % 0           & 0                 &  0 & 0 & \frac{1}{\tau_{h}} \\[.1cm]
+% % \end{bmatrix}
+% % %
+% % \cdot
+% % \begin{bmatrix}
+% % \bar{S} \\[.1cm]
+% % \check{S} \\[.1cm]
+% % \bar{E} \\[.1cm]
+% % \check{E} \\[.1cm]
+% % \bar{I} \\[.1cm]
+% % \check{I} \\[.1cm]
+% % \bar{I}^{a} \\[.1cm]
+% % \check{I}^{a} \\[.1cm]
+% % \bar{A} \\[.1cm]
+% % \check{A} \\[.1cm]
+% % \bar{M} \\[.1cm]
+% % \check{M} \\[.1cm]
+% % \bar{X} \\[.1cm]
+% % \check{X} \\[.1cm]
+% % \bar{H} \\[.1cm]
+% % \check{H} \\[.1cm]
+% % \bar{D} \\[.1cm]
+% % \check{D} \\[.1cm]
+% % \bar{R} \\[.1cm]
+% % \check{R} \\[.1cm]
+
+% % \end{bmatrix}
+% % \end{eqnarray}
+
+% % Create two smaller arrays
+% \begin{eqnarray}
+% &\frac{d\check{P}}{dt} = \nonumber \\
+% &\begin{bmatrix}
+% \check{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% T_{\check{S}\check{E}}  & \check{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm]
+% 0 & T_{\check{E}\check{I}} & \check{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & T_{\check{E}\check{I}^{a}} & 0  & \check{I}^{a}_{m}  & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & 0 & \frac{1}{\tau_{inf}}  & \check{A}_{m} & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & 0  & \check{M}_{m}  & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & T_{\check{I}\check{X}} & 0 & 0 & 0  & \check{X}_{m}  & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}}  & \check{H}_{m}  & 0 & 0 \\[.15cm] 
+% 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}}  & 0 & 0 & 0 \\[.15cm]
+% 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & \frac{1}{\tau_{mild}}  & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0  \\[.15cm]
+% \end{bmatrix}
+% \cdot
+% \begin{bmatrix}
+% \check{S} \\[.15cm]
+% \check{E} \\[.15cm]
+% \check{I} \\[.15cm]
+% \check{I}^{a} \\[.15cm]
+% \check{A} \\[.15cm]
+% \check{M} \\[.15cm]
+% \check{X} \\[.15cm]
+% \check{H} \\[.15cm]
+% \check{D} \\[.15cm]
+% \check{R} \\[.15cm]
+% \end{bmatrix}, \\
+% %
+% &\frac{d\bar{P}}{dt} =  \\
+% &\begin{bmatrix}
+% \bar{S}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% T_{\bar{S}\bar{E}}  & \bar{E}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm]
+% 0 & \frac{p_{a}}{\tau_{inc}} & \bar{I}_{m} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & \frac{(1-p_{a})}{\tau_{inc}} & 0  & \bar{I}^{a}_{m}  & 0 & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & 0 & \frac{1}{\tau_{inf}}  & \bar{A}_{m} & 0 & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & \frac{p_{m}}{\tau_{inf}} & 0 & 0  & \bar{M}_{m}  & 0 & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & \frac{p_{sev}}{\tau_{inf}} & 0 & 0 & 0  & \bar{X}_{m}  & 0 & 0 & 0 \\[.15cm] 
+% 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{h}}  & \bar{H}_{m}  & 0 & 0 \\[.15cm] 
+% 0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{p_{d}}{\tau_{d}}  & 0 & 0 & 0 \\[.15cm]
+% 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\tau_{a}} & \frac{1}{\tau_{mild}}  & \frac{(1-p_{d})}{\tau_{sev}} & 0 & 0  \\[.15cm]
+% \end{bmatrix}
+% \cdot
+% \begin{bmatrix}
+% \bar{S} \\[.15cm]
+% \bar{E} \\[.15cm]
+% \bar{I} \\[.15cm]
+% \bar{I}^{a} \\[.15cm]
+% \bar{A} \\[.15cm]
+% \bar{M} \\[.15cm]
+% \bar{X} \\[.15cm]
+% \bar{H} \\[.15cm]
+% \bar{D} \\[.15cm]
+% \bar{R} \\[.15cm]
+% \end{bmatrix}, \\ 
+% %
+% &\frac{dP}{dt} =
+% \begin{bmatrix}
+% \bar{P}_m & 0\\[.15cm]
+% 0 & \check{P}_{m} \\[.15cm]
+% \end{bmatrix}
+% \cdot
+% \begin{bmatrix}
+% \bar{P} \\[.15cm]
+% \check{P} \\[.15cm]
+% \end{bmatrix},
+% \end{eqnarray}
 
 
 
@@ -1036,15 +1115,15 @@ $\gamma^{c}_{true}$ & Rate of true notifications of individuals who have become 
 \end{table}
 % \frac{d\check{R}}{dt} &=& \frac{p_{d}}{\tau_{D}} \left[ \check{H} + \check{H}_{w} + \check{H}_{n} + \check{H}_{n'}   \right].
 
-\begin{eqnarray}
-\gamma^{c}_{false} &=& \beta_{c} (\check{S}_{n} + \check{E}_{n} + \check{I}_{n'} + \check{I}^{a}_{n'} + \boldsymbol{\check{R}_{n'}}) + \frac{(R_{c}-R_{0})}{\tau_{c}}(\check{I}_{n} + \check{I}^{a}_{n} + \boldsymbol{\check{R}_{n}}), \\
-%
-\gamma^{c}_{true} &=& \beta_{0} (\check{I}_{n} + \check{I}^{a}_{n} + \boldsymbol{\check{R}_{n}}), \\ 
-%
-\boldsymbol{\check{R}_{n'}} &=& \check{A}_{n'} + \check{M}_{n'} + \check{X}_{n'} + \check{H}_{n'}, \\
-%
-\boldsymbol{\check{R}_{n}} &=& \check{A}_{n} + \check{M}_{n} + \check{X}_{n} + \check{H}_{u} + \check{H}_{w} + \check{H}_{n}
-\end{eqnarray}
+% \begin{eqnarray}
+% \gamma^{c}_{false} &=& \beta_{c} (\check{S}_{n} + \check{E}_{n} + \check{I}_{n'} + \check{I}^{a}_{n'} + \boldsymbol{\check{R}_{n'}}) + \frac{(R_{c}-R_{0})}{\tau_{c}}(\check{I}_{n} + \check{I}^{a}_{n} + \boldsymbol{\check{R}_{n}}), \\
+% %
+% \gamma^{c}_{true} &=& \beta_{0} (\check{I}_{n} + \check{I}^{a}_{n} + \boldsymbol{\check{R}_{n}}), \\ 
+% %
+% \boldsymbol{\check{R}_{n'}} &=& \check{A}_{n'} + \check{M}_{n'} + \check{X}_{n'} + \check{H}_{n'}, \\
+% %
+% \boldsymbol{\check{R}_{n}} &=& \check{A}_{n} + \check{M}_{n} + \check{X}_{n} + \check{H}_{u} + \check{H}_{w} + \check{H}_{n}
+% \end{eqnarray}
 
 
 

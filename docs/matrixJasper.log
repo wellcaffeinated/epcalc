@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  26 APR 2020 03:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  26 APR 2020 11:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -454,7 +454,7 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <9> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
-<Basic_SEIR.png, id=77, 1146.2825pt x 482.80376pt>
+<Basic_SEIR.png, id=25, 1146.2825pt x 482.80376pt>
 File: Basic_SEIR.png Graphic file (type png)
 <use Basic_SEIR.png>
 Package pdftex.def Info: Basic_SEIR.png  used on input line 60.
@@ -465,79 +465,75 @@ LaTeX Font Info:    Trying to load font information for U+bbold on input line 1
 23.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/bbold/Ubbold.fd) [3]
-<SEIR_testing_no_contact.png, id=127, 1073.00874pt x 613.29124pt>
+<SEIR_testing_no_contact.png, id=77, 1073.00874pt x 613.29124pt>
 File: SEIR_testing_no_contact.png Graphic file (type png)
 <use SEIR_testing_no_contact.png>
 Package pdftex.def Info: SEIR_testing_no_contact.png  used on input line 198.
 (pdftex.def)             Requested size: 361.34999pt x 206.53235pt.
- [4 <./SEIR_testing_no_contact.png>]
-<SEIR with contact tracing.png, id=140, 1176.395pt x 987.69pt>
+ [4 <./SEIR_testing_no_contact.png>] [5] [6]
+<SEIR with contact tracing.png, id=107, 1176.395pt x 987.69pt>
 File: SEIR with contact tracing.png Graphic file (type png)
 <use SEIR with contact tracing.png>
-Package pdftex.def Info: SEIR with contact tracing.png  used on input line 267.
+Package pdftex.def Info: SEIR with contact tracing.png  used on input line 346.
 
 (pdftex.def)             Requested size: 252.94499pt x 212.36427pt.
-<SEIR_testing_and__contact_transitions.png, id=141, 1387.1825pt x 759.83875pt>
-File: SEIR_testing_and__contact_transitions.png Graphic file (type png)
-<use SEIR_testing_and__contact_transitions.png>
-Package pdftex.def Info: SEIR_testing_and__contact_transitions.png  used on inp
-ut line 274.
-(pdftex.def)             Requested size: 469.75499pt x 257.30986pt.
- [5] [6 <./SEIR with contact tracing.png> <./SEIR_testing_and__contact_transiti
-ons.png>] [7] [8] [9] [10] [11] [12]
+<SEIR-CT_4layer.png, id=108, 1433.355pt x 678.535pt>
+File: SEIR-CT_4layer.png Graphic file (type png)
+<use SEIR-CT_4layer.png>
+Package pdftex.def Info: SEIR-CT_4layer.png  used on input line 353.
+(pdftex.def)             Requested size: 469.75499pt x 222.37456pt.
+
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 992.
+               Default added (so using `tbp') on input line 1071.
 
-[13]
 No file matrixJasper.bbl.
-[14]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1052.
- (./matrixJasper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1052.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1052.
+[7 <./SEIR with contact tracing.png>] [8 <./SEIR-CT_4layer.png>] [9]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1131.
+
+(./matrixJasper.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1131.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1131.
 
 Package rerunfilecheck Info: File `matrixJasper.out' has not changed.
-(rerunfilecheck)             Checksum: E8C6E3E415C8EB5C06D229C213EF35CC;1157.
+(rerunfilecheck)             Checksum: D32CC448F26D0A05BDD5B02A3C9105D8;367.
  ) 
 Here is how much of TeX's memory you used:
- 8552 strings out of 480608
- 123522 string characters out of 5903631
- 464945 words of memory out of 5000000
- 24187 multiletter control sequences out of 15000+600000
+ 8490 strings out of 480608
+ 122613 string characters out of 5903631
+ 447930 words of memory out of 5000000
+ 24175 multiletter control sequences out of 15000+600000
  542184 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,15n,37p,1458b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,13n,37p,1458b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2020/texmf-dist/fonts/type1/public/bbold-type1/bbold10.pf
 b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy
-5.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/c
-mbsy7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-bx10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
-x12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx
-7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.
-pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.p
-fb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pf
-b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb>
-</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></
-usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></us
-r/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/
-local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/
-local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib5.pfb></
-usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pf
-b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></u
-sr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/
-local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loc
-al/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/
-texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/t
-exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/tex
-live/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texli
-ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive
-/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on matrixJasper.pdf (14 pages, 709224 bytes).
+7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10
+.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
+pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pf
+b></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb>
+</usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
+/usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
+usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></us
+r/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/
+local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/lo
+cal/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/loca
+l/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/loca
+l/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/
+local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local
+/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/te
+xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texli
+ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/
+2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
+020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/202
+0/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2020/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2020/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on matrixJasper.pdf (9 pages, 638352 bytes).
 PDF statistics:
- 341 PDF objects out of 1000 (max. 8388607)
- 288 compressed objects within 3 object streams
- 97 named destinations out of 1000 (max. 500000)
- 165 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 218 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
+ 47 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

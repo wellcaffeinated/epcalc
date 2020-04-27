@@ -245,57 +245,83 @@ Similar to SEIR-T, we have transition matrices for those who are tested ($\bolds
 \begin{eqnarray}
 \boldsymbol{\check{\sigma^{u}_{t}}} &=& 
     \begin{bmatrix}
-    -1 & 0 & 0 & 0  \\ 
-    0 & 0 & 0 & 0   \\
-    1 & 0 & 0 & 0   \\
-    0 & 0 & 0 & 0   \\
+    % -1 & 0 & 0 & 0  \\ 
+    % 0 & 0 & 0 & 0   \\
+    % 1 & 0 & 0 & 0   \\
+    % 0 & 0 & 0 & 0   \\
+    -1 & 0 & 1 & 0 & 0  \\ 
+    0 & 0 & 0 & 0 & 0  \\
+    1 & 0 & -1 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
     \end{bmatrix}   \\
 %
 \boldsymbol{\check{\sigma^{q}_{t}}} &=& 
     \begin{bmatrix}
-    0 & 0 & 0 & 0  \\ 
-    0 & -1 & 0 & 0   \\
-    0 & 1 & 0 & 0   \\
-    0 & 0 & 0 & 0   \\
+    % 0 & 0 & 0 & 0  \\ 
+    % 0 & -1 & 0 & 0   \\
+    % 0 & 1 & 0 & 0   \\
+    % 0 & 0 & 0 & 0   \\
+    0 & 0 & 0 & 0 & 0  \\ 
+    0 & -1 & 0 & 0 & 0  \\
+    0 & 1 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
     \end{bmatrix}   \\
 %
 \boldsymbol{\check{\sigma_{+}}} &=& \frac{1}{\tau_{t}}
     \begin{bmatrix}
-    0 & 0 & 0 & 0   \\ 
-    0 & 0 & 0 & 0   \\
-    0 & 0 & -1 & 0  \\
-    0 & 0 & 1 & 0   \\
+    % 0 & 0 & 0 & 0   \\ 
+    % 0 & 0 & 0 & 0   \\
+    % 0 & 0 & -1 & 0  \\
+    % 0 & 0 & 1 & 0   \\
+    0 & 0 & 0 & 0 & 0  \\ 
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & -1 & 0 & 0  \\
+    0 & 0 & 1 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
     \end{bmatrix}   \\ 
 %
 \boldsymbol{\check{\sigma_{-}}} &=& \frac{1}{\tau_{t}}
     \begin{bmatrix}
-    0 & 0 & 1 & 0   \\ 
-    0 & 0 & 0 & 0   \\
-    0 & 0 & -1 & 0  \\
-    0 & 0 & 0 & 0   \\
+    % 0 & 0 & 1 & 0   \\ 
+    % 0 & 0 & 0 & 0   \\
+    % 0 & 0 & -1 & 0  \\
+    % 0 & 0 & 0 & 0   \\
+    0 & 0 & 1 & 0 & 0  \\ 
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & -1 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
     \end{bmatrix}   \\ 
 %
-\boldsymbol{\check{sigma_{n}}} &=& \frac{1}{\tau_{t}}
+\boldsymbol{\check{\sigma_{n}}} &=& \frac{1}{(1 + \tau_{n})}
     \begin{bmatrix}
-    0 & 0 & 0 & 0   \\ 
-    0 & 0 & 0 & 0   \\
-    0 & 0 & 0 & 0  \\
-    0 & 0 & 0 & 0   \\
+    0 & 0 & 0 & 0 & 0  \\ 
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & -1 & 0  \\
+    0 & 0 & 0 & 1 & 0  \\
     \end{bmatrix}   \\ 
 %
 \boldsymbol{\check{\sigma_{iso}}} &=& \frac{1}{\tau_{iso}}
     \begin{bmatrix}
-    0 & 1 & 0 & 1   \\ 
-    0 & -1 & 0 & 0  \\
-    0 & 0 & 0 & 0   \\
-    0 & 0 & 0 & -1  \\
+    % 0 & 1 & 0 & 1   \\ 
+    % 0 & -1 & 0 & 0  \\
+    % 0 & 0 & 0 & 0   \\
+    % 0 & 0 & 0 & -1  \\
+    0 & 1 & 0 & 0 & 1  \\ 
+    0 & -1 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0 & -1  \\
     \end{bmatrix}
 \end{eqnarray}
 
 We can now write down the rate equations for each of the disease phases that particpate in contact tracing. Their general form is nearly identical to those used in SEIR-T, and they are given by:
 \begin{eqnarray}
 % dS/dt
-\frac{d \boldsymbol{\check{S}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + f_{pos} \boldsymbol{\check{\sigma}_{+}} + (1-f_{pos}) \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} \right) \boldsymbol{\check{S}} - \boldsymbol{\check{T}_{S \rightarrow E}}, \\
+\frac{d \boldsymbol{\check{S}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + f_{pos} \boldsymbol{\check{\sigma}_{+}} + (1-f_{pos}) \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} + \boldsymbol{\check{\sigma}_{iso}} \right) \boldsymbol{\check{S}} - \boldsymbol{\check{T}_{S \rightarrow E}}, \\
 %
 % T_{S -> E}
 \boldsymbol{\check{T}_{S \rightarrow E}} &=& \beta
@@ -318,8 +344,8 @@ We can now write down the rate equations for each of the disease phases that par
 For both the $\frac{d \boldsymbol{\check{S}}}{dt}$ and $\frac{d \boldsymbol{\bar{S}}}{dt}$ terms, the value of $\beta$ needs to be modified to include the populations of those who particpate in contact tracing, and those who do no. Anyone who is infectious can infect someone who is susceptibe regardless of whether they participate in contact tracing or not. We also have the value of $\gamma^{c}_{F}$ which represents the individuals who are notified to quarantine through a contact that did not infect them. The total number of contacts an infected person makes on average is $R_{c}$, however only $R_{0}$ of those contacts will lead to an infection. Those who are in the susceptible and exposed populations cannot infect others, so all of their contacts self quarantine without being infected. For those in the other phases (except recovered and death), $(R_{c} - R_{0})$ will quarantine without being infected. The notifications take on average time $\tau_{n}$ to carry out, and occur whenever population transfers from $J_{w} \rightarrow J_{n}$, with an average rate of change of $\frac{J_{w}}{\tau_{t}}$ goverened by the time it takes to get a test result. Here we have:
 \begin{eqnarray}
 % gamma^{c}_{F}
-\gamma^{c}_{F} &=& \frac{R_{c}}{(1+\tau_{n})}\frac{(f_{pos} \check{S}_{w} + (1-f_{neg})\check{E}_{w})}{N \tau_{t}} \nonumber \\ 
-&& + \frac{(R_{c} - R_{0})}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{I}_{w} + \check{I^{a}}_{w} + \check{A}_{w} + \check{M}_{w} + \check{X}_{w} + \check{H}_{w} + \check{D}_{w} + \check{R}_{w} )}{N \tau_{t}}.
+\gamma^{c}_{F} &=& R_{c} \frac{(f_{pos} \check{S}_{n'} + (1-f_{neg})\check{E}_{n'})}{N \tau_{t}} \nonumber \\ 
+&& + (R_{c} - R_{0}) (1-f_{neg}) \frac{(\check{I}_{n'} + \check{I^{a}}_{n'} + \check{A}_{n'} + \check{M}_{n'} + \check{X}_{n'} + \check{H}_{n'} + \check{D}_{n'} + \check{R}_{n'} )}{N }.
 \end{eqnarray} 
 
 \begin{figure}
@@ -333,36 +359,37 @@ The next rate equations again closely follow the form of their counterparts in S
 \begin{eqnarray}
 %
 % dE/dt
-\frac{d \boldsymbol{\check{E}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{E}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inc}} \mathbb{1} \right) \cdot \boldsymbol{\check{E}} + \boldsymbol{\check{T}_{S \rightarrow E}} \cdot \boldsymbol{\check{S}}, \\
+\frac{d \boldsymbol{\check{E}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{E}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inc}} \mathbb{1} \right) \cdot \boldsymbol{\check{E}} + \boldsymbol{\check{T}_{S \rightarrow E}} \cdot \boldsymbol{\check{S}}, \\
 %
 %dI/dT
-\frac{d \boldsymbol{\check{I}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\ 
+\frac{d \boldsymbol{\check{I}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\ 
 %
 %dIa/dt
-\frac{d \boldsymbol{\check{I}^{a}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\
+\frac{d \boldsymbol{\check{I}^{a}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\
 %
 % dA/dt
-\frac{d \boldsymbol{\check{A}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{\check{A}} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}^{a}}, \\
+\frac{d \boldsymbol{\check{A}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{\check{A}} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}^{a}}, \\
 %
 % dM/dt
-\frac{d \boldsymbol{\check{M}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{\check{M}} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\ 
+\frac{d \boldsymbol{\check{M}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{\check{M}} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\ 
 %
 % dX/dt
-\frac{d \boldsymbol{\check{X}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{sev}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{h}} \mathbb{1} \right) \cdot \boldsymbol{\check{X}} + \frac{(1-p_{m})}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\
+\frac{d \boldsymbol{\check{X}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{sev}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} - \frac{1}{\tau_{h}} \mathbb{1} \right) \cdot \boldsymbol{\check{X}} + \frac{(1-p_{m})}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\
 % 
 % dH/dt
-\frac{d \boldsymbol{\check{H}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{sev}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{sev}} \mathbb{1} \right) \cdot \boldsymbol{\check{H}} + \frac{1}{\tau_{h}} \mathbb{1} \cdot \boldsymbol{\check{X}}.
+\frac{d \boldsymbol{\check{H}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{sev}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma_{n}}} - \frac{1}{\tau_{sev}} \mathbb{1} \right) \cdot \boldsymbol{\check{H}} + \frac{1}{\tau_{h}} \mathbb{1} \cdot \boldsymbol{\check{X}}.
 \end{eqnarray}
 
 Those who are infectious (or were infectious but have moved on to $A$, $X$, $M$, $H$, $D$, or $R$) all infect on average $R_{0}$ individuals. We need to consider the notification rates for those who are able to sucessfully identify someone they infected and have them quarantine. We assume here that those who are in $I$ or $I^{a}$ can only notify those who are in $E$, and that those who are in $A$, $X$, $M$, $H$, $D$, or $R$ can only notify those in $I$ or $I^{a}$ of a true infection. The notification rate for those in $E$ is therefore given as:
 \begin{eqnarray}
 % \gamma^{c}_{E}
-\gamma^{c}_{E} &=& \frac{R_{0}}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{I}_{w} + \check{I^{a}}_{w})}{N \tau_{t}},
+% \gamma^{c}_{E} &=& \frac{R_{0}}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{I}_{w} + \check{I^{a}}_{w})}{N \tau_{t}},
+\gamma^{c}_{E} &=& R_{0}(1-f_{neg}) \frac{(\check{I}_{n'} + \check{I^{a}}_{n'})}{N},
 \end{eqnarray} 
 and the true notification rates for those in $I_{u}$ and $I^{a}_{u}$ are:
 \begin{eqnarray}
 % \gamma^{c}_{I}
-\gamma^{c}_{I} &=&  \frac{R_{0}}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{A}_{w} + \check{M}_{w} + \check{X}_{w} + \check{H}_{w} + \check{D}_{w} + \check{R}_{w} )}{N\tau_{t}}.
+\gamma^{c}_{I} &=&  R_{0} (1-f_{neg}) \frac{(\check{A}_{n'} + \check{M}_{n'} + \check{X}_{n'} + \check{H}_{n'} + \check{D}_{n'} + \check{R}_{n'} )}{N}.
 \end{eqnarray}   
 
 As before, a fraction $p_{d}$ of those who are hospitalized will die after an average time $\tau_{d}$, or recover after a time $\tau_{sev}$. To find $p_{d}$, we must use the case fatality rate, $C_{FR}$ to figure out the percantage of those hospitalized that will die. Since the case fatality rate applies to all infections, we need to determine the average fraction of the population that will end up in the hospital. Anyone who who gets tested while in the hospital, but dies before their results are returned still need to trigger a round of notifications. Therefore, we need to track the dynamic of $D_{w} \rightarrow D_{n}$. This leads to a rate of change of the death population of:

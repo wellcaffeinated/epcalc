@@ -144,22 +144,22 @@ The rate of change of those in the exposed stage is:
 For those who are exposed (and those in all subsequent stages), a false negative in a test result will mistakenly return the individual to the untested subpopulation. Only the positive tests will correctly lead to a quarantine. After some time period $\tau_{inc}$, individuals leave the exposed stage and move to the infectious stage. There are two populations in the infectious stage, those who display symptoms ($I$), and those who are asymptomatic ($I^{a}$). The probability of someone who is infectious but asymptomatic is $p_{a}$. The rate equations are:
 \begin{eqnarray}
 % \labe{E:testI}
-\frac{d \boldsymbol{I}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{I} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{E}, \\ 
+\frac{d \boldsymbol{I}}{dt} &=& \left( p^{n}_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{I} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{E}, \\ 
 %
-\frac{d \boldsymbol{I^{a}}}{dt} &=& \left( p_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{I^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{E},
+\frac{d \boldsymbol{I^{a}}}{dt} &=& \left( p^{n}_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{I^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{E},
 \end{eqnarray}
 and after an average time of $\tau_{inf}$ the population transitons the next stage. Those who are infectious and show symptoms will be tested with a probability $p^{i}_{t}$.
 
 Those who are aymptomatic leave the infectious phase where they are no longer infectious, but can still test positive. It takes an average time of $\tau_{a}$ before the disease runs its course and they develop immunity and move to $R$. The change in the recoverning asymptomatic population $A$ is given as:
 \begin{eqnarray}
 % \labe{E:testI}
-\frac{d \boldsymbol{A}}{dt} &=& \left( p_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{A} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{I^{a}}. \\ 
+\frac{d \boldsymbol{A}}{dt} &=& \left( p_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{A} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{I^{a}}.
 \end{eqnarray}
 
 Those who show symptoms while infectious will either transition to a mild recovery phase ($\boldsymbol{M}$) with probability $p_{m}$ or a severe recovery phase ($\boldsymbol{X}$) with a probability $(1-p_{m})$. Those who display mild symptoms after the infectious phase will be tested with the same probability as those who display symptoms while infectious, $p^{i}_{t}$. However, those who show symptoms will be tested with a probability $p^{sev}_{t}$ It will take an average time $\tau_{mild}$ for these individuals to make a full recovery and develop immunity, while those who are in the severe phase will be admitted to the hospital after an average time $\tau_{h}$:
 \begin{eqnarray}
 % \labe{E:testI}
-\frac{d \boldsymbol{M}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{M} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{I}. \\ 
+\frac{d \boldsymbol{M}}{dt} &=& \left( p^{n}_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} + \boldsymbol{\sigma_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{M} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{I}. \\ 
 %
 \frac{d \boldsymbol{X}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\sigma_{t}} + (1-f_{neg}) \boldsymbol{\sigma_{+}} + f_{neg} \boldsymbol{\sigma_{-}} - \frac{1}{\tau_{h}} \mathbb{1} \right) \cdot \boldsymbol{X} + \frac{(1-p_{m})}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{I}. 
 \end{eqnarray}
@@ -206,6 +206,20 @@ We can further build on the SEIR model with testing to incorporate contact traci
 
 The flow of the population not particpating in contact tracing reduces to the case where we only have testing (as shown in figure XXXXX). However, those particpating in contact tracing have one additional state that needs to be accounted for. Those who are untested in a group now have a chance to quarantine themselves when they are notified of a past contact with someone who is infectious. These individuals move from the population $J_{u}$ to $J_{q}$. Those who are in $J_{q}$ are tested at a rate of $r^{c}_{t}$. Anyone chosen for testing in $J_{u}$ or $J_{q}$ move to the waiting state $J_{w}$ until their test results come back. If the test is negative, they return to $J_{u}$, but if it is positive, the move to $J_{n}$. As individuals move from $J_{w}$ to $J_{n}$ they notifiy all of their potential contacts to quarantine themselves (move from $J_{u}$ to $J_{q}$). Individuals who are waiting for test, already quarantined, or have already tested positive are not affected by notifications. It takes a positive test at any stage to start the contact tracing process.
 
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{SEIR with contact tracing}
+\caption{\label{f:SEIR-contactSeparation}
+ Those who chose not to participate in contact tracing and those that do particpate in contact tracing are treated separately. Population can never flow between the top and bottom graphs, although infectious individuals, regardless of whether they contact trace or not, can infect anyone who is suscpetible.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=6.5in]{seir-c_5layer}
+\caption{\label{f:SEIR-contact}
+ Layers for contact tracing, as well as the transition rates between populations.}
+\end{figure}
+
 As in the testing section, we consider a population $J$ to be represented by the vector:
 \begin{eqnarray}
 \check{J} &=& 
@@ -227,13 +241,21 @@ Notifications can identify individuals that the infectious person has infected a
     0 & 0 & 0 & 0\\
     \end{bmatrix}
 \end{eqnarray}
-Similar to SEIR-T, we have transition matrices for those who are tested ($\boldsymbol{\check{\sigma_{t}}}$), positive tests ($\boldsymbol{\check{\sigma_{+}}}$), negative tests ($\boldsymbol{\check{\sigma_{-}}}$), and those who return from isolation ($\boldsymbol{\check{\sigma_{iso}}}$):
+Similar to SEIR-T, we have transition matrices for those who are tested ($\boldsymbol{\check{\sigma^{u}_{t}}}$ and $\boldsymbol{\check{\sigma{q}_{t}}}$), positive tests ($\boldsymbol{\check{\sigma_{+}}}$), negative tests ($\boldsymbol{\check{\sigma_{-}}}$), and those who return from isolation ($\boldsymbol{\check{\sigma_{iso}}}$):
 \begin{eqnarray}
-\boldsymbol{\check{\sigma_{t}}} &=& 
+\boldsymbol{\check{\sigma^{u}_{t}}} &=& 
     \begin{bmatrix}
     -1 & 0 & 0 & 0  \\ 
     0 & 0 & 0 & 0   \\
     1 & 0 & 0 & 0   \\
+    0 & 0 & 0 & 0   \\
+    \end{bmatrix}   \\
+%
+\boldsymbol{\check{\sigma^{q}_{t}}} &=& 
+    \begin{bmatrix}
+    0 & 0 & 0 & 0  \\ 
+    0 & -1 & 0 & 0   \\
+    0 & 1 & 0 & 0   \\
     0 & 0 & 0 & 0   \\
     \end{bmatrix}   \\
 %
@@ -253,6 +275,14 @@ Similar to SEIR-T, we have transition matrices for those who are tested ($\bolds
     0 & 0 & 0 & 0   \\
     \end{bmatrix}   \\ 
 %
+\boldsymbol{\check{sigma_{n}}} &=& \frac{1}{\tau_{t}}
+    \begin{bmatrix}
+    0 & 0 & 0 & 0   \\ 
+    0 & 0 & 0 & 0   \\
+    0 & 0 & 0 & 0  \\
+    0 & 0 & 0 & 0   \\
+    \end{bmatrix}   \\ 
+%
 \boldsymbol{\check{\sigma_{iso}}} &=& \frac{1}{\tau_{iso}}
     \begin{bmatrix}
     0 & 1 & 0 & 1   \\ 
@@ -265,15 +295,15 @@ Similar to SEIR-T, we have transition matrices for those who are tested ($\bolds
 We can now write down the rate equations for each of the disease phases that particpate in contact tracing. Their general form is nearly identical to those used in SEIR-T, and they are given by:
 \begin{eqnarray}
 % dS/dt
-\frac{d \boldsymbol{\check{S}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + f_{pos} \boldsymbol{\check{\sigma}_{+}} + (1-f_{pos}) \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} \right) - \boldsymbol{\check{T}_{S \rightarrow E}}, \\
+\frac{d \boldsymbol{\check{S}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + f_{pos} \boldsymbol{\check{\sigma}_{+}} + (1-f_{pos}) \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} \right) \boldsymbol{\check{S}} - \boldsymbol{\check{T}_{S \rightarrow E}}, \\
 %
 % T_{S -> E}
 \boldsymbol{\check{T}_{S \rightarrow E}} &=& \beta
     \begin{bmatrix}
     1 & 0 & 0 & 0 \\ 
     0 & d_{r} & 0 & 0 \\
-    0 & 0 & d_{r} \\
-    0 & 0 & & 0 & d_{r}
+    0 & 0 & d_{r} & 0 \\
+    0 & 0 & 0 & d_{r}
     \end{bmatrix} \\ 
 %
 % beta
@@ -292,29 +322,36 @@ For both the $\frac{d \boldsymbol{\check{S}}}{dt}$ and $\frac{d \boldsymbol{\bar
 && + \frac{(R_{c} - R_{0})}{(1+\tau_{n})} (1-f_{neg}) \frac{(\check{I}_{w} + \check{I^{a}}_{w} + \check{A}_{w} + \check{M}_{w} + \check{X}_{w} + \check{H}_{w} + \check{D}_{w} + \check{R}_{w} )}{N \tau_{t}}.
 \end{eqnarray} 
 
+\begin{figure}
+\centering
+\includegraphics[width=3.5in]{notification scheme}
+\caption{\label{f:SEIR-notification}
+ Those who test positive and move to $J_{n}$ from $J_{w}$ will notify (blue arrows) on average $R_{c}$ of the people they have contacted. If the individual is or was infectious, then on average $R_{0}$ of those contacts will have become infected (red arrows). If the notified indiduals are in an untested layer, they will then move to a quarantine layer $J_{q}$}
+\end{figure}
+
 The next rate equations again closely follow the form of their counterparts in SEIR-R, and are given as:
 \begin{eqnarray}
 %
 % dE/dt
-\frac{d \boldsymbol{\check{E}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{E}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inc}} \mathbb{1} \right) \cdot \boldsymbol{\check{E}} + \boldsymbol{\check{T}_{S \rightarrow E}} \cdot \boldsymbol{\check{S}}, \\
+\frac{d \boldsymbol{\check{E}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{E}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inc}} \mathbb{1} \right) \cdot \boldsymbol{\check{E}} + \boldsymbol{\check{T}_{S \rightarrow E}} \cdot \boldsymbol{\check{S}}, \\
 %
 %dI/dT
-\frac{d \boldsymbol{\check{I}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\ 
+\frac{d \boldsymbol{\check{I}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}} + \frac{(1-p_{a})}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\ 
 %
 %dIa/dt
-\frac{d \boldsymbol{\check{I}^{a}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\
+\frac{d \boldsymbol{\check{I}^{a}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + (\gamma^{c}_{F} + \gamma^{c}_{I}) \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{inf}} \mathbb{1} \right) \cdot \boldsymbol{\check{I}^{a}} + \frac{p_{a}}{\tau_{inc}} \mathbb{1} \cdot \boldsymbol{\check{E}}, \\
 %
 % dA/dt
-\frac{d \boldsymbol{\check{A}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{\check{A}} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}^{a}}, \\
+\frac{d \boldsymbol{\check{A}}}{dt} &=& \left( p_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{c}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{a}} \mathbb{1} \right) \cdot \boldsymbol{\check{A}} + \frac{1}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}^{a}}, \\
 %
 % dM/dt
-\frac{d \boldsymbol{\check{M}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{\check{M}} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\ 
+\frac{d \boldsymbol{\check{M}}}{dt} &=& \left( p^{i}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{n}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} + \boldsymbol{\check{\sigma}_{iso}} - \frac{1}{\tau_{mild}} \mathbb{1} \right) \cdot \boldsymbol{\check{M}} + \frac{p_{m}}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\ 
 %
 % dX/dt
-\frac{d \boldsymbol{\check{X}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{h}} \mathbb{1} \right) \cdot \boldsymbol{\check{X}} + \frac{(1-p_{m})}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\
+\frac{d \boldsymbol{\check{X}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{sev}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{h}} \mathbb{1} \right) \cdot \boldsymbol{\check{X}} + \frac{(1-p_{m})}{\tau_{inf}} \mathbb{1} \cdot \boldsymbol{\check{I}}, \\
 % 
 % dH/dt
-\frac{d \boldsymbol{\check{H}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{sev}} \mathbb{1} \right) \cdot \boldsymbol{\check{H}} + \frac{1}{\tau_{h}} \mathbb{1} \cdot \boldsymbol{\check{X}}.
+\frac{d \boldsymbol{\check{H}}}{dt} &=& \left( p^{sev}_{t} \boldsymbol{\check{\sigma}^{u}_{t}} + p^{sev}_{t} \boldsymbol{\check{\sigma}^{q}_{t}} + \gamma^{c}_{F} \boldsymbol{\check{\sigma}_{c}} + (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} + f_{neg} \boldsymbol{\check{\sigma}_{-}} - \frac{1}{\tau_{sev}} \mathbb{1} \right) \cdot \boldsymbol{\check{H}} + \frac{1}{\tau_{h}} \mathbb{1} \cdot \boldsymbol{\check{X}}.
 \end{eqnarray}
 
 Those who are infectious (or were infectious but have moved on to $A$, $X$, $M$, $H$, $D$, or $R$) all infect on average $R_{0}$ individuals. We need to consider the notification rates for those who are able to sucessfully identify someone they infected and have them quarantine. We assume here that those who are in $I$ or $I^{a}$ can only notify those who are in $E$, and that those who are in $A$, $X$, $M$, $H$, $D$, or $R$ can only notify those in $I$ or $I^{a}$ of a true infection. The notification rate for those in $E$ is therefore given as:
@@ -330,7 +367,7 @@ and the true notification rates for those in $I_{u}$ and $I^{a}_{u}$ are:
 
 As before, a fraction $p_{d}$ of those who are hospitalized will die after an average time $\tau_{d}$, or recover after a time $\tau_{sev}$. To find $p_{d}$, we must use the case fatality rate, $C_{FR}$ to figure out the percantage of those hospitalized that will die. Since the case fatality rate applies to all infections, we need to determine the average fraction of the population that will end up in the hospital. Anyone who who gets tested while in the hospital, but dies before their results are returned still need to trigger a round of notifications. Therefore, we need to track the dynamic of $D_{w} \rightarrow D_{n}$. This leads to a rate of change of the death population of:
 \begin{eqnarray}
-\frac{d \boldsymbol{\check{D}}}{dt} &=& (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} \boldsymbol{\check{D}} +  \frac{p_{d}}{\tau_{sev}} \mathbb{1} \cdot \boldsymbol{\check{X}}. 
+\frac{d \boldsymbol{\check{D}}}{dt} &=& (1-f_{neg}) \boldsymbol{\check{\sigma}_{+}} \boldsymbol{\check{D}} +  \frac{p_{d}}{\tau_{d}} \mathbb{1} \cdot \boldsymbol{\check{X}}. 
 \end{eqnarray}
 
 Similarly, we must also track the dynamics of those who recover while waiting for their test results so the proper notifications can be sent out. This leads to:
@@ -341,19 +378,7 @@ Similarly, we must also track the dynamics of those who recover while waiting fo
 
 
 
-\begin{figure}
-\centering
-\includegraphics[width=3.5in]{SEIR with contact tracing}
-\caption{\label{f:SEIR-contactSeparation}
- Those who chose not to participate in contact tracing and those that do particpate in contact tracing are treated separately. Population can never flow between the top and bottom graphs, although infectious individuals, regardless of whether they contact trace or not, can infect anyone who is suscpetible.}
-\end{figure}
 
-\begin{figure}
-\centering
-\includegraphics[width=6.5in]{SEIR-CT_4layer}
-\caption{\label{f:SEIR-contact}
- Layers for contact tracing, as well as the transition rates between populations.}
-\end{figure}
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
